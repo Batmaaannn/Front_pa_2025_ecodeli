@@ -1,3 +1,15 @@
 @import "tailwindcss";
 
 @tailwind utilities;
+
+.input {
+    @apply w-full rounded-md border border-gray-300 px-4 py-2 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 focus:outline-none;
+}
+
+.file-input {
+    @apply block w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-indigo-700 file:font-semibold hover:file:bg-indigo-100;
+}
+
+.btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-500 text-white py-2 px-4 rounded-md font-medium shadow;
+}
