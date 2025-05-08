@@ -3,9 +3,7 @@
 </script>
 
 <template>
-
-  TOP AU TOP
-
+  <img class="mx-auto w-auto" src="../assets/ld.jpg" alt="ld" />
 </template>
 
 <style scoped>
