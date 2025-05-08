@@ -17,8 +17,8 @@
         </button>
       </div>
       <PopoverGroup class="hidden lg:flex lg:gap-x-12">
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Features</a>
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Marketplace</a>
+        <RouterLink to="/backoffice/user" class="text-sm/6 font-semibold text-gray-900"> Users </RouterLink>
+        <RouterLink to="/backoffice/payments" class="text-sm/6 font-semibold text-gray-900"> Payments </RouterLink>
         <a href="#" class="text-sm/6 font-semibold text-gray-900">Company</a>
       </PopoverGroup>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
