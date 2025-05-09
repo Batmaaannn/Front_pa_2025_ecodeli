@@ -2,7 +2,8 @@
   <div class="max-w-2xl mx-auto mt-12 bg-white p-8 rounded-xl shadow-lg">
     <h2 class="text-3xl font-semibold text-center text-indigo-600 mb-6">Deliverer Registration</h2>
     <form class="space-y-5" @submit.prevent="register">
-      <InputField v-model="form.name" label="Full Name" />
+      <InputField v-model="form.forName" label="ForName" />
+      <InputField v-model="form.lastName" label="LastName" />
       <InputField v-model="form.email" label="Email" type="email" />
       <InputField v-model="form.password" label="Password" type="password" />
       <InputField v-model="form.phone" label="Phone Number" />
@@ -29,7 +30,8 @@ import AvailabilityCalendar from '@/components/ui/AvailabilityCalendar.vue'
 const router = useRouter()
 
 const form = reactive({
-  name: '',
+  forName: '',
+  lastName:'',
   email: '',
   password: '',
   phone: '',
