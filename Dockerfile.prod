@@ -1,0 +1,29 @@
+# Base image
+FROM node:20-slim AS build-stage
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Copy the .env and .env.production files
+COPY .env .env.production ./
+
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+
+COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
