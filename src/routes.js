@@ -1,4 +1,4 @@
-import Register from './components/register/register.vue'
+import Register from "@/components/register/Register.vue";
 import RegisterDeliverer from '@/components/register/RegisterDeliverer.vue'
 import RegisterClient from '@/components/register/RegisterClient.vue'
 import RegisterMerchant from '@/components/register/RegisterMerchant.vue'
