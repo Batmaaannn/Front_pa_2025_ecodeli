@@ -1,5 +1,4 @@
 import type { RouteRecordRaw } from "vue-router";
-//import { UserType } from "@/types";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,15 +12,28 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/contact",
     name: "Contact",
-    component: () => import("@/views/Contact.vue"),
-    // meta: {
-    //   requiresAuth: false,
-    //   userTypeAuthorized: [
-    //     UserType.PATIENT,
-    //     UserType.SERVICE_AGENT,
-    //     UserType.PHARMACIST,
-    //   ],
-    // },
+    component: () => import("@/views/landingPage/Contact.vue"),
+    meta: {
+      layout: "HomeLayout",
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/nos-prix",
+    name: "Price",
+    component: () => import("@/views/landingPage/Price.vue"),
+    meta: {
+      layout: "HomeLayout",
+    },
+  },
+  {
+    path: "/formules",
+    name: "Formules",
+    component: () => import("@/views/landingPage/Formules.vue"),
+    meta: {
+      layout: "HomeLayout",
+      requiresAuth: false,
+    },
   },
   {
     path: "/:pathMatch(.*)*",

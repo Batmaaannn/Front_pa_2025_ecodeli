@@ -5,14 +5,14 @@
       aria-label="Global"
     >
       <div class="flex lg:flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
+        <router-link :to="{ name: 'Home' }" class="-m-1.5 p-1.5">
           <span class="sr-only">Ecodeli</span>
           <img
             class="h-15 w-auto"
             src="../../../src/assets/logo/logo.svg"
             alt=""
           />
-        </a>
+        </router-link>
       </div>
       <div class="flex lg:hidden">
         <button
@@ -25,16 +25,18 @@
         </button>
       </div>
       <div class="hidden lg:flex lg:gap-x-12">
-        <a
+        <router-link
           v-for="item in navigation"
           :key="item.name"
-          :href="item.href"
+          :to="{ name: item.to }"
           class="text-sm/6 font-semibold text-gray-900"
-          >{{ item.name }}</a
+          >{{ item.name }}</router-link
         >
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <router-link to="/login" class="text-sm/6 font-semibold text-gray-900"
+        <router-link
+          :to="{ name: 'Login' }"
+          class="text-sm/6 font-semibold text-gray-900"
           >Se connecter <span aria-hidden="true">&rarr;</span></router-link
         >
       </div>
@@ -50,7 +52,7 @@
       >
         <div class="flex items-center justify-between">
           <a href="#" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
+            <span class="sr-only">Ecodeli</span>
             <img
               class="h-8 w-auto"
               src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=primary&shade=600"
@@ -69,17 +71,17 @@
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-              <a
+              <router-link
                 v-for="item in navigation"
                 :key="item.name"
-                :href="item.href"
+                :to="{ name: item.to }"
                 class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >{{ item.name }}</a
+                >{{ item.name }}</router-link
               >
             </div>
             <div class="py-6">
               <router-link
-                to="/login"
+                :to="{ name: 'Login' }"
                 class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
                 >Se connecter</router-link
               >
@@ -97,9 +99,8 @@ import { ref } from "vue";
 const mobileMenuOpen = ref(false);
 
 const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
+  { name: "Formules", to: "Formules" },
+  { name: "Nos prix", to: "Price" },
+  { name: "Nous contacter", to: "Contact" },
 ];
 </script>

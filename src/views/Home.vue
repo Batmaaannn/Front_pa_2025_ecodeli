@@ -1,21 +1,15 @@
 <template>
   <div class="bg-white">
-    <Navigation />
-    <main>
-      <Hero />
-      <Features />
-      <Stats />
-      <Cta />
-    </main>
-    <Footer />
+    <Hero />
+    <Features />
+    <Stats />
+    <Cta />
   </div>
 </template>
 
 <script setup lang="ts">
-import Hero from "./landingPage/Hero.vue";
-import Features from "./landingPage/Features.vue";
-import Stats from "./landingPage/Stats.vue";
-import Cta from "./landingPage/Cta.vue";
-import Navigation from "../components/layouts/Navigation.vue";
-import Footer from "../components/layouts/Footer.vue";
+import Hero from "./landingPage/homeSections/Hero.vue";
+import Features from "./landingPage/homeSections/Features.vue";
+import Stats from "./landingPage/homeSections/Stats.vue";
+import Cta from "./landingPage/homeSections/Cta.vue";
 </script>
