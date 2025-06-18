@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/demande-inscription",
-    name: "Signin",
+    name: "SigninRequest",
     component: () => import("@/views/auth/SignInRequest.vue"),
     meta: {
       layout: "HomeLayout",
