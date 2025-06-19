@@ -10,13 +10,13 @@
           <template v-if="getStepStatus(step.step) === 'complete'">
             <div
               v-if="stepIdx !== steps.length - 1"
-              class="absolute left-4 top-4 -ml-px mt-0.5 h-full w-0.5 bg-primary"
+              class="absolute left-4 top-4 -ml-px mt-0.5 h-full w-0.5 bg-primary-500"
               aria-hidden="true"
             />
             <a class="group relative flex items-start">
               <span class="flex h-9 items-center">
                 <span
-                  class="relative z-10 flex size-8 items-center justify-center rounded-full bg-primary group-hover:bg-primary-800"
+                  class="relative z-10 flex size-8 items-center justify-center rounded-full bg-primary-500 group-hover:bg-primary-600"
                 >
                   <Icon
                     icon="lets-icons:check-fill"
@@ -45,7 +45,7 @@
                 <span
                   class="relative z-10 flex size-8 items-center justify-center rounded-full border-2 border-primary bg-white"
                 >
-                  <span class="size-2.5 rounded-full bg-primary" />
+                  <span class="size-2.5 rounded-full bg-primary-500" />
                 </span>
               </span>
               <span class="ml-4 flex min-w-0 flex-col">
@@ -109,6 +109,11 @@ const steps = [
     name: "Profil utilisateur",
     step: RegisterSteps.PROFIL,
     description: "Renseignement du profil utilisateur",
+  },
+  {
+    name: "Prestations",
+    step: RegisterSteps.PRESTATIONS,
+    description: "Choix des prestations",
   },
   {
     name: "Informations personnelles",

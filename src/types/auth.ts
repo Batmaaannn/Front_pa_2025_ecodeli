@@ -1,5 +1,6 @@
 export enum RegisterSteps {
   PROFIL = "PROFIL",
+  PRESTATIONS = "PRESTATIONS",
   INFORMATIONS = "INFORMATIONS",
 }
 

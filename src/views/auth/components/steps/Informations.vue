@@ -6,6 +6,55 @@
       l'inscription.
     </p>
   </div>
+  <div v-if="authStore.register.userType !== 'client'">
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="flex-1">
+        <InputField
+          label="Nom de l'entreprise"
+          v-model="form.companyName"
+          name="company-name"
+          :error="error.companyName"
+          @blur="processCompanyName()"
+        ></InputField>
+      </div>
+      <div class="flex-1">
+        <InputField
+          label="Siret"
+          v-model="form.siret"
+          name="siret"
+          :error="error.siret"
+          @blur="processSiret()"
+        ></InputField>
+      </div>
+    </div>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="flex-1">
+        <InputField
+          label="Adresse de l'entreprise"
+          v-model="form.companyAddress"
+          name="company-address"
+          :error="error.companyAddress"
+        ></InputField>
+      </div>
+      <div class="flex-1">
+        <InputField
+          label="Ville"
+          v-model="form.companyCity"
+          name="siret"
+          :error="error.companyCity"
+        ></InputField>
+      </div>
+      <div class="flex-1">
+        <InputField
+          label="Code postal"
+          v-model="form.compagnyPostalCode"
+          name="siret"
+          :error="error.compagnyPostalCode"
+        ></InputField>
+      </div>
+    </div>
+  </div>
+
   <div class="flex flex-col md:flex-row gap-4">
     <div class="flex-1">
       <InputField
@@ -118,13 +167,16 @@ const form = ref({
   firstName: "",
   lastName: "",
   email: "",
-  //   companyName: "",
+  companyName: "",
   password: "",
   phone: "",
   passwordStrength: "",
   passwordConfirmation: "",
-  //   siret: "",
-  //company name, adress city
+  siret: "",
+  Companyname: "",
+  companyCity: "",
+  compagnyPostalCode: "",
+  companyAddress: "",
 });
 
 const error = ref({
@@ -134,6 +186,11 @@ const error = ref({
   phone: "",
   password: [] as string[],
   passwordConfirmation: "",
+  companyName: "",
+  siret: "",
+  companyCity: "",
+  compagnyPostalCode: "",
+  companyAddress: "",
 });
 const loading = ref(false);
 const errorMessage = ref(false);
@@ -175,6 +232,24 @@ function processFirstName() {
 function processLastName() {
   error.value.lastName = Validators.validateLastName(form.value.lastName);
 }
+function processCompanyName() {
+  error.value.companyName = Validators.validateCompanyName(
+    form.value.companyName
+  );
+}
+function processSiret() {
+  error.value.siret = Validators.validateSiret(form.value.siret);
+}
+// function processCompanyCity() {
+//   error.value.companyCity = Validators.validateCompanyCity(
+//     form.value.companyCity
+//   );
+// }
+// function processCompagnyPostalCode() {
+//   error.value.compagnyPostalCode = Validators.validateCompagnyPostalCode(
+//     form.value.compagnyPostalCode
+//   );
+// }
 
 function goToNextStep() {
   //   authStore.setUserTypeRegister({
