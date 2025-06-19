@@ -13,14 +13,39 @@
       :option="option"
     />
   </div>
+  <div class="max-w-sm flex gap-4 py-4 justify-end">
+    <Button :disabled="formHasError" isGreen @click="goToNextStep"
+      >Envoyer</Button
+    >
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import RadioButtonWithIcon from "@/components/formControls/RadioButtonWithIcon.vue";
 import { UserIcon, TruckIcon } from "@heroicons/vue/24/outline";
+import Button from "@/components/formControls/Button.vue";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth.store"; // Assumes your Pinia store is here
+const authStore = useAuthStore();
+const router = useRouter();
+const selected = ref("");
 
-const selected = ref("vehicle");
+const formHasError = computed(() => {
+  if (!selected.value) return true;
+  return !prospectOptions.some((option) => option.value === selected.value);
+});
+
+function goToNextStep() {
+  authStore.setUserTypeRegister({
+    userType: selected.value,
+  });
+
+  authStore.nextStep();
+
+  router.push({ name: "Informations" });
+}
 
 const prospectOptions = [
   { value: "client", label: "Particulier", icon: UserIcon },

@@ -1,4 +1,6 @@
+import { axios } from "@/libs/axios";
 import { RegisterSteps, type RegisterForm } from "@/types/auth";
+import type { UserType } from "@/types/user";
 import { defineStore } from "pinia";
 
 interface AuthState {
@@ -6,7 +8,7 @@ interface AuthState {
   register: RegisterForm | Record<string, never>;
 }
 
-export const stepsOrder = [RegisterSteps.PROFIL];
+export const stepsOrder = [RegisterSteps.PROFIL, RegisterSteps.INFORMATIONS];
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({
@@ -24,6 +26,48 @@ export const useAuthStore = defineStore("authStore", {
     },
   },
   actions: {
+    nextStep() {
+      this.currentRegisterStep =
+        stepsOrder[stepsOrder.indexOf(this.currentRegisterStep) + 1];
+    },
+    previousStep() {
+      this.currentRegisterStep =
+        stepsOrder[stepsOrder.indexOf(this.currentRegisterStep) - 1];
+    },
+    setUserTypeRegister(payload: { userType: string }) {
+      this.register.userType = payload.userType;
+    },
+    setUserInformations(payload: {
+      email: string;
+      password: string;
+      confirmPassword: string;
+      firstName: string;
+      lastName: string;
+      phoneNumber: string;
+    }) {
+      this.register = { ...this.register, ...payload };
+    },
+    //TODO: change any
+    async registerClient(client: any) {
+      try {
+        await axios.post("new-appointment", client);
+      } catch (e: any) {
+        return e;
+      }
+    },
+    resetAppointment() {
+      this.currentRegisterStep = RegisterSteps.PROFIL;
+      this.register = {};
+    },
+
+    // setUserPersonnalInformations(payload: {
+    //   firstName: string;
+    //   lastName: string;
+    //   phone: string;
+    //   email: string;
+    // }) {
+    //   this.register = { ...payload };
+    // },
     // async login(loginForm: LoginForm) {
     //   try {
     //     const data: string = (await axios.post("/auth/sign-in", loginForm))

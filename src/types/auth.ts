@@ -1,17 +1,17 @@
 export enum RegisterSteps {
   PROFIL = "PROFIL",
+  INFORMATIONS = "INFORMATIONS",
 }
 
 export interface RegisterForm {
+  userType: string;
   email: string;
   password: string;
-  confirmPassword: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   companyName?: string;
   companySiret?: string;
   companyAddress?: string;
-  companyPostalCode?: string;
   companyCity?: string;
 }

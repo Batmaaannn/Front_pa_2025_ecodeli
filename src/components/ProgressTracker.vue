@@ -106,9 +106,14 @@ function getStepStatus(
 
 const steps = [
   {
-    name: "Informations",
+    name: "Profil utilisateur",
     step: RegisterSteps.PROFIL,
     description: "Renseignement du profil utilisateur",
+  },
+  {
+    name: "Informations personnelles",
+    step: RegisterSteps.INFORMATIONS,
+    description: "Renseignement des informations personnelles",
   },
 ];
 </script>

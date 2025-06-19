@@ -21,7 +21,15 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         name: "UserInformations",
-        component: () => import("@/views/auth/components/steps/ProfileType.vue"),
+        component: () =>
+          import("@/views/auth/components/steps/ProfileType.vue"),
+        meta: { requiresAuth: false },
+      },
+      {
+        path: "/inscription/informations",
+        name: "Informations",
+        component: () =>
+          import("@/views/auth/components/steps/Informations.vue"),
         meta: { requiresAuth: false },
       },
     ],
