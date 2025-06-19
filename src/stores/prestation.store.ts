@@ -1,10 +1,17 @@
 import { axios } from "@/libs/axios";
+import type { Prestation } from "@/types/prestation";
 import { defineStore } from "pinia";
 
-interface PrestationState {}
+interface PrestationState {
+  prestations: Prestation[];
+}
 
 export const usePrestationStore = defineStore("prestationStore", {
-  state: (): PrestationState => ({}),
+  state: (): PrestationState => ({
+    prestations: [],
+  }),
   getters: {},
-  actions: {},
+  actions: {
+    async getPrestations() {},
+  },
 });

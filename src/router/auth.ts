@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/inscription/prestations",
         name: "Prestations",
         component: () =>
-          import("@/views/auth/components/steps/PrestationsChoice.vue"),
+          import("@/views/auth/components/steps/Prestations.vue"),
         meta: { requiresAuth: false },
       },
       {
