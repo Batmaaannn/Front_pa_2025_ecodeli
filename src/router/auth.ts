@@ -12,18 +12,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/inscription",
     name: "Signin",
-    component: () => import("@/views/auth/Signin.vue"),
+    component: () => import("@/views/auth/Register.vue"),
     meta: {
       layout: "HomeLayout",
     },
-  },
-  {
-    path: "/demande-inscription",
-    name: "SigninRequest",
-    component: () => import("@/views/auth/SignInRequest.vue"),
-    meta: {
-      layout: "HomeLayout",
-    },
+    redirect: { name: "UserInformations" },
+    children: [
+      {
+        path: "",
+        name: "UserInformations",
+        component: () => import("@/views/auth/components/steps/ProfileType.vue"),
+        meta: { requiresAuth: false },
+      },
+    ],
   },
 ];
 
