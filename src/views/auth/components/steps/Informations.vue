@@ -138,14 +138,15 @@
   </div>
 
   <div class="flex col-span-full justify-between gap-4 py-4">
+    <Button isGreen @click="goToPreviousStep">Précédent</Button>
     <Button
       v-if="authStore.register.userType === 'client'"
-      isBlue
+      isGreen
       :disabled="formHasError"
       @click="submitRegistrationClient"
       >Valider l'inscription</Button
     >
-    <Button v-else isBlue :disabled="formHasError" @click="goToNextStep"
+    <Button v-else isGreen :disabled="formHasError" @click="goToNextStep"
       >Suivant</Button
     >
   </div>
@@ -259,6 +260,11 @@ function goToNextStep() {
   authStore.nextStep();
 
   router.push({ name: "Informations" });
+}
+
+function goToPreviousStep() {
+  authStore.previousStep();
+  router.push({ name: "Prestations" });
 }
 
 async function submitRegistrationClient() {

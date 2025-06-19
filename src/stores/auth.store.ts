@@ -8,7 +8,11 @@ interface AuthState {
   register: RegisterForm | Record<string, never>;
 }
 
-export const stepsOrder = [RegisterSteps.PROFIL, RegisterSteps.INFORMATIONS];
+export const stepsOrder = [
+  RegisterSteps.PROFIL,
+  RegisterSteps.PRESTATIONS,
+  RegisterSteps.INFORMATIONS,
+];
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({

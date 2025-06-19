@@ -13,9 +13,15 @@
       :option="option"
     />
   </div>
+  <Alert
+    v-if="selected === 'service_agent' || selected === 'delivery_agent'"
+    isWarning
+    >L'inscription n'est pas automatique, nous étudierons avec le plus grand
+    soin votre demande.</Alert
+  >
   <div class="max-w-sm flex gap-4 py-4 justify-end">
     <Button :disabled="formHasError" isGreen @click="goToNextStep"
-      >Envoyer</Button
+      >Suivant</Button
     >
   </div>
 </template>
@@ -23,11 +29,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import RadioButtonWithIcon from "@/components/formControls/RadioButtonWithIcon.vue";
+import Alert from "@/components/formControls/Alert.vue";
 import { UserIcon, TruckIcon } from "@heroicons/vue/24/outline";
 import Button from "@/components/formControls/Button.vue";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/auth.store"; // Assumes your Pinia store is here
+import { useAuthStore } from "@/stores/auth.store";
 const authStore = useAuthStore();
 const router = useRouter();
 const selected = ref("");
@@ -44,7 +51,13 @@ function goToNextStep() {
 
   authStore.nextStep();
 
-  router.push({ name: "Informations" });
+  if (selected.value === "client" || selected.value === "merchant") {
+    router.push({ name: "Informations" });
+    return;
+  } else {
+    router.push({ name: "Prestations" });
+    return;
+  }
 }
 
 const prospectOptions = [
