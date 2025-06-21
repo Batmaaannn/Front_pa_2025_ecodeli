@@ -37,7 +37,7 @@
             v-model.number="price[plan.id]"
             @input="onPriceInput(plan.id)"
           />
-          <span class="ml-1 text-gray-500 sm:ml-0">/heure</span>
+          <span class="ml-1 text-gray-500 sm:ml-0"> €/heure</span>
         </span>
       </label>
     </div>

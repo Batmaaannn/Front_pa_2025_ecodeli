@@ -12,6 +12,12 @@ export const usePrestationStore = defineStore("prestationStore", {
   }),
   getters: {},
   actions: {
-    async getPrestations() {},
+    async getPrestations() {
+      try {
+        return this.prestations = (await axios.get<Prestation[]>("/prestations")).data;
+      } catch (error) {
+        console.log("Error fetching prestations:", error);
+      }
+    },
   },
 });

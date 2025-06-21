@@ -27,12 +27,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import RadioButtonWithIcon from "@/components/formControls/RadioButtonWithIcon.vue";
 import Alert from "@/components/formControls/Alert.vue";
 import { UserIcon, TruckIcon } from "@heroicons/vue/24/outline";
 import Button from "@/components/formControls/Button.vue";
-import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.store";
 const authStore = useAuthStore();
