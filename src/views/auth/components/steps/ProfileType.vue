@@ -34,10 +34,17 @@ import { UserIcon, TruckIcon } from "@heroicons/vue/24/outline";
 import Button from "@/components/formControls/Button.vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/auth.store";
+import { RegisterSteps } from "@/types/auth";
 const authStore = useAuthStore();
 const router = useRouter();
 const selected = ref("");
+import { onMounted } from "vue";
 
+onMounted(() => {
+  if (authStore.register.userType) {
+    selected.value = authStore.register.userType;
+  }
+});
 const formHasError = computed(() => {
   if (!selected.value) return true;
   return !prospectOptions.some((option) => option.value === selected.value);
@@ -47,15 +54,19 @@ function goToNextStep() {
   authStore.setUserTypeRegister({
     userType: selected.value,
   });
+  authStore.initStepByUserType();
 
-  authStore.nextStep();
-
-  if (selected.value === "client" || selected.value === "merchant") {
-    router.push({ name: "Informations" });
-    return;
-  } else {
-    router.push({ name: "Prestations" });
-    return;
+  switch (authStore.currentRegisterStep) {
+    case RegisterSteps.INFORMATIONS:
+      router.push({ name: "Informations" });
+      break;
+    case RegisterSteps.PRESTATIONS:
+      router.push({ name: "Prestations" });
+      break;
+    case RegisterSteps.PROFIL:
+    default:
+      router.push({ name: "Informations" });
+      break;
   }
 }
 

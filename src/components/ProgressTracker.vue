@@ -18,9 +18,8 @@
                 <span
                   class="relative z-10 flex size-8 items-center justify-center rounded-full bg-primary-500 group-hover:bg-primary-600"
                 >
-                  <Icon
-                    icon="lets-icons:check-fill"
-                    class="size-5 text-white"
+                  <CheckIcon
+                    class="h-5 w-5 flex-none text-white"
                     aria-hidden="true"
                   />
                 </span>
@@ -92,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import { CheckIcon } from "@heroicons/vue/20/solid";
 import { useAuthStore } from "@/stores/auth.store";
 import { RegisterSteps } from "@/types/auth";
 const authStore = useAuthStore();
@@ -119,6 +119,11 @@ const steps = [
     name: "Informations personnelles",
     step: RegisterSteps.INFORMATIONS,
     description: "Renseignement des informations personnelles",
+  },
+  {
+    name: "Documents",
+    step: RegisterSteps.DOCUMENTS,
+    description: "Renseignement des documents justificatifs",
   },
 ];
 </script>

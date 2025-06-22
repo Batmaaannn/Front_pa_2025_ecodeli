@@ -39,6 +39,13 @@ const routes: Array<RouteRecordRaw> = [
           import("@/views/auth/components/steps/Informations.vue"),
         meta: { requiresAuth: false },
       },
+      {
+        path: "/inscription/documents",
+        name: "Documents",
+        component: () =>
+          import("@/views/auth/components/steps/Documents.vue"),
+        meta: { requiresAuth: false },
+      },
     ],
   },
 ];

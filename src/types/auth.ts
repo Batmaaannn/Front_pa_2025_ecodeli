@@ -1,7 +1,10 @@
+import { PrestationIdWithPrice } from "./prestation";
+
 export enum RegisterSteps {
   PROFIL = "PROFIL",
   PRESTATIONS = "PRESTATIONS",
   INFORMATIONS = "INFORMATIONS",
+  DOCUMENTS = "DOCUMENTS",
 }
 
 export interface RegisterForm {
@@ -15,4 +18,5 @@ export interface RegisterForm {
   companySiret?: string;
   companyAddress?: string;
   companyCity?: string;
+  prestations?: PrestationIdWithPrice[];
 }

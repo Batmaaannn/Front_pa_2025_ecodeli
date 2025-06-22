@@ -12,15 +12,14 @@
       pour en discuter.</small
     >
   </div>
-  <div class="">
-    <PrestationChoose
-      v-if="plans.length > 0"
-      v-model="selectedPrestations"
-      :prestations="plans"
-      @update:prestationPrice="handlePrice"
-    />
-  </div>
+  <PrestationChoose
+    v-if="plans.length > 0"
+    v-model="selectedPrestations"
+    :prestations="plans"
+    @update:prestationPrice="handlePrice"
+  />
   <div class="max-w-sm flex gap-4 py-4 justify-end">
+    <Button isGreen @click="goToPreviousStep">Précédent</Button>
     <Button :disabled="formHasError" isGreen @click="goToNextStep"
       >Suivant</Button
     >
@@ -29,41 +28,57 @@
 
 <script setup lang="ts">
 import PrestationChoose from "@/components/prestations/PrestationChoose.vue";
-import { onBeforeMount, ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeMount, ref, computed, onMounted } from "vue";
 import Button from "@/components/formControls/Button.vue";
+import { Prestation, PrestationIdWithPrice } from "@/types/prestation";
 
 import { usePrestationStore } from "@/stores/prestation.store";
+import { useAuthStore } from "@/stores/auth.store";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 const prestationStore = usePrestationStore();
-import { Prestation } from "@/types/prestation.type";
+const authStore = useAuthStore();
 const plans = ref<Prestation[]>([]);
 
 onBeforeMount(async () => {
-  plans.value = await prestationStore.getPrestations();
+  plans.value = (await prestationStore.getPrestations()) ?? [];
+});
+
+onMounted(() => {
+  if (authStore.register.prestations) {
+    prices.value = authStore.register.prestations;
+  }
 });
 
 const selectedPrestations = ref<number[]>([]);
-const quantities = ref<Record<number, number>>({});
+const prices = ref<PrestationIdWithPrice[]>([]);
 
 const handlePrice = ({ id, value }: { id: number; value: number }) => {
-  quantities.value[id] = value;
+  const index = prices.value.findIndex((item) => item.prestation === id);
+  if (index !== -1) {
+    prices.value[index].price = value;
+  } else {
+    prices.value.push({ prestation: id, price: value });
+  }
 };
 
-const formHasError = computed(() => {});
+const formHasError = computed(() => prices.value.length === 0);
 
 function goToNextStep() {
-  // authStore.setUserTypeRegister({
-  //   userType: selected.value,
-  // });
+  authStore.setServiceAgentPrestations({
+    prestationsAndPrices: prices.value,
+  });
+  authStore.nextStep();
 
-  // authStore.nextStep();
+  router.push({ name: "Informations" });
+  return;
+}
 
-  // if (selected.value === "client" || selected.value === "merchant") {
-  //   router.push({ name: "Informations" });
-  //   return;
-  // } else {
-  //   router.push({ name: "Prestations" });
-  //   return;
-  // }
+function goToPreviousStep() {
+  authStore.previousStep();
+
+  router.push({ name: "UserInformations" });
 }
 </script>

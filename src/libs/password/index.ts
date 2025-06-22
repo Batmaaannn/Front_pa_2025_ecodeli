@@ -21,7 +21,7 @@ export const passwordStrengthCheck = (password: string) => {
 
   if (lengthError) errorsArray.push(lengthError);
   if (missingElementsError) errorsArray.push(missingElementsError);
-  console.log("Password strength check:", missingElementsError);
+
   return {
     color,
     strength,
