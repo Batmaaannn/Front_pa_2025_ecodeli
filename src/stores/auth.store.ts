@@ -1,108 +1,19 @@
-import { axios } from "@/libs/axios";
-import { RegisterSteps, type RegisterForm } from "@/types/auth";
+import { axios, getAxiosError } from "@/libs/axios";
+import { type RegisterForm } from "@/types/auth";
 import { InformationsForm, PrestationIdWithPrice } from "@/types/prestation";
-import type { UserType } from "@/types/user";
+import RegisterProfessionnal from "@/views/register/RegisterProfessionnal.vue";
 import { defineStore } from "pinia";
 
 interface AuthState {
-  currentRegisterStep: RegisterSteps;
   register: RegisterForm | Record<string, never>;
 }
 
-export const stepsOrder = [
-  RegisterSteps.PROFIL,
-  RegisterSteps.PRESTATIONS,
-  RegisterSteps.INFORMATIONS,
-  RegisterSteps.DOCUMENTS,
-];
-
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({
-    currentRegisterStep: RegisterSteps.PROFIL,
     register: {},
   }),
-  getters: {
-    isCompleted: (state: AuthState) => (step: RegisterSteps) => {
-      return (
-        stepsOrder.indexOf(step) < stepsOrder.indexOf(state.currentRegisterStep)
-      );
-    },
-    getCurrentRegisterStep: (state: AuthState) => {
-      return state.currentRegisterStep;
-    },
-  },
+  getters: {},
   actions: {
-    initStepByUserType() {
-      if (
-        this.register.userType === "client" ||
-        this.register.userType === "merchant"
-      ) {
-        this.currentRegisterStep = RegisterSteps.INFORMATIONS;
-      } else if (this.register.userType === "service_agent") {
-        this.currentRegisterStep = RegisterSteps.PRESTATIONS;
-      } else {
-        this.currentRegisterStep = RegisterSteps.PROFIL;
-      }
-    },
-    nextStep() {
-      if (
-        this.register.userType === "client" ||
-        this.register.userType === "merchant"
-      ) {
-        this.currentRegisterStep = RegisterSteps.INFORMATIONS;
-      } else if (this.register.userType === "service_agent") {
-        if (this.currentRegisterStep === RegisterSteps.PROFIL) {
-          this.currentRegisterStep = RegisterSteps.PRESTATIONS;
-        } else {
-          const nextIndex = stepsOrder.indexOf(this.currentRegisterStep) + 1;
-          if (nextIndex < stepsOrder.length) {
-            this.currentRegisterStep = stepsOrder[nextIndex];
-          }
-        }
-      } else {
-        const nextIndex = stepsOrder.indexOf(this.currentRegisterStep) + 1;
-        if (nextIndex < stepsOrder.length) {
-          this.currentRegisterStep = stepsOrder[nextIndex];
-        }
-      }
-    },
-    previousStep() {
-      if (
-        this.register.userType === "client" ||
-        this.register.userType === "merchant"
-      ) {
-        // Si on est sur INFORMATIONS, on revient à PROFIL
-        if (this.currentRegisterStep === RegisterSteps.INFORMATIONS) {
-          this.currentRegisterStep = RegisterSteps.PROFIL;
-        } else {
-          // sinon recul normal
-          const prevIndex = stepsOrder.indexOf(this.currentRegisterStep) - 1;
-          if (prevIndex >= 0) {
-            this.currentRegisterStep = stepsOrder[prevIndex];
-          }
-        }
-      } else if (this.register.userType === "service_agent") {
-        // Si on est sur PRESTATIONS, on revient à PROFIL
-        if (this.currentRegisterStep === RegisterSteps.PRESTATIONS) {
-          this.currentRegisterStep = RegisterSteps.PROFIL;
-        } else {
-          // sinon recul normal
-          const prevIndex = stepsOrder.indexOf(this.currentRegisterStep) - 1;
-          if (prevIndex >= 0) {
-            this.currentRegisterStep = stepsOrder[prevIndex];
-          }
-        }
-      } else {
-        // Cas par défaut : recul normal
-        const prevIndex = stepsOrder.indexOf(this.currentRegisterStep) - 1;
-        if (prevIndex >= 0) {
-          this.currentRegisterStep = stepsOrder[prevIndex];
-        }
-      }
-    },
-    setUserTypeRegister(payload: { userType: string }) {
-      this.register.userType = payload.userType;
-    },
     setUserProfessionnalInformations(payload: InformationsForm) {
       this.register.firstName = payload.firstName;
       this.register.lastName = payload.lastName;
@@ -124,13 +35,29 @@ export const useAuthStore = defineStore("authStore", {
       try {
         await axios.post("customers/create-customer", client);
       } catch (e: any) {
-        return e;
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
-    resetRegister() {
-      this.currentRegisterStep = RegisterSteps.PROFIL;
-      this.register = {};
+    async RegisterProfessionnal(client: any) {
+      try {
+        await axios.post("customers/create-customer", client);
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
+      }
     },
+
     // async login(loginForm: LoginForm) {
     //   try {
     //     const data: string = (await axios.post("/auth/sign-in", loginForm))

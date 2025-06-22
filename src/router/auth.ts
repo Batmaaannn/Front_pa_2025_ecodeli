@@ -9,45 +9,6 @@ const routes: Array<RouteRecordRaw> = [
       layout: "HomeLayout",
     },
   },
-  {
-    path: "/inscription",
-    name: "Signin",
-    component: () => import("@/views/auth/Register.vue"),
-    meta: {
-      layout: "HomeLayout",
-    },
-    redirect: { name: "UserInformations" },
-    children: [
-      {
-        path: "",
-        name: "UserInformations",
-        component: () =>
-          import("@/views/auth/components/steps/ProfileType.vue"),
-        meta: { requiresAuth: false },
-      },
-      {
-        path: "/inscription/prestations",
-        name: "Prestations",
-        component: () =>
-          import("@/views/auth/components/steps/Prestations.vue"),
-        meta: { requiresAuth: false },
-      },
-      {
-        path: "/inscription/informations",
-        name: "Informations",
-        component: () =>
-          import("@/views/auth/components/steps/Informations.vue"),
-        meta: { requiresAuth: false },
-      },
-      {
-        path: "/inscription/documents",
-        name: "Documents",
-        component: () =>
-          import("@/views/auth/components/steps/Documents.vue"),
-        meta: { requiresAuth: false },
-      },
-    ],
-  },
 ];
 
 export default routes;

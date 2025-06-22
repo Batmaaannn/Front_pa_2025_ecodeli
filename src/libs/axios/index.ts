@@ -46,15 +46,17 @@ export const getAxiosError = (
 
 import type { InternalAxiosRequestConfig } from "axios";
 
-const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-//   const { cookies } = useCookies();
-//   const token = cookies.get(COOKIES.CONNECTION_TOKEN);
+const onRequest = (
+  config: InternalAxiosRequestConfig
+): InternalAxiosRequestConfig => {
+  //   const { cookies } = useCookies();
+  //   const token = cookies.get(COOKIES.CONNECTION_TOKEN);
 
-//   if (config?.headers && token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
+  //   if (config?.headers && token) {
+  //     config.headers.Authorization = `Bearer ${token}`;
+  //   }
 
- return config;
+  return config;
 };
 
 const onRequestError = (error: AxiosError): Promise<AxiosError> => {
@@ -66,11 +68,11 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 };
 
 const onResponseError = (error: any) => {
-//   if (error.response?.data.message.match(/Invalid or expired Token/gi)) {
-//     store.commit(`user/${MUTATION_TYPES.DISCONNECT}`);
+  //   if (error.response?.data.message.match(/Invalid or expired Token/gi)) {
+  //     store.commit(`user/${MUTATION_TYPES.DISCONNECT}`);
 
-//     return router.push({ path: "/" });
-//   }
+  //     return router.push({ path: "/" });
+  //   }
   return Promise.reject(error);
 };
 

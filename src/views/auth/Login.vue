@@ -70,7 +70,7 @@
         Pas encore membre ?
         {{ " " }}
         <router-link
-          :to="{ name: 'Signin' }"
+          :to="{ name: 'SigninClient' }"
           class="font-semibold text-indigo-600 hover:text-indigo-500"
           >S'incrire</router-link
         >
