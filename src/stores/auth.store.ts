@@ -84,9 +84,7 @@ export const useAuthStore = defineStore("authStore", {
           const userStore = useUserStore();
           await userStore.fetchUser();
 
-          console.log("userStore.user", userStore.user);
-
-          router.push("/dashboard");
+          await router.push("/dashboard");
         }
       } catch (e: any) {
         const { message } = getAxiosError(e);

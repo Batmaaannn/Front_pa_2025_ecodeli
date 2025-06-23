@@ -53,7 +53,7 @@ const onRequest = (
 ): InternalAxiosRequestConfig => {
   const { cookies } = useCookies();
   const token = cookies.get(COOKIES.CONNECTION_TOKEN);
-  console.log("token", token);
+
   if (config?.headers && token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
