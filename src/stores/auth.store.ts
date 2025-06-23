@@ -1,8 +1,11 @@
 import { axios, getAxiosError } from "@/libs/axios";
 import { type RegisterForm } from "@/types/auth";
+import { COOKIES } from "@/types/cookies";
 import { InformationsForm, PrestationIdWithPrice } from "@/types/prestation";
-import RegisterProfessionnal from "@/views/register/RegisterProfessionnal.vue";
 import { defineStore } from "pinia";
+import { useCookies } from "vue3-cookies";
+import { useUserStore } from "./user.store";
+import { useRouter } from "vue-router";
 
 interface AuthState {
   register: RegisterForm | Record<string, never>;
@@ -31,6 +34,7 @@ export const useAuthStore = defineStore("authStore", {
     }) {
       this.register.prestations = payload.prestationsAndPrices;
     },
+    //TODO: typer
     async registerClient(client: any) {
       try {
         await axios.post("customers/create-customer", client);
@@ -44,9 +48,19 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
-    async RegisterProfessionnal(client: any) {
+    //TODO: typer
+    async registerProfessionnal(client: any) {
       try {
-        await axios.post("customers/create-customer", client);
+        if (client.userType === "merchant") {
+          await axios.post("customers/create-customer", client);
+        } else if (client.userType === "service_agent") {
+          await axios.post("service-agents/create-service-agent", client);
+        } else if (client.userType === "delivery_agent") {
+          await axios.post(
+            "service-agents/create-service-agent-prestations",
+            client
+          );
+        }
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
@@ -58,28 +72,35 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    // async login(loginForm: LoginForm) {
-    //   try {
-    //     const data: string = (await axios.post("/auth/sign-in", loginForm))
-    //       .data;
-    //     if (data) {
-    //       await this.setCookie(data);
-    //       const userStore = useUsersStore();
-    //       await userStore.fetchUser();
-    //       router.push("/");
-    //     }
-    //   } catch (e: any) {
-    //     let message: string;
-    //     message = e.response?.data.message || e.response.statusText;
-    //     if (message.match(/missing/gi))
-    //       this.error =
-    //         "Aucun rôle n'a été trouvé pour cet utilisateur. Veuillez contacter le support.";
-    //     else
-    //       this.error =
-    //         "Une erreur est survenue lors de la connexion. Veuillez réessayer.";
-    //     router.push("/connexion");
-    //     return e;
-    //   }
-    // },
+    async login(loginForm: any) {
+      const router = useRouter();
+      try {
+        const data: string = (await axios.post("/auth/login", loginForm)).data;
+        if (data) {
+          const { cookies } = useCookies();
+
+          cookies.set(COOKIES.CONNECTION_TOKEN, data, "30d");
+
+          const userStore = useUserStore();
+          await userStore.fetchUser();
+
+          console.log("userStore.user", userStore.user);
+
+          router.push("/dashboard");
+        }
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+
+        if (message.match(/Wrong Credentials/gi)) {
+          throw "Email ou mot de passe incorrect.";
+        }
+
+        if (message.match(/E-mail not validated/gi)) {
+          throw `Votre e-mail n'est pas validé. Merci de vérifier votre boîte mail.`;
+        }
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client.";
+      }
+    },
   },
 });

@@ -5,13 +5,14 @@ import App from "./App.vue";
 import defaultRoutes from "@/router";
 import authRoutes from "@/router/auth";
 import registerRoutes from "@/router/register";
+import usersRoutes from "@/router/user";
 
 import { createRouter, createWebHistory } from "vue-router";
 import { createNewInstance as createNewAxiosInstance } from "@/libs/axios";
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...defaultRoutes, ...authRoutes, ...registerRoutes],
+  routes: [...defaultRoutes, ...authRoutes, ...registerRoutes, ...usersRoutes],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },

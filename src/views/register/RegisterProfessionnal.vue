@@ -70,7 +70,10 @@
           </p>
         </div>
 
-        <form @submit.prevent="submitRegistrationProfessionnal" class="lg:flex-auto">
+        <form
+          @submit.prevent="submitRegistrationProfessionnal"
+          class="lg:flex-auto"
+        >
           <div class="flex flex-col md:flex-row gap-4">
             <div class="flex-1">
               <InputField
@@ -161,43 +164,47 @@
               ></InputField>
             </div>
           </div>
-          <div class="flex flex-col md:flex-row">
-            <div class="flex-1">
-              <InputField
-                type="password"
-                label="Mot de passe"
-                v-model="form.password"
-                name="password"
-                @blur="processPassword()"
-              ></InputField>
-              <span v-if="form.passwordStrength"
-                >Force du mot de passe : {{ form.passwordStrength }}</span
-              >
-              <div v-if="error.password.length > 0">
-                <p
-                  v-for="passwordError in error.password"
-                  :key="passwordError"
-                  class="error"
+          <div
+            v-if="selected !== 'service_agent' && selected !== 'delivery_agent'"
+          >
+            <div class="flex flex-col md:flex-row">
+              <div class="flex-1">
+                <InputField
+                  type="password"
+                  label="Mot de passe"
+                  v-model="form.password"
+                  name="password"
+                  @blur="processPassword()"
+                ></InputField>
+                <span v-if="form.passwordStrength"
+                  >Force du mot de passe : {{ form.passwordStrength }}</span
                 >
-                  {{ passwordError }}
-                </p>
+                <div v-if="error.password.length > 0">
+                  <p
+                    v-for="passwordError in error.password"
+                    :key="passwordError"
+                    class="error"
+                  >
+                    {{ passwordError }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col md:flex-row">
+              <div class="flex-1">
+                <InputField
+                  type="password"
+                  label="Confirmation de mot de passe"
+                  v-model="form.passwordConfirmation"
+                  name="password-confirmation"
+                  :error="error.passwordConfirmation"
+                  @blur="processPasswordConfirmation()"
+                ></InputField>
               </div>
             </div>
           </div>
-          <div class="flex flex-col md:flex-row">
-            <div class="flex-1">
-              <InputField
-                type="password"
-                label="Confirmation de mot de passe"
-                v-model="form.passwordConfirmation"
-                name="password-confirmation"
-                :error="error.passwordConfirmation"
-                @blur="processPasswordConfirmation()"
-              ></InputField>
-            </div>
-          </div>
           <div class="flex col-span-full justify-between gap-4 py-4">
-            <Button type="submit" isGreen :disabled="formClientHasError"
+            <Button type="submit" isGreen :disabled="formHasError"
               >Valider l'inscription</Button
             >
           </div>
@@ -235,7 +242,7 @@ const authStore = useAuthStore();
 const prestationStore = usePrestationStore();
 
 const selectedPrestations = ref<number[]>([]);
-const prices = ref<PrestationIdWithPrice[]>([]);
+const prices = ref<PrestationIdWithPrice[]>([]); //TODO: change name
 
 const handlePrice = ({ id, value }: { id: number; value: number }) => {
   const index = prices.value.findIndex((item) => item.prestation === id);
@@ -286,18 +293,19 @@ const prospectOptions = [
   { value: "merchant", label: "Entreprise", icon: TruckIcon },
 ];
 
-const formClientHasError = computed(() => {
+//TODO revenir sur le pwd + autre vérification
+// error.value.password.length > 0 ||
+// error.value.passwordConfirmation ||
+// !form.value.password ||
+// !form.value.passwordConfirmation ||
+const formHasError = computed(() => {
   return !!(
     error.value.phone ||
     error.value.email ||
-    error.value.password.length > 0 ||
-    error.value.passwordConfirmation ||
     error.value.firstName ||
     error.value.lastName ||
     !form.value.phone ||
     !form.value.email ||
-    !form.value.password ||
-    !form.value.passwordConfirmation ||
     !form.value.lastName ||
     !form.value.firstName
   );
@@ -381,14 +389,20 @@ async function submitRegistrationProfessionnal() {
     errorMessage.value = "";
     successMessage.value = "";
 
-    if (formClientHasError.value) return;
+    if (formHasError.value) return;
 
-    await authStore.RegisterProfessionnal({
+    await authStore.registerProfessionnal({
+      userType: selected.value,
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       email: form.value.email,
       phoneNumber: form.value.phone,
       password: form.value.password,
+      siret: form.value.siret,
+      companyName: form.value.companyName,
+      companyAddress: form.value.companyAddress,
+      companyCity: form.value.compagnyPostalCode + " " + form.value.companyCity,
+      prestations: prices.value,
     });
     successMessage.value =
       "L'inscription a été validée avec succès. Vous pouvez vous maintenant vous connecter.";

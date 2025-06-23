@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/inscription/professionnel",
-    name: "SigninServiceAgent",
+    name: "SigninProfessional",
     component: () => import("@/views/register/RegisterProfessionnal.vue"),
     meta: {
       layout: "HomeLayout",

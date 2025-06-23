@@ -45,16 +45,18 @@ export const getAxiosError = (
 };
 
 import type { InternalAxiosRequestConfig } from "axios";
+import { useCookies } from "vue3-cookies";
+import { COOKIES } from "@/types/cookies";
 
 const onRequest = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  //   const { cookies } = useCookies();
-  //   const token = cookies.get(COOKIES.CONNECTION_TOKEN);
-
-  //   if (config?.headers && token) {
-  //     config.headers.Authorization = `Bearer ${token}`;
-  //   }
+  const { cookies } = useCookies();
+  const token = cookies.get(COOKIES.CONNECTION_TOKEN);
+  console.log("token", token);
+  if (config?.headers && token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
 
   return config;
 };

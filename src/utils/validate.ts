@@ -74,3 +74,15 @@ export function validateCGU(value: boolean): string {
   if (!value) return "Merci d'accepter les conditions d'utilisation";
   return "";
 }
+
+export function mail(value: string | null): string | null {
+  if (!value) {
+    return "Veuillez entrer votre adresse email";
+  }
+
+  if (!value.includes(".") || !value.includes("@")) {
+    return "E-mail invalide";
+  }
+
+  return null;
+}
