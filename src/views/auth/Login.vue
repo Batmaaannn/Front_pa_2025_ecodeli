@@ -117,6 +117,9 @@ const formHasError = computed(() => {
   );
 });
 
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 async function login() {
   processEmail();
   processPassword();
@@ -131,6 +134,7 @@ async function login() {
         password: password.value,
       });
       success.value = true;
+      router.push({ name: "Dashboard" }); // Redirige vers la page d'accueil (ajuste le nom de la route si besoin)
     } catch (e: any) {
       error.value = e;
     } finally {

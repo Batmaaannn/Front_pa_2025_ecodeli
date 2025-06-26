@@ -47,6 +47,7 @@ export const getAxiosError = (
 import type { InternalAxiosRequestConfig } from "axios";
 import { useCookies } from "vue3-cookies";
 import { COOKIES } from "@/types/cookies";
+import router from "@/router";
 
 const onRequest = (
   config: InternalAxiosRequestConfig
@@ -70,11 +71,11 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 };
 
 const onResponseError = (error: any) => {
-  //   if (error.response?.data.message.match(/Invalid or expired Token/gi)) {
-  //     store.commit(`user/${MUTATION_TYPES.DISCONNECT}`);
+  if (error.response?.data.message.match(/Invalid or expired Token/gi)) {
+    //store.commit(`user/${MUTATION_TYPES.DISCONNECT}`);
 
-  //     return router.push({ path: "/" });
-  //   }
+    //return router.push("/");
+  }
   return Promise.reject(error);
 };
 

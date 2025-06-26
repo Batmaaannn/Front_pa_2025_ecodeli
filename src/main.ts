@@ -9,6 +9,7 @@ import usersRoutes from "@/router/user";
 
 import { createRouter, createWebHistory } from "vue-router";
 import { createNewInstance as createNewAxiosInstance } from "@/libs/axios";
+import { authGuard } from "./router/guards/auth";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -16,6 +17,11 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },
+});
+
+router.beforeEach(async (to, from, next) => {
+  await authGuard(to, next);
+  next();
 });
 
 const app = createApp(App);

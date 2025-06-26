@@ -8,6 +8,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/users/Dashboard.vue"),
     meta: {
       layout: "ConnectedLayout",
+      requiresAuth: true,
     },
   },
 ];

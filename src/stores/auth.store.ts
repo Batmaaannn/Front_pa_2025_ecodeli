@@ -6,6 +6,7 @@ import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
 import { useRouter } from "vue-router";
+import router from "@/router";
 
 interface AuthState {
   register: RegisterForm | Record<string, never>;
@@ -71,9 +72,7 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
-
     async login(loginForm: any) {
-      const router = useRouter();
       try {
         const data: string = (await axios.post("/auth/login", loginForm)).data;
         if (data) {
@@ -83,11 +82,10 @@ export const useAuthStore = defineStore("authStore", {
 
           const userStore = useUserStore();
           await userStore.fetchUser();
-
-          await router.push("/dashboard");
         }
       } catch (e: any) {
         const { message } = getAxiosError(e);
+        console.error("Error during login:", message);
 
         if (message.match(/Wrong Credentials/gi)) {
           throw "Email ou mot de passe incorrect.";
