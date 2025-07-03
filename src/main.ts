@@ -3,8 +3,7 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import defaultRoutes from "@/router";
-import authRoutes from "@/router/auth";
-import registerRoutes from "@/router/register";
+import connectionRoutes from "@/router/connection";
 import usersRoutes from "@/router/user";
 
 import { createRouter, createWebHistory } from "vue-router";
@@ -13,7 +12,11 @@ import { authGuard } from "./router/guards/auth";
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...defaultRoutes, ...authRoutes, ...registerRoutes, ...usersRoutes],
+  routes: [
+    ...defaultRoutes,
+    ...connectionRoutes,
+    ...usersRoutes,
+  ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
   },

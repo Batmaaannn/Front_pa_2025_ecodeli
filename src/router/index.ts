@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/contact",
     name: "Contact",
-    component: () => import("@/views/landingPage/Contact.vue"),
+    component: () => import("@/views/landing-page/Contact.vue"),
     meta: {
       layout: "HomeLayout",
       requiresAuth: false,
@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/nos-prix",
     name: "Price",
-    component: () => import("@/views/landingPage/Price.vue"),
+    component: () => import("@/views/landing-page/Price.vue"),
     meta: {
       layout: "HomeLayout",
     },
@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/formules",
     name: "Formules",
-    component: () => import("@/views/landingPage/Formules.vue"),
+    component: () => import("@/views/landing-page/Formules.vue"),
     meta: {
       layout: "HomeLayout",
       requiresAuth: false,
