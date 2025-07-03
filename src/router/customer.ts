@@ -19,13 +19,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: "FutureCustomerDeliveries",
-        path: "mes-livraison",
+        path: "mes-livraisons",
         component: () =>
           import("@/views/customer/deliveries/FutureDeliveries.vue"),
       },
       {
         name: "CustomerDelivery",
-        path: "mes-livraison/:id",
+        path: "mes-livraisons/:id",
         component: () => import("@/views/customer/deliveries/DeliveryPage.vue"),
       },
       {

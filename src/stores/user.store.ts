@@ -42,5 +42,10 @@ export const useUserStore = defineStore("userStore", {
         return Promise.reject(error);
       }
     },
+    disconnect() {
+      const { cookies } = useCookies();
+      cookies.remove(COOKIES.CONNECTION_TOKEN);
+      this.user = {};
+    },
   },
 });
