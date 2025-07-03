@@ -1,5 +1,12 @@
 import { axios } from "@/libs/axios";
 import { COOKIES } from "@/types/cookies";
+import {
+  isAdminUser,
+  isCustomerUser,
+  isDeliveryAgentUser,
+  isMerchantUser,
+  isServiceAgentUser,
+} from "@/types/typeGuards";
 import { User } from "@/types/user";
 import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
@@ -14,9 +21,12 @@ export const useUserStore = defineStore("userStore", {
   }),
   getters: {
     isConnected: (state) => Object.keys(state.user).length > 0,
-    getDashboardUrl: (state) => {
-      if (isProprietaireUser(state.user)) return "/extranet";
-      else return "/";
+    getDashboardUrl: (state: UserState) => {
+      if (isCustomerUser(state.user)) return "/mon-espace";
+      if (isMerchantUser(state.user)) return "/mon-espace-commercant";
+      if (isServiceAgentUser(state.user)) return "/mon-espace-prestataire";
+      if (isDeliveryAgentUser(state.user)) return "/mon-espace-livreur";
+      if (isAdminUser(state.user)) return "/tableau-de-bord";
     },
   },
   actions: {

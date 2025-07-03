@@ -136,7 +136,8 @@ async function login() {
         password: password.value,
       });
       success.value = true;
-      router.push({ name: "Dashboard" }); // Redirige vers la page d'accueil (ajuste le nom de la route si besoin)
+      console.log("Login successful", userStore.getDashboardUrl);
+      router.push({ path: userStore.getDashboardUrl }); // Redirige vers la page d'accueil (ajuste le nom de la route si besoin)
     } catch (e: any) {
       error.value = e;
     } finally {

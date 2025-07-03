@@ -4,7 +4,9 @@ import { createPinia } from "pinia";
 import App from "./App.vue";
 import defaultRoutes from "@/router";
 import connectionRoutes from "@/router/connection";
-import usersRoutes from "@/router/user";
+import customersRoutes from "@/router/customer";
+import deliveryAgentRoutes from "@/router/customer";
+import serviceAgentRoutes from "@/router/customer";
 
 import { createRouter, createWebHistory } from "vue-router";
 import { createNewInstance as createNewAxiosInstance } from "@/libs/axios";
@@ -15,7 +17,9 @@ const router = createRouter({
   routes: [
     ...defaultRoutes,
     ...connectionRoutes,
-    ...usersRoutes,
+    ...customersRoutes,
+    ...deliveryAgentRoutes,
+    ...serviceAgentRoutes,
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
