@@ -18,22 +18,32 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/service-agent/Dashboard.vue"),
       },
       {
-        name: "Dashboard",
+        name: "FutureServiceAgentAppointments",
         path: "mes-rendez-vous",
         component: () =>
           import("@/views/service-agent/appointments/FutureAppointments.vue"),
       },
       {
-        name: "Dashboard",
+        name: "ServiceAgentAppointment",
         path: "mes-rendez-vous/:id",
         component: () =>
           import("@/views/service-agent/appointments/AppointmentPage.vue"),
       },
       {
-        name: "Dashboard",
+        name: "PastServiceAgentAppointments",
         path: "mon-historique",
         component: () =>
           import("@/views/service-agent/appointments/PastAppointments.vue"),
+      },
+      {
+        name: "ServiceAgentReviews",
+        path: "mes-avis",
+        component: () => import("@/views/service-agent/Reviews.vue"),
+      },
+      {
+        name: "Prestations",
+        path: "mes-prestations",
+        component: () => import("@/views/service-agent/Prestations.vue"),
       },
     ],
   },

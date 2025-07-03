@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/inscription/professionnel",
     name: "SigninProfessional",
-    component: () => import("@/views/register/RegisterProfessionnal.vue"),
+    component: () => import("@/views/auth/RegisterProfessionnal.vue"),
     meta: {
       layout: "HomeLayout",
     },
@@ -20,7 +20,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/inscription/client",
     name: "SigninClient",
-    component: () => import("@/views/register/RegisterClient.vue"),
+    component: () => import("@/views/auth/RegisterClient.vue"),
     meta: {
       layout: "HomeLayout",
     },

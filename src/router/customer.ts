@@ -13,46 +13,46 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        name: "Dashboard",
+        name: "CustomerDashboard",
         path: "",
         component: () => import("@/views/customer/Dashboard.vue"),
       },
       {
-        name: "Dashboard",
-        path: "mes-demandes-de-livraison",
+        name: "FutureCustomerDeliveries",
+        path: "mes-livraison",
         component: () =>
           import("@/views/customer/deliveries/FutureDeliveries.vue"),
       },
       {
-        name: "Dashboard",
-        path: "mes-demandes-de-livraison/:id",
+        name: "CustomerDelivery",
+        path: "mes-livraison/:id",
         component: () => import("@/views/customer/deliveries/DeliveryPage.vue"),
       },
       {
-        name: "Dashboard",
+        name: "PastCustomerDeliveries",
         path: "mon-historique-de-livraison",
         component: () =>
           import("@/views/customer/deliveries/PastDeliveries.vue"),
       },
       {
-        name: "Dashboard",
+        name: "BoxPage",
         path: "mes-boxs",
         component: () => import("@/views/customer/boxs/BoxPage.vue"),
       },
       {
-        name: "Dashboard",
+        name: "FutureCustomerAppointments",
         path: "mes-rendez-vous",
         component: () =>
           import("@/views/customer/appointments/FutureAppointments.vue"),
       },
       {
-        name: "Dashboard",
+        name: "CustomerAppointment",
         path: "mes-rendez-vous/:id",
         component: () =>
           import("@/views/customer/appointments/AppointmentPage.vue"),
       },
       {
-        name: "Dashboard",
+        name: "PastCustomerAppointments",
         path: "mon-historique",
         component: () =>
           import("@/views/customer/appointments/PastAppointments.vue"),

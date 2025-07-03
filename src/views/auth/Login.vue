@@ -98,10 +98,13 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth.store";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user.store";
 
 import * as Validators from "@/utils/validate";
 
 const authStore = useAuthStore();
+const userStore = useUserStore();
 
 const email = ref("");
 const password = ref("");
@@ -117,7 +120,6 @@ const formHasError = computed(() => {
   );
 });
 
-import { useRouter } from "vue-router";
 const router = useRouter();
 
 async function login() {

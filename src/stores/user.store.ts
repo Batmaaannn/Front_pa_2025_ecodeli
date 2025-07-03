@@ -14,10 +14,10 @@ export const useUserStore = defineStore("userStore", {
   }),
   getters: {
     isConnected: (state) => Object.keys(state.user).length > 0,
-    // getDashboardUrl: (state) => {
-    //   if (isProprietaireUser(state.user)) return "/extranet";
-    //   else return "/";
-    // },
+    getDashboardUrl: (state) => {
+      if (isProprietaireUser(state.user)) return "/extranet";
+      else return "/";
+    },
   },
   actions: {
     async fetchUser() {
