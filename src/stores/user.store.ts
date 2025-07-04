@@ -27,6 +27,7 @@ export const useUserStore = defineStore("userStore", {
       if (isServiceAgentUser(state.user)) return "/mon-espace-prestataire";
       if (isDeliveryAgentUser(state.user)) return "/mon-espace-livreur";
       if (isAdminUser(state.user)) return "/tableau-de-bord";
+      return "/";
     },
   },
   actions: {

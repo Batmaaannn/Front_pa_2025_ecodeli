@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/mon-espace-livreur",
-    name: "Dashboard",
+    name: "DashboardDeliveriesAgents",
     component: () =>
       import("@/views/delivery-agent/DashboardDeliveryAgent.vue"),
     meta: {
@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        name: "Dashboard",
+        name: "DashboardDeliveryAgent",
         path: "",
         component: () => import("@/views/delivery-agent/Dashboard.vue"),
       },

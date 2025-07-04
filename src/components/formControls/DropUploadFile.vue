@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-around items-center m-4 border border-red-500 rounded-lg w-64 h-64"
+    class="mt-2 flex-col justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
     @drop.prevent="dragUpload"
     @dragenter.prevent
     @dragleave.prevent
@@ -20,43 +20,43 @@
           @click="deleteFile(file.name)"
           class="ml-2 cursor-pointer text-red-500"
         >
-        X
+          X
           <i class="fas fa-times"></i>
         </span>
       </div>
     </div>
 
-    <label
-      for="upload-input"
-      class="flex flex-col items-center justify-center w-full h-1/2 p-2 cursor-pointer"
-    >
-      <input
-        type="file"
-        @change="fileSelectionUpload"
-        id="upload-input"
-        multiple
-        accept=".pdf,.jpg,.jpeg,.png"
-        class="hidden"
-      />
-      <span
-        class="flex justify-center items-center w-5 h-5 p-2 border border-orange-400 rounded-full text-orange-400"
+    <div class="text-center">
+      <PhotoIcon class="mx-auto size-12 text-gray-300" aria-hidden="true" />
+      <div
+        class="mt-4 flex items-center justify-center text-sm/6 text-gray-600"
       >
-      +
-        <i class="fas fa-plus"></i>
-      </span>
-      <p class="text-center mt-2 px-2">{{ subtitle }}</p>
-    </label>
+        <label
+          for="upload-input"
+          class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500"
+        >
+          <span>Cliquez</span>
+          <input
+            type="file"
+            @change="fileSelectionUpload"
+            id="upload-input"
+            multiple
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="hidden"
+          />
+        </label>
+        <p class="pl-1">ou déposez votre fichier ici</p>
+      </div>
+      <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { PhotoIcon } from "@heroicons/vue/24/solid";
 import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  subtitle: {
-    type: String,
-    default: "Cliquez ou déposez votre fichier ici ",
-  },
   files: {
     type: Array as () => File[],
     default: () => [],

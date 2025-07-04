@@ -24,7 +24,7 @@ import {
 } from "@heroicons/vue/24/outline";
 
 const navigation = [
-  { name: "Accueil", href: "CustomerDashboard", icon: HomeIcon, current: true },
+  { name: "Accueil", href: "DashboardCustomer", icon: HomeIcon, current: true },
   {
     name: "Livraisons",
     href: "FutureCustomerDeliveries",

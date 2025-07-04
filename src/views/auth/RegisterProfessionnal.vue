@@ -1,34 +1,16 @@
 <template>
   <div class="mx-auto max-w-7xl py-40 px-4 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <div v-if="!!successMessage">
-        <Alert isSuccess>{{ successMessage }}</Alert>
-      </div>
-      <div v-else>
-        <!-- User profile -->
-        <div class="max-w-2xl">
-          <h2 class="text-l font-semibold">Quel est votre type de profil ?</h2>
-          <p class="mb-4">
-            Sélectionnez le type de profil qui correspond le mieux à votre
-            activité.
-          </p>
-        </div>
-        <div class="grid lg:grid-cols-4 gap-4 md:grid-cols-2 sm:grid-cols-1">
-          <RadioButtonWithIcon
-            v-for="option in prospectOptions"
-            :key="option.value"
-            v-model="selected"
-            :option="option"
-          />
-        </div>
-        <Alert
-          v-if="selected === 'service_agent' || selected === 'delivery_agent'"
-          isWarning
-          >L'inscription n'est pas automatique, nous étudierons avec le plus
-          grand soin votre demande.</Alert
-        >
+      <Alert v-if="!!successMessage" isSuccess>{{ successMessage }}</Alert>
+      <div>
+        <ProfileModal
+          v-if="displayedModal"
+          @close="closeModal()"
+          @update-profile="updateProfile"
+        />
+
         <!-- Prestations profile -->
-        <div v-if="selected === 'service_agent'" class="max-w-3xl mt-8">
+        <div v-if="profileSelected === 'service_agent'" class="max-w-3xl mt-8">
           <h2 class="text-l font-semibold">
             Quels services à la personne proposés vous ?
           </h2>
@@ -107,7 +89,7 @@
               <InputField
                 label="Ville"
                 v-model="form.companyCity"
-                name="siret"
+                name="city"
                 :error="error.companyCity"
               ></InputField>
             </div>
@@ -115,7 +97,7 @@
               <InputField
                 label="Code postal"
                 v-model="form.compagnyPostalCode"
-                name="siret"
+                name="postalCode"
                 :error="error.compagnyPostalCode"
               ></InputField>
             </div>
@@ -165,7 +147,10 @@
             </div>
           </div>
           <div
-            v-if="selected !== 'service_agent' && selected !== 'delivery_agent'"
+            v-if="
+              profileSelected !== 'service_agent' &&
+              profileSelected !== 'delivery_agent'
+            "
           >
             <div class="flex flex-col md:flex-row">
               <div class="flex-1">
@@ -225,18 +210,28 @@ import { useAuthStore } from "@/stores/auth.store";
 import { passwordStrengthCheck } from "@/libs/password";
 import * as Validators from "@/utils/validate";
 import Alert from "@/components/formControls/Alert.vue";
-import RadioButtonWithIcon from "@/components/formControls/RadioButtonWithIcon.vue";
-import { UserIcon, TruckIcon } from "@heroicons/vue/24/outline";
 import PrestationChoose from "@/components/prestations/PrestationChoose.vue";
 import { Prestation, PrestationIdWithPrice } from "@/types/prestation";
 import { usePrestationStore } from "@/stores/prestation.store";
 import DropUploadFile from "@/components/formControls/DropUploadFile.vue";
+import ProfileModal from "./components/ProfileModal.vue";
 
 const prestations = ref<Prestation[]>([]);
+const profileSelected = ref<string>("");
 
 onBeforeMount(async () => {
   prestations.value = (await prestationStore.getPrestations()) ?? [];
 });
+
+let displayedModal = ref<boolean>(true);
+
+const closeModal = () => {
+  displayedModal.value = false;
+};
+
+function updateProfile($event: string) {
+  profileSelected.value = $event;
+}
 
 const authStore = useAuthStore();
 const prestationStore = usePrestationStore();
@@ -286,12 +281,6 @@ const error = ref({
 const loading = ref(false);
 const errorMessage = ref("");
 const successMessage = ref("");
-const selected = ref("");
-const prospectOptions = [
-  { value: "service_agent", label: "Prestataire de service", icon: TruckIcon },
-  { value: "delivery_agent", label: "Livreur", icon: UserIcon },
-  { value: "merchant", label: "Entreprise", icon: TruckIcon },
-];
 
 //TODO revenir sur le pwd + autre vérification
 // error.value.password.length > 0 ||
@@ -385,14 +374,14 @@ function removeFile(fileName: string) {
 
 async function submitRegistrationProfessionnal() {
   try {
+    console.log("Submitting registration for professional:");
     loading.value = true;
     errorMessage.value = "";
     successMessage.value = "";
 
     if (formHasError.value) return;
 
-    await authStore.registerProfessionnal({
-      userType: selected.value,
+    const registrationData: any = {
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       email: form.value.email,
@@ -402,8 +391,16 @@ async function submitRegistrationProfessionnal() {
       companyName: form.value.companyName,
       companyAddress: form.value.companyAddress,
       companyCity: form.value.compagnyPostalCode + " " + form.value.companyCity,
-      prestations: prices.value,
-    });
+    };
+
+    if (prices.value.length > 0) {
+      registrationData.prestations = prices.value;
+    }
+    console.log("Registration data:", profileSelected.value);
+    await authStore.registerProfessionnal(
+      profileSelected.value,
+      registrationData
+    );
     successMessage.value =
       "L'inscription a été validée avec succès. Vous pouvez vous maintenant vous connecter.";
   } catch (error: any) {

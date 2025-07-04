@@ -1,12 +1,4 @@
 <template>
-  <!--
-    This example requires updating your template:
-
-    ```
-    <html class="h-full bg-white">
-    <body class="h-full">
-    ```
-  -->
   <div>
     <TransitionRoot as="template" :show="sidebarOpen">
       <Dialog class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -230,7 +222,7 @@
                 >
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      :to="{ name: 'CustomerDashboard' }"
+                      :to="{ name: 'DashboardCustomer' }"
                       :class="[
                         active ? 'bg-gray-50 outline-hidden' : '',
                         'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',

@@ -37,6 +37,7 @@ export const useAuthStore = defineStore("authStore", {
     },
     //TODO: typer
     async registerClient(client: any) {
+      console.log("Registering client:", client);
       try {
         await axios.post("customers/create-customer", client);
       } catch (e: any) {
@@ -50,17 +51,16 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
     //TODO: typer
-    async registerProfessionnal(client: any) {
+    async registerProfessionnal(userType: string, client: any) {
+      console.log("Registering professional:", userType);
       try {
-        if (client.userType === "merchant") {
-          await axios.post("customers/create-customer", client);
-        } else if (client.userType === "service_agent") {
-          await axios.post("service-agents/create-service-agent", client);
-        } else if (client.userType === "delivery_agent") {
-          await axios.post(
-            "service-agents/create-service-agent-prestations",
-            client
-          );
+        if (userType === "merchant") {
+          console.log("Registering as merchant:");
+          await axios.post("merchants/create-merchant", client);
+        } else if (userType === "service_agent") {
+          await axios.post("registration-requests/service-agent", client);
+        } else if (userType === "delivery_agent") {
+          await axios.post("registration-requests/delivery-agent", client);
         }
       } catch (e: any) {
         const { message } = getAxiosError(e);

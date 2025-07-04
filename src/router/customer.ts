@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/mon-espace",
-    name: "Dashboard",
+    name: "DashboardCustomers",
     component: () => import("@/views/customer/DashboardCustomer.vue"),
     meta: {
       layout: "ConnectedLayout",
@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        name: "CustomerDashboard",
+        name: "DashboardCustomer",
         path: "",
         component: () => import("@/views/customer/Dashboard.vue"),
       },

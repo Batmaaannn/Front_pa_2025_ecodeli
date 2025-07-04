@@ -16,15 +16,12 @@
 import ConnecterSidebar from "@/components/layouts/menus/ConnectedSidebar.vue";
 import {
   CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
   UsersIcon,
 } from "@heroicons/vue/24/outline";
 
 const navigation = [
-  { name: "Accueil", href: "DashboardCustomer", icon: HomeIcon, current: true },
+  { name: "Accueil", href: "DashboardMerchant", icon: HomeIcon, current: true },
   {
     name: "Livraisons",
     href: "FutureCustomerDeliveries",
@@ -37,19 +34,5 @@ const navigation = [
     icon: CalendarIcon,
     current: false,
   },
-
-  {
-    name: "Mes rendez-vous",
-    href: "FutureCustomerAppointments",
-    icon: FolderIcon,
-    current: false,
-  },
-  {
-    name: "Rendez-vous passés",
-    href: "PastCustomerAppointments",
-    icon: DocumentDuplicateIcon,
-    current: false,
-  },
-  { name: "Boxs", href: "BoxPage", icon: ChartPieIcon, current: false },
 ];
 </script>

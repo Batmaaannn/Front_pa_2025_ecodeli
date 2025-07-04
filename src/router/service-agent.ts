@@ -4,7 +4,7 @@ import type { RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/mon-espace-prestataire",
-    name: "Dashboard",
+    name: "DashboardServiceAgents",
     component: () => import("@/views/service-agent/DashboardServiceAgent.vue"),
     meta: {
       layout: "ConnectedLayout",
@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        name: "Dashboard",
+        name: "DashboardServiceAgent",
         path: "",
         component: () => import("@/views/service-agent/Dashboard.vue"),
       },
