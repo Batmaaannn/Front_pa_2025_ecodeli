@@ -8,6 +8,8 @@ import customersRoutes from "@/router/customer";
 import deliveryAgentRoutes from "@/router/delivery-agent";
 import serviceAgentRoutes from "@/router/service-agent";
 import merchantsRoutes from "@/router/merchant";
+import adminRoutes from "@/router/admin";
+
 
 import { createRouter, createWebHistory } from "vue-router";
 import { createNewInstance as createNewAxiosInstance } from "@/libs/axios";
@@ -23,6 +25,7 @@ const router = createRouter({
     ...deliveryAgentRoutes,
     ...serviceAgentRoutes,
     ...merchantsRoutes,
+    ...adminRoutes,
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
