@@ -240,11 +240,11 @@ const selectedPrestations = ref<number[]>([]);
 const prices = ref<PrestationIdWithPrice[]>([]); //TODO: change name
 
 const handlePrice = ({ id, value }: { id: number; value: number }) => {
-  const index = prices.value.findIndex((item) => item.prestation === id);
+  const index = prices.value.findIndex((item) => item.prestationId === id);
   if (index !== -1) {
     prices.value[index].price = value;
   } else {
-    prices.value.push({ prestation: id, price: value });
+    prices.value.push({ prestationId: id, price: value });
   }
 };
 
@@ -386,17 +386,20 @@ async function submitRegistrationProfessionnal() {
       lastName: form.value.lastName,
       email: form.value.email,
       phoneNumber: form.value.phone,
-      password: form.value.password,
       siret: form.value.siret,
       companyName: form.value.companyName,
       companyAddress: form.value.companyAddress,
       companyCity: form.value.compagnyPostalCode + " " + form.value.companyCity,
     };
 
+    if (form.value.password && form.value.password !== "") {
+      registrationData.password = form.value.password;
+    }
+
     if (prices.value.length > 0) {
       registrationData.prestations = prices.value;
     }
-    console.log("Registration data:", profileSelected.value);
+  
     await authStore.registerProfessionnal(
       profileSelected.value,
       registrationData

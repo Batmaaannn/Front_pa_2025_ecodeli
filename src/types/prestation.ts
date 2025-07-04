@@ -5,7 +5,7 @@ export interface Prestation {
 }
 
 export interface PrestationIdWithPrice {
-  prestation: number;
+  prestationId: number;
   price: number;
 }
 
