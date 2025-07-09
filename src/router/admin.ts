@@ -20,8 +20,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: "RegistrationRequests",
-        path: "/demande-inscription",
+        path: "demande-inscription",
         component: () => import("@/views/admin/RegistrationRequests.vue"),
+      },
+      {
+        name: "RegistrationRequestId",
+        path: "demande-inscription/:id",
+        component: () => import("@/views/admin/RegistrationRequestId.vue"),
       },
     ],
   },

@@ -4,7 +4,7 @@ export interface Prestation {
   category: string;
 }
 
-export interface PrestationIdWithPrice {
+export interface FormPrestationIdWithPrice {
   prestationId: number;
   price: number;
 }
@@ -20,4 +20,13 @@ export interface InformationsForm {
   companyCity: string;
   compagnyPostalCode: string;
   companyAddress: string;
+}
+
+export interface PrestationWithPrice {
+  id: number;
+  price: string;
+  prestation: Prestation & {
+    created_at: string;
+    updated_at: string;
+  };
 }

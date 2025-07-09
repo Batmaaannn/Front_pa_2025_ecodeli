@@ -3,11 +3,13 @@ import axios, {
   type AxiosInstance,
   type AxiosRequestConfig,
   type AxiosResponse,
+  InternalAxiosRequestConfig,
 } from "axios";
-// import { useCookies } from "vue3-cookies";
+import { useCookies } from "vue3-cookies";
+import { COOKIES } from "@/types/cookies";
+import router from "@/router";
 import { config as globalConfig } from "@/config";
-// import { COOKIES } from "@/types";
-// import { router, store } from "@/main";
+import { useUserStore } from "@/stores/user.store";
 
 const apiUrl =
   globalConfig.apiUrl === "production"
@@ -44,11 +46,6 @@ export const getAxiosError = (
   return error;
 };
 
-import type { InternalAxiosRequestConfig } from "axios";
-import { useCookies } from "vue3-cookies";
-import { COOKIES } from "@/types/cookies";
-import router from "@/router";
-
 const onRequest = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
@@ -72,9 +69,10 @@ const onResponse = (response: AxiosResponse): AxiosResponse => {
 
 const onResponseError = (error: any) => {
   if (error.response?.data.message.match(/Invalid or expired Token/gi)) {
-    //store.commit(`user/${MUTATION_TYPES.DISCONNECT}`);
+    const userStore = useUserStore();
 
-    //return router.push("/");
+    userStore.disconnect();
+    return router.push({ path: "/connexion" });
   }
   return Promise.reject(error);
 };

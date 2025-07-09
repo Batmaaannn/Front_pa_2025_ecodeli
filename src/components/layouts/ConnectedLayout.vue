@@ -4,7 +4,9 @@
       <slot />
     </div>
   </div>
-  <Footer />
+  <div class="lg:pl-72">
+    <Footer />
+  </div>
 </template>
 
 <script setup lang="ts">

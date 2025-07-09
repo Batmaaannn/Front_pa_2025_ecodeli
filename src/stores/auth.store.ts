@@ -1,7 +1,14 @@
 import { axios, getAxiosError } from "@/libs/axios";
-import { type RegisterForm } from "@/types/auth";
+import {
+  AddProfessionnal,
+  PrescriptionUpload,
+  type RegisterForm,
+} from "@/types/auth";
 import { COOKIES } from "@/types/cookies";
-import { InformationsForm, PrestationIdWithPrice } from "@/types/prestation";
+import {
+  InformationsForm,
+  FormPrestationIdWithPrice,
+} from "@/types/prestation";
 import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
@@ -31,7 +38,7 @@ export const useAuthStore = defineStore("authStore", {
       this.register.companyAddress = payload.companyAddress;
     },
     setServiceAgentPrestations(payload: {
-      prestationsAndPrices: PrestationIdWithPrice[];
+      prestationsAndPrices: FormPrestationIdWithPrice[];
     }) {
       this.register.prestations = payload.prestationsAndPrices;
     },
@@ -51,16 +58,37 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
     //TODO: typer
-    async registerProfessionnal(userType: string, client: any) {
-      console.log("Registering professional:", userType);
+    async registerProfessionnal(
+      userType: string,
+      {
+        files,
+        filename,
+        ...patientToAdd
+      }: AddProfessionnal & PrescriptionUpload
+    ) {
+      const filesData = new FormData();
+      files.map((file) => {
+        filesData.append("files", file);
+      });
+      filesData.append("fileName", filename);
+      Object.keys(patientToAdd).map((item) => {
+        const value = patientToAdd[item as keyof typeof patientToAdd];
+        if (value !== undefined) {
+          if (Array.isArray(value)) {
+            filesData.append(item, JSON.stringify(value));
+          } else {
+            filesData.append(item, String(value));
+          }
+        }
+      });
       try {
         if (userType === "merchant") {
           console.log("Registering as merchant:");
-          await axios.post("merchants/create-merchant", client);
+          await axios.post("merchants/create-merchant", filesData);
         } else if (userType === "service_agent") {
-          await axios.post("registration-requests/service-agent", client);
+          await axios.post("registration-requests/service-agent", filesData);
         } else if (userType === "delivery_agent") {
-          await axios.post("registration-requests/delivery-agent", client);
+          await axios.post("registration-requests/delivery-agent", filesData);
         }
       } catch (e: any) {
         const { message } = getAxiosError(e);
