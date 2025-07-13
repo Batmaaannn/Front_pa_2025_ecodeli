@@ -43,8 +43,19 @@ export const useRegistrationStore = defineStore("registrationStore", {
       data: FormUpdateFileStatutRegistration[]
     ) {
       try {
+        return (await axios.patch(`/files/${id}/update-registration`, data))
+          .data;
+      } catch (error) {
+        return error;
+      }
+    },
+    async updateStatusRegistrationRequest(status: boolean) {
+      try {
         return (
-          await axios.patch(`/files/${id}/update-registration`, data)
+          await axios.patch(
+            `/registration-requests/${this.registrationRequest.id}/status`,
+            { status }
+          )
         ).data;
       } catch (error) {
         return error;

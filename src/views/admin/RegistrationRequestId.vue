@@ -15,10 +15,9 @@
         </p>
       </div>
       <div class="ml-4">
-        <!-- Remplacez 'registration.status' par la variable souhaitée -->
-        <span class="text-sm text-gray-700">{{
-          statusToDisplay(registration.statut)
-        }}</span>
+        <span class="text-sm text-gray-700"
+          >Status : {{ statusToDisplay(registration.statut) }}</span
+        >
       </div>
     </div>
     <div class="mt-6 border-t border-gray-100">
@@ -60,7 +59,9 @@
           v-if="registration.documents?.length"
           class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0"
         >
-          <dt class="text-sm/6 font-medium text-gray-900">Documents</dt>
+          <dt class="text-sm/6 font-medium text-gray-900">
+            Documents (status, date de validité)
+          </dt>
           <dd class="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
             <ul
               role="list"
@@ -103,7 +104,7 @@
               <Button
                 isBlue
                 @click="
-                  updateRegistrationRequestStatus(registration.id, editedDocs)
+                  updateRegistrationRequestFile(registration.id, editedDocs)
                 "
               >
                 Enregistrer
@@ -111,8 +112,45 @@
             </div>
           </dd>
         </div>
-        ici
+        <div
+          v-if="registration.prestationLinks?.length"
+          class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0"
+        >
+          <dt class="text-sm/6 font-medium text-gray-900">
+            Prestations (prix souhaité, prestation, catégorie)
+          </dt>
+          <dd class="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <ul
+              role="list"
+              class="divide-y divide-gray-100 rounded-md border border-gray-200"
+            >
+              <li
+                v-for="prestationLink in registration.prestationLinks"
+                :key="prestationLink.id"
+                class="grid grid-cols-3 gap-4 items-center py-4 pr-5 pl-4 text-sm/6"
+              >
+                <span>{{ prestationLink.prestation.category }}</span>
+                <span>{{ prestationLink.prestation.label }}</span>
+                <span>{{ prestationLink.price }} €</span>
+              </li>
+            </ul>
+          </dd>
+        </div>
       </dl>
+    </div>
+    <div class="flex gap-2">
+      <Button
+        isGreen
+        class="w-full"
+        @click="updateRegistrationRequestStatus(true)"
+        >Valider</Button
+      >
+      <Button
+        isRed
+        class="w-full"
+        @click="updateRegistrationRequestStatus(false)"
+        >Refuser</Button
+      >
     </div>
   </div>
 </template>
@@ -206,12 +244,20 @@ const vehiculeToDisplay = computed(() => {
   };
 });
 
-const updateRegistrationRequestStatus = async (
+const updateRegistrationRequestFile = async (
   id: number,
   dataToUpdate: FormUpdateFileStatutRegistration[]
 ) => {
   try {
     await registrationStore.updateFileRegistrationRequest(id, dataToUpdate);
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut :", error);
+  }
+};
+
+const updateRegistrationRequestStatus = async (status: boolean) => {
+  try {
+    await registrationStore.updateStatusRegistrationRequest(status);
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut :", error);
   }
