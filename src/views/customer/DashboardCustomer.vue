@@ -22,34 +22,25 @@ import {
   HomeIcon,
   UsersIcon,
 } from "@heroicons/vue/24/outline";
+import { computed } from "vue";
+import { useRoute } from "vue-router";
 
-const navigation = [
-  { name: "Accueil", href: "DashboardCustomer", icon: HomeIcon, current: true },
-  {
-    name: "Livraisons",
-    href: "FutureCustomerDeliveries",
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Livraisons passées",
-    href: "PastCustomerDeliveries",
-    icon: CalendarIcon,
-    current: false,
-  },
+const route = useRoute();
 
-  {
-    name: "Mes rendez-vous",
-    href: "FutureCustomerAppointments",
-    icon: FolderIcon,
-    current: false,
-  },
-  {
-    name: "Rendez-vous passés",
-    href: "PastCustomerAppointments",
-    icon: DocumentDuplicateIcon,
-    current: false,
-  },
-  { name: "Boxs", href: "BoxPage", icon: ChartPieIcon, current: false },
+const navigationItems = [
+  { name: "Accueil", href: "DashboardCustomer", icon: HomeIcon },
+  { name: "Livraisons", href: "FutureDeliveries", icon: UsersIcon },
+  { name: "Livraisons passées", href: "PastDeliveries", icon: CalendarIcon },
+  { name: "Demander une livraison", href: "DeliveryRequestForm", icon: ChartPieIcon },
+  { name: "Mes rendez-vous", href: "FutureCustomerAppointments", icon: FolderIcon },
+  { name: "Rendez-vous passés", href: "PastCustomerAppointments", icon: DocumentDuplicateIcon },
+  { name: "Boxs", href: "BoxPage", icon: ChartPieIcon },
 ];
+
+const navigation = computed(() =>
+  navigationItems.map(item => ({
+    ...item,
+    current: route.name === item.href
+  }))
+);
 </script>

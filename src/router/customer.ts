@@ -6,11 +6,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/mon-espace",
     name: "DashboardCustomers",
     component: () => import("@/views/customer/DashboardCustomer.vue"),
-    meta: {
+    /*meta: {
       layout: "ConnectedLayout",
       requiresAuth: true,
       userTypeAuthorized: [UserType.CUSTOMER],
-    },
+    },*/
     children: [
       {
         name: "DashboardCustomer",
@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/customer/Dashboard.vue"),
       },
       {
-        name: "FutureCustomerDeliveries",
+        name: "FutureDeliveries",
         path: "mes-livraisons",
         component: () =>
           import("@/views/customer/deliveries/FutureDeliveries.vue"),
@@ -29,10 +29,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/customer/deliveries/DeliveryPage.vue"),
       },
       {
-        name: "PastCustomerDeliveries",
+        name: "PastDeliveries",
         path: "mon-historique-de-livraison",
         component: () =>
           import("@/views/customer/deliveries/PastDeliveries.vue"),
+      },
+      {
+        path: "demande-livraison",
+        name: "DeliveryRequestForm",
+        component: () =>
+            import("@/views/customer/deliveries/DeliveryRequestForm.vue"),
       },
       {
         name: "BoxPage",
