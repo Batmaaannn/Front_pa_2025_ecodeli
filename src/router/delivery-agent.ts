@@ -7,11 +7,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "DashboardDeliveriesAgents",
     component: () =>
       import("@/views/delivery-agent/DashboardDeliveryAgent.vue"),
-    meta: {
+    /*meta: {
       layout: "ConnectedLayout",
       requiresAuth: true,
       userTypeAuthorized: [UserType.DELIVERY_AGENT],
-    },
+    },*/
     children: [
       {
         name: "DashboardDeliveryAgent",
@@ -35,6 +35,18 @@ const routes: Array<RouteRecordRaw> = [
         path: "mon-historique-de-livraison",
         component: () =>
           import("@/views/delivery-agent/deliveries/PastDeliveries.vue"),
+      },
+      {
+        name: "CreateTrip",
+        path: "ajouter-un-trajet",
+        component: () =>
+            import("@/views/delivery-agent/trips/CreateTrip.vue"),
+      },
+      {
+        name: "AllDeliveryRequests",
+        path: "demandes-de-livraisons",
+        component: () =>
+            import("@/views/delivery-agent/deliveries/AllRequestsDeliveries.vue"),
       },
     ],
   },
