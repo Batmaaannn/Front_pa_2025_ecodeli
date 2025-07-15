@@ -62,7 +62,6 @@ export const useAuthStore = defineStore("authStore", {
       userType: string,
       {
         files,
-        filename,
         ...patientToAdd
       }: AddProfessionnal & PrescriptionUpload
     ) {
@@ -70,7 +69,6 @@ export const useAuthStore = defineStore("authStore", {
       files.map((file) => {
         filesData.append("files", file);
       });
-      filesData.append("fileName", filename);
       Object.keys(patientToAdd).map((item) => {
         const value = patientToAdd[item as keyof typeof patientToAdd];
         if (value !== undefined) {

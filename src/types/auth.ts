@@ -36,5 +36,5 @@ export interface AddProfessionnal {
 
 export interface PrescriptionUpload {
   files: File[];
-  filename: string;
+  filename?: string;
 }

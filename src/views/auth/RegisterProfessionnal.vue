@@ -9,6 +9,7 @@
           @update-profile="updateProfile"
         />
         <!-- Prestations profile -->
+
         <div v-if="profileSelected === 'service_agent'" class="max-w-3xl mt-8">
           <h2 class="text-l font-semibold">
             Quels services à la personne proposés vous ?
@@ -30,19 +31,13 @@
             @update:prestationPrice="handlePrice"
           />
         </div>
-
         <!-- Documents -->
         <h2 class="text-l font-semibold">Transmettez-nous vos documents</h2>
         <p class="mb-4">
           (KBIS, livreurs : permis de conduire, carte grise, assurance)
         </p>
 
-        <DropUploadFile
-          subtitle="Cliquez ou déposez le fichier ici"
-          @upload="setFile"
-          @delete="removeFile"
-          :files="files"
-        />
+        <DropUploadFile @upload="setFile" @delete="removeFile" :files="files" />
         <div>
           <h2 class="text-l font-semibold">Informations personnelles</h2>
           <p class="mb-4">
@@ -202,7 +197,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount, watch } from "vue";
 import InputField from "@/components/formControls/InputField.vue";
 import Button from "@/components/formControls/Button.vue";
 import { useAuthStore } from "@/stores/auth.store";
@@ -214,6 +209,7 @@ import { Prestation, FormPrestationIdWithPrice } from "@/types/prestation";
 import { usePrestationStore } from "@/stores/prestation.store";
 import DropUploadFile from "@/components/formControls/DropUploadFile.vue";
 import ProfileModal from "./components/ProfileModal.vue";
+import { VehiculeType } from "@/types/vehicule";
 
 const prestations = ref<Prestation[]>([]);
 const profileSelected = ref<string>("");
@@ -223,6 +219,15 @@ onBeforeMount(async () => {
 });
 
 let displayedModal = ref<boolean>(true);
+
+watch(
+  () => displayedModal.value,
+  (val) => {
+    if (profileSelected.value === "" && val === false) {
+      displayedModal.value = true;
+    }
+  }
+);
 
 const closeModal = () => {
   displayedModal.value = false;
@@ -261,6 +266,7 @@ const form = ref({
   companyCity: "",
   compagnyPostalCode: "",
   companyAddress: "",
+  vehiculeType: VehiculeType.VAN,
 });
 
 const error = ref({
@@ -389,7 +395,6 @@ async function submitRegistrationProfessionnal() {
       companyAddress: form.value.companyAddress,
       companyCity: form.value.compagnyPostalCode + " " + form.value.companyCity,
       files: files.value,
-      filename: "test",
     };
 
     if (form.value.password && form.value.password !== "") {
@@ -398,6 +403,10 @@ async function submitRegistrationProfessionnal() {
 
     if (prices.value.length > 0) {
       registrationData.prestations = prices.value;
+    }
+
+    if (form.value.vehiculeType) {
+      registrationData.vehiculeType = form.value.vehiculeType;
     }
 
     await authStore.registerProfessionnal(
