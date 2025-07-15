@@ -1,28 +1,20 @@
 import { defineStore } from "pinia";
-import { axios } from "@/libs/axios";
+import axios from "axios";
 
-interface DeliveryRequest {
-    name: string;
-    pickupAddress: string;
-    deliveryAddress: string;
-    datetime: string;
-    packageSize: string;
-    comment?: string;
-}
-
-
-export const useDeliveryStore = defineStore("deliveryStore", {
-    state: () => ({
-        requests: [] as DeliveryRequest[],
-    }),
+export const useDeliveryStore = defineStore("deliveryRequest", {
+    state: () => ({}),
     actions: {
-        async createDeliveryRequest(request: DeliveryRequest) {
+        async createDeliveryRequest(formData: FormData) {
             try {
-                const response = await axios.post("/delivery-requests", request);
-                this.requests.push(response.data);
+                const response = await axios.post("/api/delivery-requests/with-upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
                 return response.data;
             } catch (error) {
-                return error;
+                console.error("Erreur lors de la création de la demande :", error);
+                throw error;
             }
         },
     },
