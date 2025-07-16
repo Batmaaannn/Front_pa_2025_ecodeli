@@ -12,10 +12,7 @@ export function isMerchantUser(
 ): user is MerchantUser {
   if (!user || Object.keys(user).length === 0) return false;
 
-  return (
-    Object.prototype.hasOwnProperty.call(user, "merchant_id") &&
-    user.user_type === UserType.MERCHANT
-  );
+  return user.user_type === UserType.MERCHANT;
 }
 
 export function isDeliveryAgentUser(
@@ -23,21 +20,14 @@ export function isDeliveryAgentUser(
 ): user is DeliveryAgentUser {
   if (!user || Object.keys(user).length === 0) return false;
 
-  return (
-    Object.prototype.hasOwnProperty.call(user, "delivery_agent_id") &&
-    user.user_type === UserType.DELIVERY_AGENT
-  );
+  return user.user_type === UserType.DELIVERY_AGENT;
 }
 
 export function isServiceAgentUser(
   user: User | Record<string, never>
 ): user is ServiceAgentUser {
   if (!user || Object.keys(user).length === 0) return false;
-
-  return (
-    Object.prototype.hasOwnProperty.call(user, "service_agent_id") &&
-    user.user_type === UserType.SERVICE_AGENT
-  );
+  return user.user_type === UserType.SERVICE_AGENT;
 }
 
 export function isCustomerUser(
@@ -45,10 +35,7 @@ export function isCustomerUser(
 ): user is CustomerUser {
   if (!user || Object.keys(user).length === 0) return false;
 
-  return (
-    Object.prototype.hasOwnProperty.call(user, "customer_id") &&
-    user.user_type === UserType.CUSTOMER
-  );
+  return user.user_type === UserType.CUSTOMER;
 }
 
 export function isAdminUser(

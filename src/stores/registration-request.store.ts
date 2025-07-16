@@ -49,12 +49,22 @@ export const useRegistrationStore = defineStore("registrationStore", {
         return error;
       }
     },
-    async updateStatusRegistrationRequest(status: boolean) {
+    async validateRegistrationRequest() {
       try {
         return (
-          await axios.patch(
-            `/registration-requests/${this.registrationRequest.id}/status`,
-            { status }
+          await axios.post(
+            `/registration-requests/validate/${this.registrationRequest.id}/`
+          )
+        ).data;
+      } catch (error) {
+        return error;
+      }
+    },
+    async rejectRegistrationRequest() {
+      try {
+        return (
+          await axios.post(
+            `/registration-requests/reject/${this.registrationRequest.id}/`
           )
         ).data;
       } catch (error) {

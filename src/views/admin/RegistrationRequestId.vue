@@ -139,16 +139,10 @@
       </dl>
     </div>
     <div class="flex gap-2">
-      <Button
-        isGreen
-        class="w-full"
-        @click="updateRegistrationRequestStatus(true)"
+      <Button isGreen class="w-full" @click="updateRegistrationRequestStatus()"
         >Valider</Button
       >
-      <Button
-        isRed
-        class="w-full"
-        @click="updateRegistrationRequestStatus(false)"
+      <Button isRed class="w-full" @click="rejectRegistrationRequest()"
         >Refuser</Button
       >
     </div>
@@ -255,9 +249,17 @@ const updateRegistrationRequestFile = async (
   }
 };
 
-const updateRegistrationRequestStatus = async (status: boolean) => {
+const updateRegistrationRequestStatus = async () => {
   try {
-    await registrationStore.updateStatusRegistrationRequest(status);
+    await registrationStore.validateRegistrationRequest();
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut :", error);
+  }
+};
+
+const rejectRegistrationRequest = async () => {
+  try {
+    await registrationStore.rejectRegistrationRequest();
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut :", error);
   }
