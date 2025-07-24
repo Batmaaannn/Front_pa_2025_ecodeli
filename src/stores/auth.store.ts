@@ -62,15 +62,15 @@ export const useAuthStore = defineStore("authStore", {
       userType: string,
       {
         files,
-        ...patientToAdd
+        ...userToAdd
       }: AddProfessionnal & PrescriptionUpload
     ) {
       const filesData = new FormData();
       files.map((file) => {
         filesData.append("files", file);
       });
-      Object.keys(patientToAdd).map((item) => {
-        const value = patientToAdd[item as keyof typeof patientToAdd];
+      Object.keys(userToAdd).map((item) => {
+        const value = userToAdd[item as keyof typeof userToAdd];
         if (value !== undefined) {
           if (Array.isArray(value)) {
             filesData.append(item, JSON.stringify(value));
@@ -81,7 +81,6 @@ export const useAuthStore = defineStore("authStore", {
       });
       try {
         if (userType === "merchant") {
-          console.log("Registering as merchant:");
           await axios.post("merchants/create-merchant", filesData);
         } else if (userType === "service_agent") {
           await axios.post("registration-requests/service-agent", filesData);

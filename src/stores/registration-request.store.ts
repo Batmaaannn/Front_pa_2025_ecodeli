@@ -63,10 +63,11 @@ export const useRegistrationStore = defineStore("registrationStore", {
     async rejectRegistrationRequest() {
       try {
         return (
-          await axios.post(
+          await axios.patch(
             `/registration-requests/reject/${this.registrationRequest.id}/`
           )
         ).data;
+        
       } catch (error) {
         return error;
       }

@@ -180,7 +180,7 @@ function processEmail() {
   error.value.email = Validators.validateEmail(form.value.email);
 }
 function processPhoneNumber() {
-  error.value.phone = Validators.validateEmail(form.value.email);
+  error.value.phone = Validators.validatePhoneNumber(form.value.phone);
 }
 function processFirstName() {
   error.value.firstName = Validators.validateFirstName(form.value.firstName);

@@ -24,32 +24,20 @@ import {
 } from "@heroicons/vue/24/outline";
 
 const navigation = [
-  { name: "Accueil", href: "DashboardCustomer", icon: HomeIcon, current: true },
-  {
-    name: "Livraisons",
-    href: "FutureCustomerDeliveries",
-    icon: UsersIcon,
-    current: false,
-  },
-  {
-    name: "Livraisons passées",
-    href: "PastCustomerDeliveries",
-    icon: CalendarIcon,
-    current: false,
-  },
-
+  { name: "Accueil", href: "DashboardServiceAgent", icon: HomeIcon, current: true },
   {
     name: "Mes rendez-vous",
-    href: "FutureCustomerAppointments",
+    href: "FutureServiceAgentAppointments",
     icon: FolderIcon,
     current: false,
   },
   {
     name: "Rendez-vous passés",
-    href: "PastCustomerAppointments",
+    href: "PastServiceAgentAppointments",
     icon: DocumentDuplicateIcon,
     current: false,
   },
-  { name: "Boxs", href: "BoxPage", icon: ChartPieIcon, current: false },
+  { name: "Mes avis", href: "ServiceAgentReviews", icon: ChartPieIcon, current: false },
+  { name: "Mes prestations", href: "Prestations", icon: ChartPieIcon, current: false },
 ];
 </script>

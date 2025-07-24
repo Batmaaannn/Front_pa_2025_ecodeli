@@ -110,6 +110,12 @@
                 Enregistrer
               </Button>
             </div>
+            <div v-if="!!successMessageFile">
+              <Alert isSuccess>{{ successMessageFile }}</Alert>
+            </div>
+            <div v-if="!!errorMessageFile">
+              <Alert isError>{{ errorMessageFile }}</Alert>
+            </div>
           </dd>
         </div>
         <div
@@ -139,12 +145,35 @@
       </dl>
     </div>
     <div class="flex gap-2">
-      <Button isGreen class="w-full" @click="updateRegistrationRequestStatus()"
+      <Button
+        isGreen
+        class="w-full"
+        @click="updateRegistrationRequestStatus()"
+        :disabled="
+          registration.documents?.some(
+            (doc) => doc.status === Statut.PENDING
+          ) ||
+          registration.statut === Statut.ACCEPTED ||
+          registration.statut === Statut.REJECTED
+        "
         >Valider</Button
       >
-      <Button isRed class="w-full" @click="rejectRegistrationRequest()"
+      <Button
+        isRed
+        class="w-full"
+        @click="rejectRegistrationRequest()"
+        :disabled="
+          registration.statut === Statut.ACCEPTED ||
+          registration.statut === Statut.REJECTED
+        "
         >Refuser</Button
       >
+    </div>
+    <div v-if="!!successMessage">
+      <Alert isSuccess>{{ successMessage }}</Alert>
+    </div>
+    <div v-if="!!errorMessage">
+      <Alert isError>{{ errorMessage }}</Alert>
     </div>
   </div>
 </template>
@@ -165,6 +194,7 @@ import { fr } from "date-fns/locale";
 import Button from "@/components/formControls/Button.vue";
 import { FormUpdateFileStatutRegistration } from "@/types/file";
 const dateFormat = "dd/MM/yyyy";
+import Alert from "@/components/formControls/Alert.vue";
 
 const registrationStore = useRegistrationStore();
 
@@ -238,29 +268,54 @@ const vehiculeToDisplay = computed(() => {
   };
 });
 
+const successMessage = ref("");
+const errorMessage = ref("");
+const successMessageFile = ref("");
+const errorMessageFile = ref("");
+
 const updateRegistrationRequestFile = async (
   id: number,
   dataToUpdate: FormUpdateFileStatutRegistration[]
 ) => {
+  errorMessageFile.value = "";
+  successMessageFile.value = "";
   try {
     await registrationStore.updateFileRegistrationRequest(id, dataToUpdate);
+    successMessageFile.value = "Documents mis à jour avec succès.";
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut :", error);
+    errorMessageFile.value = "Erreur lors de la mise à jour des documents.";
   }
 };
 
 const updateRegistrationRequestStatus = async () => {
+  errorMessage.value = "";
+  successMessage.value = "";
   try {
     await registrationStore.validateRegistrationRequest();
+    successMessage.value = "Demande d'inscription validée avec succès.";
+    // Refetch registration data to update the UI
+    registration.value = await registrationStore.getRegistrationById(
+      registration.value.id
+    );
   } catch (error) {
     console.error("Erreur lors de la mise à jour du statut :", error);
+    errorMessage.value = "Erreur lors de la validation de la demande.";
   }
 };
 
 const rejectRegistrationRequest = async () => {
+  errorMessage.value = "";
+  successMessage.value = "";
   try {
     await registrationStore.rejectRegistrationRequest();
+    successMessage.value = "Demande d'inscription rejetée avec succès.";
+    // Refetch registration data to update the UI
+    registration.value = await registrationStore.getRegistrationById(
+      registration.value.id
+    );
   } catch (error) {
+    errorMessage.value = "Erreur lors du rejet de la demande.";
     console.error("Erreur lors de la mise à jour du statut :", error);
   }
 };

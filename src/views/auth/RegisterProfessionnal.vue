@@ -1,8 +1,10 @@
 <template>
   <div class="mx-auto max-w-7xl py-40 px-4 sm:px-6 lg:px-8">
     <div class="mx-auto max-w-7xl">
-      <Alert v-if="!!successMessage" isSuccess>{{ successMessage }}</Alert>
-      <div>
+      <div v-if="!!successMessage">
+        <Alert isSuccess>{{ successMessage }}</Alert>
+      </div>
+      <div v-else>
         <ProfileModal
           v-if="displayedModal"
           @close="closeModal()"
@@ -262,7 +264,6 @@ const form = ref({
   passwordStrength: "",
   passwordConfirmation: "",
   siret: "",
-  Companyname: "",
   companyCity: "",
   compagnyPostalCode: "",
   companyAddress: "",
@@ -328,7 +329,7 @@ function processEmail() {
   error.value.email = Validators.validateEmail(form.value.email);
 }
 function processPhoneNumber() {
-  error.value.phone = Validators.validateEmail(form.value.email);
+  error.value.phone = Validators.validatePhoneNumber(form.value.phone);
 }
 function processFirstName() {
   error.value.firstName = Validators.validateFirstName(form.value.firstName);
@@ -414,8 +415,13 @@ async function submitRegistrationProfessionnal() {
       registrationData
     );
 
-    successMessage.value =
-      "L'inscription a été validée avec succès. Vous pouvez vous maintenant vous connecter.";
+    if (profileSelected.value === "merchant") {
+      successMessage.value =
+        "L'inscription a été validée avec succès. Vous pouvez vous maintenant vous connecter.";
+    } else {
+      successMessage.value =
+        "Votre demande d'inscription a été envoyée. Nous vous contacterons rapidement pour la valider.";
+    }
   } catch (error: any) {
     errorMessage.value = error;
   } finally {
