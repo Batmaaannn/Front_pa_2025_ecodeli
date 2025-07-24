@@ -89,7 +89,7 @@
       >
         <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
           <img
-            src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
+            src="/home.png"
             alt="App screenshot"
             width="2432"
             height="1442"
