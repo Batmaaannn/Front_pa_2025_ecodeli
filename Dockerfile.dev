@@ -1,12 +1,20 @@
+# image officielle Node.js légère Debian Slim (essayer sans slim)
 FROM node:20-slim
 
+# Définit le répertoire de travail à l'intérieur du conteneur
 WORKDIR /usr/src/app
 
+# Copie les fichiers package.json et package-lock.json dans le conteneur
 COPY package*.json ./
-RUN npm install
 
+# Installe les dépendances du projet (force la résolution même si conflit)
+RUN npm install --force
+
+# Copie tous les fichiers du projet dans le conteneur
 COPY . .
 
+# Expose le port 5173 pour accéder à l'application (utilisé par Vite en dev)
 EXPOSE 5173
 
+# Commande à exécuter au démarrage du conteneur (lance Vite en mode dev)
 CMD ["npm", "run", "dev"]
