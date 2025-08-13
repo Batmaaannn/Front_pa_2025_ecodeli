@@ -86,3 +86,16 @@ export function mail(value: string | null): string | null {
 
   return null;
 }
+
+export function validatePostalCode(value: string): string {
+  if (!value) return "Le champ 'Code postal' est requis";
+  if (!/^\d{5}$/.test(value)) return "Code postal invalide";
+  return "";
+}
+
+export function validateCity(value: string): string {
+  if (!value) return "Le champ 'Ville' est requis";
+  if (value.length < 2 || value.length > 30)
+    return "La valeur du champ 'Ville' doit être comprise entre 2 et 30 caractères";
+  return "";
+}

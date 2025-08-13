@@ -11,7 +11,7 @@
         </p>
       </div>
 
-      <form @submit.prevent="handleNext" class="space-y-6">
+      <form @submit.prevent="handleSubmit" class="space-y-6">
         <div class="space-y-4">
           <h3
             class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2"
@@ -105,11 +105,11 @@
           </div>
         </div>
 
+        <!-- :disable-next="formClientHasError" -->
         <StepperNavigationButtons
           :show-previous="navigation.canGoPrevious"
-          :disable-next="formClientHasError"
           :loading="loading"
-          submit-type="submit"
+          submit-type="button"
           @previous="navigation.goToPreviousStep"
           @next="handleNext"
         />
@@ -130,16 +130,14 @@ import { onMounted } from "vue";
 const navigation = useStepperNavigation();
 
 onMounted(() => {
-    // Get saved data for current step
-    const savedData = navigation.getCurrentStepData();
-    if (savedData) {
-        form.value.firstName = savedData.firstName || "";
-        form.value.lastName = savedData.lastName || "";
-        form.value.email = savedData.email || "";
-        form.value.phone = savedData.phoneNumber || "";
-        form.value.password = savedData.password || "";
-        form.value.passwordConfirmation = savedData.passwordConfirmation || "";
-    }
+  const savedData = navigation.getCurrentStepData();
+  if (savedData) {
+    form.value.firstName = savedData.firstName || "";
+    form.value.lastName = savedData.lastName || "";
+    form.value.email = savedData.email || "";
+    form.value.phone = savedData.phoneNumber || "";
+    form.value.password = savedData.password || "";
+  }
 });
 
 const form = ref({
@@ -211,19 +209,24 @@ function processLastName() {
   error.value.lastName = Validators.validateLastName(form.value.lastName);
 }
 
+const handleSubmit = async () => {
+  await handleNext();
+};
+
 const handleNext = async () => {
+
   try {
     loading.value = true;
 
-    if (formClientHasError.value) return;
+    //if (formClientHasError.value) return;
 
     navigation.saveAndNext({
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       email: form.value.email,
       phoneNumber: form.value.phone,
-      password: form.value.password,
-      passwordConfirmation: form.value.passwordConfirmation,
+      // password: form.value.password,
+      // passwordConfirmation: form.value.passwordConfirmation,
     });
   } catch (err) {
     console.error("Error:", err);

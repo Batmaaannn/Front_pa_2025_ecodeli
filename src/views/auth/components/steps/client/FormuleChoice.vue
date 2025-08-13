@@ -190,12 +190,11 @@ const submitRegistration = async () => {
     const allStepData = authStore.stepData;
 
     const registrationData = {
-      // Update to use the new unique step name
-      firstName: allStepData["Client - Informations Personnelles"]?.firstName,
-      lastName: allStepData["Client - Informations Personnelles"]?.lastName,
-      email: allStepData["Client - Informations Personnelles"]?.email,
-      phoneNumber: allStepData["Client - Informations Personnelles"]?.phoneNumber,
-      password: allStepData["Client - Informations Personnelles"]?.password,
+      firstName: allStepData["InformationsCustomer"]?.firstName,
+      lastName: allStepData["InformationsCustomer"]?.lastName,
+      email: allStepData["InformationsCustomer"]?.email,
+      phoneNumber: allStepData["InformationsCustomer"]?.phoneNumber,
+      password: allStepData["InformationsCustomer"]?.password,
       subscriptionPlan: formData.value.subscriptionPlan,
     };
 

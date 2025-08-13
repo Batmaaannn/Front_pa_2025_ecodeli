@@ -54,6 +54,10 @@ const emit = defineEmits<{
   next: [];
 }>();
 
-const onPrevious = () => emit('previous');
-const onNext = () => emit('next');
+const onPrevious = () => {
+  emit('previous');
+};
+const onNext = () => {
+  emit('next');
+};
 </script>

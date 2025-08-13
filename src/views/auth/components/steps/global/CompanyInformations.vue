@@ -10,7 +10,7 @@
         </p>
       </div>
 
-      <form @submit.prevent="handleNext" class="space-y-6">
+      <form @submit.prevent="handleSubmit" class="space-y-6">
         <div class="space-y-4">
           <h3
             class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2"
@@ -87,13 +87,15 @@ import { ref, computed, onMounted } from "vue";
 import InputField from "@/components/formControls/InputField.vue";
 import StepperNavigationButtons from "@/components/StepperNavigationButtons.vue";
 import { useStepperNavigation } from "@/composables/useStepperNavigation";
+import * as Validators from "@/utils/validate";
 
 const navigation = useStepperNavigation();
 
 onMounted(() => {
   // Get saved data for current step
   const savedData = navigation.getCurrentStepData();
-  if (savedData) {
+  
+  if (savedData && savedData.companyName !== undefined) {
     form.value.companyName = savedData.companyName || "";
     form.value.companySiret = savedData.companySiret || "";
     form.value.companyAddress = savedData.companyAddress || "";
@@ -121,7 +123,7 @@ const error = ref({
 const loading = ref(false);
 
 const formHasError = computed(() => {
-  return !!(
+  const hasError = !!(
     error.value.companyName ||
     error.value.companySiret ||
     error.value.companyAddress ||
@@ -133,41 +135,42 @@ const formHasError = computed(() => {
     !form.value.companyPostalCode ||
     !form.value.companyCity
   );
+
+  return hasError;
 });
 
 function processCompanyName() {
-  error.value.companyName = form.value.companyName ? "" : "Nom de l'entreprise requis";
+  error.value.companyName = Validators.validateCompanyName(
+    form.value.companyName
+  );
 }
 
 function processCompanySiret() {
-  if (!form.value.companySiret) {
-    error.value.companySiret = "Numero SIRET requis";
-  } else if (form.value.companySiret.length !== 14) {
-    error.value.companySiret = "Le numero SIRET doit contenir 14 chiffres";
-  } else {
-    error.value.companySiret = "";
-  }
+  error.value.companySiret = Validators.validateSiret(form.value.companySiret);
 }
 
 function processCompanyAddress() {
-  error.value.companyAddress = form.value.companyAddress ? "" : "Adresse requise";
+  error.value.companyAddress = Validators.validateAddress(
+    form.value.companyAddress
+  );
 }
 
 function processCompanyPostalCode() {
-  if (!form.value.companyPostalCode) {
-    error.value.companyPostalCode = "Code postal requis";
-  } else if (!/^\d{5}$/.test(form.value.companyPostalCode)) {
-    error.value.companyPostalCode = "Code postal invalide";
-  } else {
-    error.value.companyPostalCode = "";
-  }
+  error.value.companyPostalCode = Validators.validatePostalCode(
+    form.value.companyPostalCode
+  );
 }
 
 function processCompanyCity() {
-  error.value.companyCity = form.value.companyCity ? "" : "Ville requise";
+  error.value.companyCity = Validators.validateCity(form.value.companyCity);
 }
 
+const handleSubmit = async () => {
+  await handleNext();
+};
+
 const handleNext = async () => {
+  
   try {
     loading.value = true;
 
@@ -177,7 +180,9 @@ const handleNext = async () => {
     processCompanyPostalCode();
     processCompanyCity();
 
-    if (formHasError.value) return;
+    if (formHasError.value) {
+      return;
+    }
 
     navigation.saveAndNext({
       companyName: form.value.companyName,

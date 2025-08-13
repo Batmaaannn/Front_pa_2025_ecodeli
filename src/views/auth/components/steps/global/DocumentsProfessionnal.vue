@@ -169,11 +169,11 @@ const handleNext = async () => {
   }
 };
 
-const getStepPrefix = () => {
+const getStepSuffixe = () => {
   switch (registrationType.value) {
-    case 'delivery_agent': return 'Livreur';
-    case 'merchant': return 'Commercant';
-    case 'service_agent': return 'Prestataire';
+    case 'delivery_agent': return 'DeliveryAgent';
+    case 'merchant': return 'Merchant';
+    case 'service_agent': return 'ServiceAgent';
     default: return '';
   }
 };
@@ -181,25 +181,25 @@ const getStepPrefix = () => {
 const submitRegistration = async () => {
   try {
     const allStepData = authStore.stepData;
-    const prefix = getStepPrefix();
+    const suffix = getStepSuffixe();
     
     // Prepare data for registration
     const registrationData: any = {};
     
     // Add personal information
-    const personalInfo = allStepData[`${prefix} - Informations Personnelles`] || {};
+    const personalInfo = allStepData[`Informations${suffix}`] || {};
     Object.assign(registrationData, personalInfo);
-    
-    // Add company information  
-    const companyInfo = allStepData[`${prefix} - Informations Entreprise`] || {};
+
+    // Add company information
+    const companyInfo = allStepData[`CompanyDocuments${suffix}`] || {};
     Object.assign(registrationData, companyInfo);
 
     // Add specific step data based on registration type
     if (registrationType.value === 'delivery_agent') {
-      const vehicleInfo = allStepData[`${prefix} - Informations Vehicule`] || {};
+      const vehicleInfo = allStepData[`Informations${suffix} - Informations Vehicule`] || {};
       Object.assign(registrationData, vehicleInfo);
     } else if (registrationType.value === 'service_agent') {
-      const prestationsInfo = allStepData[`${prefix} - Prestations`] || {};
+      const prestationsInfo = allStepData[`Informations${suffix} - Prestations`] || {};
       Object.assign(registrationData, prestationsInfo);
     }
     
