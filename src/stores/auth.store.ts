@@ -13,6 +13,7 @@ import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
 import type { Router } from "vue-router";
+import { RegistrationCustomer } from "@/types/registration";
 
 interface StepperStep {
   name: string;
@@ -50,7 +51,6 @@ export const useAuthStore = defineStore("authStore", {
     },
 
     updateCurrentStepByRoute(pathName: string) {
-      console.log("Updating current step by route:", pathName);
       const index = this.stepperSteps.findIndex(
         (step) => step.pathName === pathName
       );
@@ -77,9 +77,7 @@ export const useAuthStore = defineStore("authStore", {
         this.currentStepIndex++;
         this.updateStepStatuses();
         const nextStep = this.stepperSteps[this.currentStepIndex];
-        console.log("Navigating to next step:", nextStep);
         if (nextStep.pathName) {
-          console.log("Pushing to router path:", nextStep.pathName);
           router.push(nextStep.pathName);
         }
       }
@@ -98,7 +96,6 @@ export const useAuthStore = defineStore("authStore", {
 
     setStepData(stepName: string, data: any) {
       this.stepData[stepName] = data;
-      console.log(`Step data for ${stepName} set to:`, data);
     },
 
     getStepData(stepName: string) {
@@ -122,11 +119,9 @@ export const useAuthStore = defineStore("authStore", {
     }) {
       this.register.prestations = payload.prestationsAndPrices;
     },
-    //TODO: typer
-    async registerClient(client: any) {
-      console.log("Registering client:", client);
+    async registerClient(customer: RegistrationCustomer) {
       try {
-        await axios.post("customers/create-customer", client);
+        await axios.post("customers/create-customer", customer);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))

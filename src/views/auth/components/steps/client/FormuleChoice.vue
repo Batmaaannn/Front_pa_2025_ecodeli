@@ -4,8 +4,16 @@
     <div v-if="successMessage" class="bg-green-50 p-4 rounded-lg">
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          <svg
+            class="h-5 w-5 text-green-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
           </svg>
         </div>
         <div class="ml-3">
@@ -18,8 +26,16 @@
     <div v-if="errorMessage" class="bg-red-50 p-4 rounded-lg">
       <div class="flex">
         <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          <svg
+            class="h-5 w-5 text-red-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            />
           </svg>
         </div>
         <div class="ml-3">
@@ -39,7 +55,7 @@
           @click="selectPlan(plan.value)"
           :class="[
             'p-4 border-2 rounded-lg cursor-pointer transition-all duration-200',
-            formData.subscription_plan === plan.value
+            formData.subscriptionPlan === plan.value
               ? 'border-primary-500 bg-primary-50'
               : 'border-gray-200 hover:border-gray-300',
           ]"
@@ -66,7 +82,7 @@
     <StepperNavigationButtons
       v-if="!successMessage"
       :show-previous="navigation.canGoPrevious"
-      :disable-next="!formData.subscription_plan"
+      :disable-next="!formData.subscriptionPlan"
       :loading="loading"
       :next-text="navigation.nextButtonText.value"
       @previous="navigation.goToPreviousStep"
@@ -75,12 +91,7 @@
 
     <!-- After success, show login button -->
     <div v-if="successMessage" class="flex justify-center">
-      <Button
-        @click="goToLogin"
-        isGreen
-      >
-        Se connecter
-      </Button>
+      <Button @click="goToLogin" isGreen> Se connecter </Button>
     </div>
   </div>
 </template>
@@ -92,6 +103,7 @@ import { useStepperNavigation } from "@/composables/useStepperNavigation";
 import { useAuthStore } from "@/stores/auth.store";
 import StepperNavigationButtons from "@/components/StepperNavigationButtons.vue";
 import Button from "@/components/formControls/Button.vue";
+import { SubscriptionPlan } from "@/types/subscription-plan";
 
 const navigation = useStepperNavigation();
 const authStore = useAuthStore();
@@ -99,19 +111,19 @@ const router = useRouter();
 
 const subscriptionPlans = ref([
   {
-    value: "free",
+    value: SubscriptionPlan.FREE,
     name: "Gratuit",
     price: "0€/mois",
     description: "Fonctionnalités de base",
   },
   {
-    value: "starter",
+    value: SubscriptionPlan.STARTER,
     name: "Starter",
     price: "9,90€/mois",
     description: "Assurance jusqu'à 115€, 5% de réduction",
   },
   {
-    value: "premium",
+    value: SubscriptionPlan.PREMIUM,
     name: "Premium",
     price: "19,99€/mois",
     description: "Assurance jusqu'à 3000€, 9% de réduction",
@@ -119,7 +131,7 @@ const subscriptionPlans = ref([
 ]);
 
 const formData = ref({
-  subscription_plan: "free",
+  subscriptionPlan: SubscriptionPlan.FREE,
 });
 
 const error = ref("");
@@ -127,29 +139,28 @@ const loading = ref(false);
 const successMessage = ref("");
 const errorMessage = ref("");
 
-const selectPlan = (planValue: string) => {
-  formData.value.subscription_plan = planValue;
+const selectPlan = (planValue: SubscriptionPlan) => {
+  formData.value.subscriptionPlan = planValue;
   error.value = "";
 };
 
 const validateSelection = () => {
-  if (!formData.value.subscription_plan) {
+  if (!formData.value.subscriptionPlan) {
     error.value = "Veuillez sélectionner une formule";
     return false;
   }
   return true;
 };
 
-// Restore data on mount
 onMounted(() => {
   const savedData = navigation.getCurrentStepData();
-  if (savedData && savedData.subscription_plan) {
-    formData.value.subscription_plan = savedData.subscription_plan;
+  if (savedData && savedData.subscriptionPlan) {
+    formData.value.subscriptionPlan = savedData.subscriptionPlan;
   }
 });
 
 const goToLogin = () => {
-  router.push('/connexion');
+  router.push("/connexion");
 };
 
 const handleNext = async () => {
@@ -162,18 +173,11 @@ const handleNext = async () => {
       return;
     }
 
-    // Save current step data
     navigation.saveStepData({
-      subscription_plan: formData.value.subscription_plan,
+      subscription_plan: formData.value.subscriptionPlan,
     });
 
-    // If it's the last step, submit the registration
-    if (navigation.isLastStep.value) {
-      await submitRegistration();
-    } else {
-      // Otherwise, go to next step
-      navigation.goToNextStep();
-    }
+    await submitRegistration();
   } catch (err) {
     console.error("Error:", err);
   } finally {
@@ -183,32 +187,27 @@ const handleNext = async () => {
 
 const submitRegistration = async () => {
   try {
-    // Collect all step data
     const allStepData = authStore.stepData;
-    
-    // Prepare final registration data
+
     const registrationData = {
-      // From Informations step
-      firstName: allStepData['Informations Personnelles']?.firstName || '',
-      lastName: allStepData['Informations Personnelles']?.lastName || '',
-      email: allStepData['Informations Personnelles']?.email || '',
-      phoneNumber: allStepData['Informations Personnelles']?.phoneNumber || '',
-      password: allStepData['Informations Personnelles']?.password || '',
-      // From FormuleChoice step
-      subscription_plan: formData.value.subscription_plan,
+      firstName: allStepData["Informations Personnelles"]?.firstName,
+      lastName: allStepData["Informations Personnelles"]?.lastName,
+      email: allStepData["Informations Personnelles"]?.email,
+      phoneNumber: allStepData["Informations Personnelles"]?.phoneNumber,
+      password: allStepData["Informations Personnelles"]?.password,
+      subscriptionPlan: formData.value.subscriptionPlan,
     };
 
-    // Call the store method to register
     await authStore.registerClient(registrationData);
-    
-    // Show success message
-    successMessage.value = "Votre inscription a été réalisée avec succès ! Vous pouvez maintenant vous connecter.";
-    
-    // Clear step data after successful registration
+
+    successMessage.value =
+      "Votre inscription a été réalisée avec succès ! Vous pouvez maintenant vous connecter.";
+
     authStore.stepData = {};
   } catch (err: any) {
-    // Show error message
-    errorMessage.value = err || "Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
+    errorMessage.value =
+      err ||
+      "Une erreur est survenue lors de l'inscription. Veuillez réessayer.";
   }
 };
 </script>

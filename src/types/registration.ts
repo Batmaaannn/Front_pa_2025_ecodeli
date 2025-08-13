@@ -1,5 +1,6 @@
 import { PrestationWithPrice } from "./prestation";
 import { Statut } from "./statut";
+import { SubscriptionPlan } from "./subscription-plan";
 import { AgentType } from "./user";
 
 export interface RegistrationRequest {
@@ -38,3 +39,13 @@ export interface RegistrationDocument {
   created_at: string;
   updated_at: string;
 }
+
+export interface RegistrationCustomer {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  password: string;
+  subscriptionPlan: SubscriptionPlan;
+}
+
