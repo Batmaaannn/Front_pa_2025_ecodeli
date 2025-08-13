@@ -98,6 +98,7 @@ export const useAuthStore = defineStore("authStore", {
 
     setStepData(stepName: string, data: any) {
       this.stepData[stepName] = data;
+      console.log(`Step data for ${stepName} set to:`, data);
     },
 
     getStepData(stepName: string) {

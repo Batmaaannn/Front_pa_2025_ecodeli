@@ -1,7 +1,7 @@
 <template>
   <nav class="flex items-center justify-center" aria-label="Progress">
     <p class="text-sm font-medium">
-      Step {{ computedCurrentStepIndex + 1 }} of
+      Etape {{ computedCurrentStepIndex + 1 }} sur
       {{ steps.length }}
     </p>
     <ol role="list" class="ml-8 flex items-center space-x-5">
@@ -10,7 +10,7 @@
           v-if="step.status === 'complete'"
           @click="handleStepClick(step, index)"
           type="button"
-          class="block size-2.5 rounded-full bg-indigo-600 hover:bg-indigo-900 cursor-pointer"
+          class="block size-2.5 rounded-full bg-primary-600 hover:bg-primary-900 cursor-pointer"
         >
           <span class="sr-only">{{ step.name }}</span>
         </button>
@@ -20,10 +20,10 @@
           aria-current="step"
         >
           <span class="absolute flex size-5 p-px" aria-hidden="true">
-            <span class="size-full rounded-full bg-indigo-200" />
+            <span class="size-full rounded-full bg-primary-200" />
           </span>
           <span
-            class="relative block size-2.5 rounded-full bg-indigo-600"
+            class="relative block size-2.5 rounded-full bg-primary-600"
             aria-hidden="true"
           />
           <span class="sr-only">{{ step.name }}</span>
