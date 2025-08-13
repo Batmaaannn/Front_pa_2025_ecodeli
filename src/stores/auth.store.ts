@@ -12,19 +12,98 @@ import {
 import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
-import { useRouter } from "vue-router";
-import router from "@/router";
+import type { Router } from "vue-router";
+
+interface StepperStep {
+  name: string;
+  status: "complete" | "current" | "upcoming";
+  pathName: string;
+}
 
 interface AuthState {
   register: RegisterForm | Record<string, never>;
+  stepperSteps: StepperStep[];
+  currentStepIndex: number;
+  stepData: Record<string, any>;
 }
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({
     register: {},
+    stepperSteps: [],
+    currentStepIndex: 0,
+    stepData: {},
   }),
-  getters: {},
+  getters: {
+    currentStep: (state) => state.stepperSteps[state.currentStepIndex],
+    canGoNext: (state) =>
+      state.currentStepIndex < state.stepperSteps.length - 1,
+    canGoPrevious: (state) => state.currentStepIndex > 0,
+  },
   actions: {
+    initializeStepper(steps: Omit<StepperStep, "status">[]) {
+      this.stepperSteps = steps.map((step, index) => ({
+        ...step,
+        status: index === 0 ? "current" : ("upcoming" as const),
+      }));
+      this.currentStepIndex = 0;
+    },
+
+    updateCurrentStepByRoute(pathName: string) {
+      console.log("Updating current step by route:", pathName);
+      const index = this.stepperSteps.findIndex(
+        (step) => step.pathName === pathName
+      );
+      if (index !== -1) {
+        this.currentStepIndex = index;
+        this.updateStepStatuses();
+      }
+    },
+
+    updateStepStatuses() {
+      this.stepperSteps = this.stepperSteps.map((step, index) => ({
+        ...step,
+        status:
+          index < this.currentStepIndex
+            ? "complete"
+            : index === this.currentStepIndex
+              ? "current"
+              : "upcoming",
+      }));
+    },
+
+    goToNextStep(router: Router) {
+      if (this.canGoNext) {
+        this.currentStepIndex++;
+        this.updateStepStatuses();
+        const nextStep = this.stepperSteps[this.currentStepIndex];
+        console.log("Navigating to next step:", nextStep);
+        if (nextStep.pathName) {
+          console.log("Pushing to router path:", nextStep.pathName);
+          router.push(nextStep.pathName);
+        }
+      }
+    },
+
+    goToPreviousStep(router: Router) {
+      if (this.canGoPrevious) {
+        this.currentStepIndex--;
+        this.updateStepStatuses();
+        const prevStep = this.stepperSteps[this.currentStepIndex];
+        if (prevStep.pathName) {
+          router.push(prevStep.pathName);
+        }
+      }
+    },
+
+    setStepData(stepName: string, data: any) {
+      this.stepData[stepName] = data;
+    },
+
+    getStepData(stepName: string) {
+      return this.stepData[stepName] || {};
+    },
+
     setUserProfessionnalInformations(payload: InformationsForm) {
       this.register.firstName = payload.firstName;
       this.register.lastName = payload.lastName;
@@ -60,10 +139,7 @@ export const useAuthStore = defineStore("authStore", {
     //TODO: typer
     async registerProfessionnal(
       userType: string,
-      {
-        files,
-        ...userToAdd
-      }: AddProfessionnal & PrescriptionUpload
+      { files, ...userToAdd }: AddProfessionnal & PrescriptionUpload
     ) {
       const filesData = new FormData();
       files.map((file) => {

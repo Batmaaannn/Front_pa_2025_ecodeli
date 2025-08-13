@@ -1,0 +1,1 @@
+<template>Choice formule</template>

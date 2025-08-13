@@ -32,6 +32,26 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       layout: "HomeLayout",
     },
+    children: [
+      {
+        path: "", // This will match /inscription/client
+        name: "InformationsClient",
+        component: () =>
+          import("@/views/auth/components/steps/client/Informations.vue"),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "formule", // This will match /inscription/client/formule
+        name: "FormuleChoice",
+        component: () =>
+          import("@/views/auth/components/steps/client/FormuleChoice.vue"),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+    ],
   },
   {
     path: "/inscription/commercant",

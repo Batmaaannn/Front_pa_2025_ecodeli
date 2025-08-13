@@ -1,0 +1,1 @@
+<template>Ici informations</template>

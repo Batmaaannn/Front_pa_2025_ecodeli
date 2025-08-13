@@ -1,159 +1,135 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-primary-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl w-full space-y-8">
-      <div v-if="!!successMessage" class="text-center">
-        <Alert isSuccess>{{ successMessage }}</Alert>
-      </div>
-      <div v-else class="bg-white shadow-2xl rounded-2xl p-8 space-y-6">
-        <!-- Header Section -->
-        <div class="text-center space-y-2">
-          <h1 class="text-3xl font-bold text-gray-900">Créer votre compte</h1>
-          <p class="text-gray-600">
-            Rejoignez Ecodeli et commencez votre parcours écologique
-          </p>
-        </div>
+  <div class="relative isolate overflow-hidden min-h-screen flex flex-col">
+    <svg
+      class="absolute inset-0 -z-10 size-full mask-[radial-gradient(100%_100%_at_bottom_left,white,transparent)] stroke-gray-200"
+      aria-hidden="true"
+    >
+      <defs>
+        <pattern
+          id="83fd4e5a-9d52-42fc-97b6-718e5d7ee527"
+          width="200"
+          height="200"
+          x="50%"
+          y="-1"
+          patternUnits="userSpaceOnUse"
+        >
+          <path d="M100 200V.5M.5 .5H200" fill="none" />
+        </pattern>
+      </defs>
+      <svg x="50%" y="-1" class="overflow-visible fill-gray-50">
+        <path
+          d="M-100.5 0h201v201h-201Z M699.5 0h201v201h-201Z M499.5 400h201v201h-201Z M-300.5 600h201v201h-201Z"
+          stroke-width="0"
+        />
+      </svg>
+      <rect
+        width="100%"
+        height="100%"
+        stroke-width="0"
+        fill="url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)"
+      />
+    </svg>
+    <div
+      class="flex flex-1 flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+    >
+      <Stepper
+        :steps="authStore.stepperSteps"
+        :current-step-index="authStore.currentStepIndex"
+        @step-click="handleStepClick"
+      />
 
-        <div class="border-t border-gray-200 pt-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-2">Informations personnelles</h2>
-          <p class="text-gray-600 mb-6">
-            Veuillez fournir vos informations personnelles pour continuer l'inscription.
-          </p>
-        </div>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
 
-        <form @submit.prevent="submitRegistrationClient" class="space-y-6">
-          <!-- Personal Information Section -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Identité</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="Prénom"
-                v-model="form.firstName"
-                name="first-name"
-                autoCompleteName="given-name"
-                :error="error.firstName"
-                @blur="processFirstName()"
-              ></InputField>
-              <InputField
-                label="Nom de famille"
-                v-model="form.lastName"
-                name="last-name"
-                autoCompleteName="family-name"
-                :error="error.lastName"
-                @blur="processLastName()"
-              ></InputField>
-            </div>
-          </div>
-          
-          <!-- Contact Information Section -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Contact</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <InputField
-                label="Email"
-                v-model="form.email"
-                name="email"
-                autoCompleteName="email"
-                @blur="processEmail()"
-                :error="error.email"
-              ></InputField>
-              <InputField
-                label="Numéro de téléphone"
-                v-model="form.phone"
-                name="phone"
-                autoCompleteName="phone"
-                @blur="processPhoneNumber()"
-                :error="error.phone"
-              ></InputField>
-            </div>
-          </div>
-          <!-- Password Section -->
-          <div class="space-y-4">
-            <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Sécurité</h3>
-            <div class="space-y-4">
-              <div>
-                <InputField
-                  type="password"
-                  label="Mot de passe"
-                  v-model="form.password"
-                  name="password"
-                  @blur="processPassword()"
-                ></InputField>
-                
-                <!-- Password Strength Indicator -->
-                <div v-if="form.password" class="mt-2">
-                  <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm text-gray-600">Force du mot de passe</span>
-                    <span class="text-sm font-medium" :class="passwordStrengthColor">{{ form.passwordStrength }}</span>
-                  </div>
-                  <div class="w-full bg-gray-200 rounded-full h-2">
-                    <div class="h-2 rounded-full transition-all duration-300" :class="passwordStrengthBarColor" :style="{ width: passwordStrengthPercentage }"></div>
-                  </div>
-                </div>
-                
-                <!-- Password Errors -->
-                <div v-if="error.password.length > 0" class="mt-2 space-y-1">
-                  <p
-                    v-for="passwordError in error.password"
-                    :key="passwordError"
-                    class="text-sm text-red-600 flex items-center"
-                  >
-                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                    {{ passwordError }}
-                  </p>
-                </div>
-              </div>
-              
-              <InputField
-                type="password"
-                label="Confirmation de mot de passe"
-                v-model="form.passwordConfirmation"
-                name="password-confirmation"
-                :error="error.passwordConfirmation"
-                @blur="processPasswordConfirmation()"
-              ></InputField>
-            </div>
-          </div>
-          <!-- Submit Section -->
-          <div class="pt-6 border-t border-gray-200">
-            <Button 
-              type="submit" 
-              isGreen 
-              :disabled="formClientHasError"
-              :loading="loading"
-              class="w-full py-3 text-base font-semibold"
-            >
-              Créer mon compte
-            </Button>
-            
-            <div v-if="!!errorMessage" class="mt-4">
-              <Alert isError>{{ errorMessage }}</Alert>
-            </div>
-            
-            <p class="mt-4 text-center text-sm text-gray-600">
-              Déjà un compte ? 
-              <router-link to="/login" class="font-medium text-primary-600 hover:text-primary-500">
-                Se connecter
-              </router-link>
-            </p>
-          </div>
-        </form>
+      <div class="mt-8 flex justify-between">
+        <Button
+          @click="authStore.goToPreviousStep(router)"
+          :disabled="!authStore.canGoPrevious"
+          isGreen
+        >
+          Précédent
+        </Button>
+        <Button
+          @click="handleNextStep"
+          :disabled="!authStore.canGoNext"
+          isGreen
+        >
+          Suivant
+        </Button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import InputField from "@/components/formControls/InputField.vue";
 import Button from "@/components/formControls/Button.vue";
 import { useAuthStore } from "@/stores/auth.store";
 import { passwordStrengthCheck } from "@/libs/password";
 import * as Validators from "@/utils/validate";
 import Alert from "@/components/formControls/Alert.vue";
+import Stepper from "@/components/Stepper.vue";
+import { useRoute, useRouter } from "vue-router";
+
+const route = useRoute();
+const router = useRouter();
 
 const authStore = useAuthStore();
+
+const handleStepClick = (step: any, index: number) => {
+  if (index < authStore.currentStepIndex) {
+    if (step.pathName) {
+      router.push(step.pathName);
+    }
+    authStore.currentStepIndex = index;
+    authStore.updateStepStatuses();
+  }
+};
+
+onMounted(() => {
+  // Initialize stepper with steps
+  authStore.initializeStepper([
+    {
+      name: "Informations Personnelles",
+      pathName: "/inscription/client",
+    },
+    {
+      name: "Choix de la Formule",
+      pathName: "/inscription/client/formule",
+    },
+  ]);
+
+  // Set the current step based on current route
+  authStore.updateCurrentStepByRoute(route.path);
+});
+
+// Update current step when route changes
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath) {
+      authStore.updateCurrentStepByRoute(newPath);
+    }
+  }
+);
+
+// Save step data before moving to next step
+const handleNextStep = () => {
+  // Save current step data
+  const currentStep = authStore.currentStep;
+  if (currentStep) {
+    // Example: Save form data from current step
+    const formData = {
+      /* your form data */
+    };
+    authStore.setStepData(currentStep.name, formData);
+  }
+  authStore.goToNextStep(router);
+};
 
 const form = ref({
   firstName: "",
@@ -196,30 +172,32 @@ const formClientHasError = computed(() => {
 
 const passwordStrengthColor = computed(() => {
   const strength = form.value.passwordStrength.toLowerCase();
-  if (strength.includes('très faible') || strength.includes('faible')) return 'text-red-600';
-  if (strength.includes('moyen')) return 'text-yellow-600';
-  if (strength.includes('fort') || strength.includes('très fort')) return 'text-green-600';
-  return 'text-gray-600';
+  if (strength.includes("très faible") || strength.includes("faible"))
+    return "text-red-600";
+  if (strength.includes("moyen")) return "text-yellow-600";
+  if (strength.includes("fort") || strength.includes("très fort"))
+    return "text-green-600";
+  return "text-gray-600";
 });
 
 const passwordStrengthBarColor = computed(() => {
   const strength = form.value.passwordStrength.toLowerCase();
-  if (strength.includes('très faible')) return 'bg-red-300';
-  if (strength.includes('faible')) return 'bg-red-500';
-  if (strength.includes('moyen')) return 'bg-yellow-500';
-  if (strength.includes('fort')) return 'bg-green-500';
-  if (strength.includes('très fort')) return 'bg-green-600';
-  return 'bg-gray-300';
+  if (strength.includes("très faible")) return "bg-red-300";
+  if (strength.includes("faible")) return "bg-red-500";
+  if (strength.includes("moyen")) return "bg-yellow-500";
+  if (strength.includes("fort")) return "bg-green-500";
+  if (strength.includes("très fort")) return "bg-green-600";
+  return "bg-gray-300";
 });
 
 const passwordStrengthPercentage = computed(() => {
   const strength = form.value.passwordStrength.toLowerCase();
-  if (strength.includes('très faible')) return '20%';
-  if (strength.includes('faible')) return '40%';
-  if (strength.includes('moyen')) return '60%';
-  if (strength.includes('fort')) return '80%';
-  if (strength.includes('très fort')) return '100%';
-  return '0%';
+  if (strength.includes("très faible")) return "20%";
+  if (strength.includes("faible")) return "40%";
+  if (strength.includes("moyen")) return "60%";
+  if (strength.includes("fort")) return "80%";
+  if (strength.includes("très fort")) return "100%";
+  return "0%";
 });
 
 function setStrength(strength: string) {
