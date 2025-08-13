@@ -99,3 +99,10 @@ export function validateCity(value: string): string {
     return "La valeur du champ 'Ville' doit être comprise entre 2 et 30 caractères";
   return "";
 }
+
+export function validateCarlicenseNumber(value: string): string {
+  if (!value) return "Le champ 'Numéro de permis de conduire' est requis";
+  if (value.length !== 12)
+    return "La valeur du champ 'Numéro de permis de conduire' doit être égale à 12 caractères";
+  return "";
+}

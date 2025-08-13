@@ -2,6 +2,7 @@ import { PrestationWithPrice } from "./prestation";
 import { Statut } from "./statut";
 import { SubscriptionPlan } from "./subscription-plan";
 import { AgentType } from "./user";
+import { VehiculeType } from "./vehicule";
 
 export interface RegistrationRequest {
   id: number;
@@ -40,21 +41,15 @@ export interface RegistrationDocument {
   updated_at: string;
 }
 
-export interface RegistrationCustomer {
+interface BaseRegistration {
   email: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   password: string;
-  subscriptionPlan: SubscriptionPlan;
 }
 
-export interface RegistrationMerchant {
-  email: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  password: string;
+interface CompanyInfo {
   companyName: string;
   companyAddress: string;
   companyCity: string;
@@ -63,6 +58,14 @@ export interface RegistrationMerchant {
   files: File[];
 }
 
-export interface UploadDocument {
-  files: File[];
+export interface RegistrationCustomer extends BaseRegistration {
+  subscriptionPlan: SubscriptionPlan;
 }
+
+export interface RegistrationMerchant extends BaseRegistration, CompanyInfo {}
+
+export interface RegistrationDeliveryAgent extends BaseRegistration, CompanyInfo {
+  licenseNumber: string;
+  vehicleType: VehiculeType;
+}
+

@@ -11,6 +11,7 @@ import { useUserStore } from "./user.store";
 import type { Router } from "vue-router";
 import {
   RegistrationCustomer,
+  RegistrationDeliveryAgent,
   RegistrationMerchant,
   UploadDocument,
 } from "@/types/registration";
@@ -116,9 +117,24 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    async registerDeliveryAgent(deliveryAgent: RegistrationCustomer) {
+    async registerDeliveryAgent({ files, ...deliveryAgent }: RegistrationDeliveryAgent) {
+      const filesData = new FormData();
+
+      files.forEach((file) => {
+        filesData.append("files", file);
+      });
+
+      Object.entries(deliveryAgent).forEach(([key, value]) => {
+        if (value !== undefined) {
+          if (Array.isArray(value)) {
+            filesData.append(key, JSON.stringify(value));
+          } else {
+            filesData.append(key, String(value));
+          }
+        }
+      });
       try {
-        await axios.post("registration-requests/delivery-agent", deliveryAgent);
+        await axios.post("delivery-agents/create-deliver", filesData);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
@@ -132,7 +148,7 @@ export const useAuthStore = defineStore("authStore", {
 
     async registerServiceAgent(serviceAgent: RegistrationCustomer) {
       try {
-        await axios.post("registration-requests/service-agent", serviceAgent);
+        await axios.post("delivery-agent/create-deliver", serviceAgent);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))

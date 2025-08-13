@@ -105,10 +105,10 @@
           </div>
         </div>
 
-        <!-- :disable-next="formClientHasError" -->
         <StepperNavigationButtons
           :show-previous="navigation.canGoPrevious"
           :loading="loading"
+          :disable-next="formClientHasError"
           submit-type="button"
           @previous="navigation.goToPreviousStep"
           @next="handleNext"
@@ -208,13 +208,12 @@ function processFirstName() {
 function processLastName() {
   error.value.lastName = Validators.validateLastName(form.value.lastName);
 }
- 
+
 const handleSubmit = async () => {
   await handleNext();
 };
 
 const handleNext = async () => {
-
   try {
     loading.value = true;
 

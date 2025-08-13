@@ -73,7 +73,7 @@
           :show-previous="navigation.canGoPrevious"
           :disable-next="formHasError"
           :loading="loading"
-          submit-type="submit"
+          submit-type="button"
           @previous="navigation.goToPreviousStep"
           @next="handleNext"
         />
@@ -93,7 +93,7 @@ const navigation = useStepperNavigation();
 
 onMounted(() => {
   const savedData = navigation.getCurrentStepData();
-  
+
   if (savedData && savedData.companyName !== undefined) {
     form.value.companyName = savedData.companyName || "";
     form.value.companySiret = savedData.companySiret || "";
@@ -169,7 +169,6 @@ const handleSubmit = async () => {
 };
 
 const handleNext = async () => {
-  
   try {
     loading.value = true;
 

@@ -1,55 +1,13 @@
 <template>
   <div class="w-full max-w-2xl space-y-8">
-    <!-- Success Message -->
-    <div v-if="successMessage" class="bg-green-50 p-4 rounded-lg">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <svg
-            class="h-5 w-5 text-green-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div class="ml-3">
-          <p class="text-sm font-medium text-green-800">{{ successMessage }}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Error Message -->
-    <div v-if="errorMessage" class="bg-red-50 p-4 rounded-lg">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <svg
-            class="h-5 w-5 text-red-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div class="ml-3">
-          <p class="text-sm font-medium text-red-800">{{ errorMessage }}</p>
-        </div>
-      </div>
-    </div>
+    <Alert v-if="successMessage" isSuccess>{{ successMessage }}</Alert>
+    <Alert v-if="errorMessage" isError>{{ errorMessage }}</Alert>
 
     <div v-if="!successMessage">
       <h2 class="text-xl font-semibold text-gray-900 mb-6">
         Documents professionnels
       </h2>
 
-      <!-- File upload section -->
       <div class="space-y-6">
         <div v-for="doc in requiredDocuments" :key="doc.key" class="">
           <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -65,11 +23,9 @@
         </div>
       </div>
 
-      <!-- Validation error -->
       <p v-if="error" class="mt-4 text-sm text-red-600">{{ error }}</p>
     </div>
 
-    <!-- Navigation buttons -->
     <StepperNavigationButtons
       v-if="!successMessage"
       :show-previous="navigation.canGoPrevious"
@@ -80,7 +36,6 @@
       @next="handleNext"
     />
 
-    <!-- After success, show login button -->
     <div v-if="successMessage" class="flex justify-center">
       <Button @click="goToLogin" isGreen>Se connecter</Button>
     </div>
@@ -95,6 +50,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import StepperNavigationButtons from "@/components/StepperNavigationButtons.vue";
 import Button from "@/components/formControls/Button.vue";
 import DropUploadFile from "@/components/formControls/DropUploadFile.vue";
+import Alert from "@/components/formControls/Alert.vue";
 
 const navigation = useStepperNavigation();
 const authStore = useAuthStore();
@@ -239,7 +195,7 @@ const submitRegistration = async () => {
     // Add specific step data based on registration type
     if (registrationType.value === "delivery_agent") {
       const vehicleInfo =
-        allStepData[`Informations${suffix} - Informations Vehicule`] || {};
+        allStepData[`VehiculeInformations${suffix}`] || {};
       Object.assign(registrationData, vehicleInfo);
     } else if (registrationType.value === "service_agent") {
       const prestationsInfo =
@@ -250,6 +206,7 @@ const submitRegistration = async () => {
     // Add files (flatten the array of arrays)
     registrationData.files = Object.values(uploadedFiles.value).flat();
 
+    console.log("Registration Data:", registrationData);
     // Call appropriate registration method
     switch (registrationType.value) {
       case "delivery_agent":
