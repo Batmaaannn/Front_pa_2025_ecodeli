@@ -54,7 +54,7 @@ interface CompanyInfo {
   companyAddress: string;
   companyCity: string;
   companyPostalCode: string;
-  siret: string;
+  companySiret: string;
   files: File[];
 }
 

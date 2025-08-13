@@ -146,24 +146,31 @@ export const useAuthStore = defineStore("authStore", {
       files,
       ...serviceAgent
     }: RegistrationServiceAgent) {
-      const filesData = new FormData();
+      const formData = new FormData();
 
       files.forEach((file) => {
-        filesData.append("files", file);
+        formData.append("files", file);
       });
 
-      Object.entries(serviceAgent).forEach(([key, value]) => {
-        if (value !== undefined) {
-          if (Array.isArray(value)) {
-            filesData.append(key, JSON.stringify(value));
-          } else {
-            filesData.append(key, String(value));
-          }
-        }
+     formData.append("firstName", serviceAgent.firstName);
+     formData.append("lastName", serviceAgent.lastName);
+     formData.append("email", serviceAgent.email);
+     formData.append("password", serviceAgent.password);
+     formData.append("phoneNumber", serviceAgent.phoneNumber);
+     formData.append("companySiret", serviceAgent.companySiret);
+     formData.append("companyName", serviceAgent.companyName);
+     formData.append("companyAddress", serviceAgent.companyAddress);
+     formData.append("companyCity", serviceAgent.companyCity);
+     formData.append("companyPostalCode", serviceAgent.companyPostalCode);
+     //formData.append("certifications", serviceAgent.certifications);
+
+     serviceAgent.selectedPrestations.forEach((prestation, idx) => {
+        formData.append(`selectedPrestations[${idx}][prestationId]`, String(prestation.prestationId));
+        formData.append(`selectedPrestations[${idx}][requestedPrice]`, String(prestation.requestedPrice));
       });
 
       try {
-        await axios.post("service-agent/create-service", filesData);
+        await axios.post("service-agents/create-service", formData);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
