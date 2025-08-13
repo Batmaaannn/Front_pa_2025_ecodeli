@@ -71,14 +71,14 @@ const handleStepClick = (step: any, index: number) => {
 };
 
 onMounted(() => {
-  // Initialize stepper with steps
+  // Initialize stepper with steps - use unique names for client registration
   authStore.initializeStepper([
     {
-      name: "Informations Personnelles",
+      name: "InformationsCustomer",
       pathName: "/inscription/client",
     },
     {
-      name: "Choix de la Formule",
+      name: "FormuleChoice",
       pathName: "/inscription/client/formule",
     },
   ]);

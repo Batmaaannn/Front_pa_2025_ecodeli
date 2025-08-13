@@ -114,11 +114,13 @@ export const useAuthStore = defineStore("authStore", {
         payload.compagnyPostalCode + " " + payload.companyCity;
       this.register.companyAddress = payload.companyAddress;
     },
+
     setServiceAgentPrestations(payload: {
       prestationsAndPrices: FormPrestationIdWithPrice[];
     }) {
       this.register.prestations = payload.prestationsAndPrices;
     },
+    
     async registerClient(customer: RegistrationCustomer) {
       try {
         await axios.post("customers/create-customer", customer);
@@ -132,8 +134,36 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
-    //TODO: typer
-    async registerProfessionnal(
+
+    async registerDeliveryAgent(deliveryAgent: RegistrationCustomer) {
+      try {
+        await axios.post("registration-requests/delivery-agent", deliveryAgent);
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
+      }
+    },
+
+    async registerServiceAgent(serviceAgent: RegistrationCustomer) {
+      try {
+        await axios.post("registration-requests/service-agent", serviceAgent);
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
+      }
+    },
+
+    async registerMerchant(
       userType: string,
       { files, ...userToAdd }: AddProfessionnal & PrescriptionUpload
     ) {
@@ -152,13 +182,7 @@ export const useAuthStore = defineStore("authStore", {
         }
       });
       try {
-        if (userType === "merchant") {
-          await axios.post("merchants/create-merchant", filesData);
-        } else if (userType === "service_agent") {
-          await axios.post("registration-requests/service-agent", filesData);
-        } else if (userType === "delivery_agent") {
-          await axios.post("registration-requests/delivery-agent", filesData);
-        }
+        await axios.post("merchants/create-merchant", filesData);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
@@ -169,6 +193,7 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
+
     async login(loginForm: any) {
       try {
         const data: string = (await axios.post("/auth/login", loginForm)).data;

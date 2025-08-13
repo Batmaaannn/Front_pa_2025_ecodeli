@@ -1,0 +1,1 @@
+<template>Prestations choice</template>

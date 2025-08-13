@@ -16,11 +16,11 @@
           <h3
             class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2"
           >
-            Identité
+            Identite
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <InputField
-              label="Prénom"
+              label="Prenom"
               v-model="form.firstName"
               name="first-name"
               autoCompleteName="given-name"
@@ -55,7 +55,7 @@
               :error="error.email"
             ></InputField>
             <InputField
-              label="Numéro de téléphone"
+              label="Numero de telephone"
               v-model="form.phone"
               name="phone"
               autoCompleteName="phone"
@@ -69,7 +69,7 @@
           <h3
             class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2"
           >
-            Sécurité
+            Securite
           </h3>
           <div class="space-y-4">
             <div>
@@ -138,6 +138,7 @@ onMounted(() => {
         form.value.email = savedData.email || "";
         form.value.phone = savedData.phoneNumber || "";
         form.value.password = savedData.password || "";
+        form.value.passwordConfirmation = savedData.passwordConfirmation || "";
     }
 });
 
@@ -222,6 +223,7 @@ const handleNext = async () => {
       email: form.value.email,
       phoneNumber: form.value.phone,
       password: form.value.password,
+      passwordConfirmation: form.value.passwordConfirmation,
     });
   } catch (err) {
     console.error("Error:", err);

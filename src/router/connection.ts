@@ -24,6 +24,50 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       layout: "HomeLayout",
     },
+    children: [
+      {
+        path: "",
+        name: "InformationsDeliver",
+        component: () =>
+          import("@/views/auth/components/steps/global/Informations.vue"),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "entreprise",
+        name: "CompanyInformationsDeliver",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/CompanyInformations.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "vehicule",
+        name: "VehiculeInformations",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/delivery-agent/VehiculeInformations.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "documents",
+        name: "CompanyDocumentsDeliver",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/DocumentsProfessionnal.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+    ],
   },
   {
     path: "/inscription/client",
@@ -34,16 +78,16 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "", // This will match /inscription/client
-        name: "InformationsClient",
+        path: "",
+        name: "InformationsCustomer",
         component: () =>
-          import("@/views/auth/components/steps/client/Informations.vue"),
+          import("@/views/auth/components/steps/global/Informations.vue"),
         meta: {
           layout: "HomeLayout",
         },
       },
       {
-        path: "formule", // This will match /inscription/client/formule
+        path: "formule",
         name: "FormuleChoice",
         component: () =>
           import("@/views/auth/components/steps/client/FormuleChoice.vue"),
@@ -60,6 +104,39 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       layout: "HomeLayout",
     },
+    children: [
+      {
+        path: "",
+        name: "InformationsMerchant",
+        component: () =>
+          import("@/views/auth/components/steps/global/Informations.vue"),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "entreprise",
+        name: "CompanyInformationsMerchant",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/CompanyInformations.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "documents",
+        name: "CompanyDocumentsMerchant",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/DocumentsProfessionnal.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+    ],
   },
   {
     path: "/inscription/prestataire",
@@ -68,6 +145,50 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       layout: "HomeLayout",
     },
+    children: [
+      {
+        path: "",
+        name: "InformationsServiceAgent",
+        component: () =>
+          import("@/views/auth/components/steps/global/Informations.vue"),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "entreprise",
+        name: "CompanyInformationsServiceAgent",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/CompanyInformations.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      {
+        path: "prestations",
+        name: "PrestationsChoice",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/service-agent/PrestationsChoice.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
+      // {
+      //   path: "documents",
+      //   name: "CompanyDocumentsServiceAgent",
+      //   component: () =>
+      //     import(
+      //       "@/views/auth/components/steps/global/DocumentsProfessionnal.vue"
+      //     ),
+      //   meta: {
+      //     layout: "HomeLayout",
+      //   },
+      // },
+    ],
   },
 ];
 
