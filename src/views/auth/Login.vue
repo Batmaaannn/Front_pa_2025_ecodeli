@@ -57,9 +57,7 @@
         "
       />
     </div>
-    <div
-      class="flex flex-1 min-h-0 flex-col justify-center px-6 py-12 lg:px-8"
-    >
+    <div class="flex flex-1 min-h-0 flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2
           class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900"
@@ -132,10 +130,8 @@
             </div>
           </form>
         </div>
+        <Alert v-if="error" isError>{{ error }}</Alert>
 
-        <p v-if="error" class="mt-2 text-sm/6 text-red-600">
-          {{ error }}
-        </p>
         <p class="mt-10 text-center text-sm/6 text-gray-500">
           Pas encore membre ?
           {{ " " }}
@@ -155,6 +151,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
+import Alert from "@/components/formControls/Alert.vue";
 
 import * as Validators from "@/utils/validate";
 
@@ -191,7 +188,7 @@ async function login() {
         password: password.value,
       });
       success.value = true;
-      router.push({ path: userStore.getDashboardUrl }); // Redirige vers la page d'accueil (ajuste le nom de la route si besoin)
+      router.push({ path: userStore.getDashboardUrl });
     } catch (e: any) {
       error.value = e;
     } finally {

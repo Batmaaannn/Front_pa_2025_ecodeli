@@ -1,9 +1,5 @@
 import { axios, getAxiosError } from "@/libs/axios";
-import {
-  AddProfessionnal,
-  PrescriptionUpload,
-  type RegisterForm,
-} from "@/types/auth";
+import { type RegisterForm } from "@/types/auth";
 import { COOKIES } from "@/types/cookies";
 import {
   InformationsForm,
@@ -13,7 +9,11 @@ import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
 import type { Router } from "vue-router";
-import { RegistrationCustomer } from "@/types/registration";
+import {
+  RegistrationCustomer,
+  RegistrationMerchant,
+  UploadDocument,
+} from "@/types/registration";
 
 interface StepperStep {
   name: string;
@@ -102,25 +102,6 @@ export const useAuthStore = defineStore("authStore", {
       return this.stepData[stepName] || {};
     },
 
-    setUserProfessionnalInformations(payload: InformationsForm) {
-      this.register.firstName = payload.firstName;
-      this.register.lastName = payload.lastName;
-      this.register.email = payload.email;
-      this.register.password = payload.password;
-      this.register.phoneNumber = payload.phone;
-      this.register.companyName = payload.companyName;
-      this.register.companySiret = payload.siret;
-      this.register.companyCity =
-        payload.compagnyPostalCode + " " + payload.companyCity;
-      this.register.companyAddress = payload.companyAddress;
-    },
-
-    setServiceAgentPrestations(payload: {
-      prestationsAndPrices: FormPrestationIdWithPrice[];
-    }) {
-      this.register.prestations = payload.prestationsAndPrices;
-    },
-    
     async registerClient(customer: RegistrationCustomer) {
       try {
         await axios.post("customers/create-customer", customer);
@@ -163,21 +144,19 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    async registerMerchant(
-      userType: string,
-      { files, ...userToAdd }: AddProfessionnal & PrescriptionUpload
-    ) {
+    async registerMerchant({ files, ...userToAdd }: RegistrationMerchant) {
       const filesData = new FormData();
-      files.map((file) => {
+
+      files.forEach((file) => {
         filesData.append("files", file);
       });
-      Object.keys(userToAdd).map((item) => {
-        const value = userToAdd[item as keyof typeof userToAdd];
+
+      Object.entries(userToAdd).forEach(([key, value]) => {
         if (value !== undefined) {
           if (Array.isArray(value)) {
-            filesData.append(item, JSON.stringify(value));
+            filesData.append(key, JSON.stringify(value));
           } else {
-            filesData.append(item, String(value));
+            filesData.append(key, String(value));
           }
         }
       });
@@ -189,6 +168,8 @@ export const useAuthStore = defineStore("authStore", {
           throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
         if (message.match(/blacklisted/gi))
           throw "Impossible d'utiliser des emails jetables";
+        if (message.match(/exists/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
 
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
@@ -213,8 +194,8 @@ export const useAuthStore = defineStore("authStore", {
           throw "Email ou mot de passe incorrect.";
         }
 
-        if (message.match(/E-mail not validated/gi)) {
-          throw `Votre e-mail n'est pas validé. Merci de vérifier votre boîte mail.`;
+        if (message.match(/Account not validated/gi)) {
+          throw `Votre compte n'est pas encore validé.`;
         }
 
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client.";

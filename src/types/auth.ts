@@ -20,21 +20,3 @@ export interface RegisterForm {
   companyCity?: string;
   prestations?: FormPrestationIdWithPrice[];
 }
-
-export interface AddProfessionnal {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  companyName: string;
-  companySiret: string;
-  companyAddress: string;
-  companyCity: string;
-  prestations?: FormPrestationIdWithPrice[];
-}
-
-export interface PrescriptionUpload {
-  files: File[];
-  filename?: string;
-}

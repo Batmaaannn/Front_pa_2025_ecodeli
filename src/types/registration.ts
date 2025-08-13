@@ -49,3 +49,20 @@ export interface RegistrationCustomer {
   subscriptionPlan: SubscriptionPlan;
 }
 
+export interface RegistrationMerchant {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  password: string;
+  companyName: string;
+  companyAddress: string;
+  companyCity: string;
+  companyPostalCode: string;
+  siret: string;
+  files: File[];
+}
+
+export interface UploadDocument {
+  files: File[];
+}

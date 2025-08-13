@@ -92,7 +92,6 @@ import * as Validators from "@/utils/validate";
 const navigation = useStepperNavigation();
 
 onMounted(() => {
-  // Get saved data for current step
   const savedData = navigation.getCurrentStepData();
   
   if (savedData && savedData.companyName !== undefined) {

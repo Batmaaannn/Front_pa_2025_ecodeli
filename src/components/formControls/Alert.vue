@@ -1,11 +1,11 @@
 <template>
-  <div class="rounded-md p-4 my-2" :class="colorName">
+  <div class="rounded-lg p-4 my-2" :class="colorName">
     <div class="flex">
       <div class="flex-shrink-0">
-        <component :is="iconName" class="h-6 w-6" />
+        <component :is="iconName" class="h-5 w-5" :class="iconColor" />
       </div>
       <div class="ml-3">
-        <p class="text-md"><slot></slot></p>
+        <p class="text-sm"><slot></slot></p>
       </div>
     </div>
   </div>
@@ -45,11 +45,18 @@ const iconName = computed(() => {
 });
 
 const colorName = computed(() => {
-  if (props.isError) return "bg-red-50 text-red-600 border-red-600";
-  if (props.isSuccess)
-    return "bg-primary-50 text-primary-500 border-prmary-500";
-  if (props.isWarning) return "bg-yellow-50 text-yellow-500 border-yellow-500";
-  if (props.isInfo) return "bg-blue-50 text-blue-500 border-blue-500";
+  if (props.isError) return "bg-red-50 font-medium text-red-800";
+  if (props.isSuccess) return "bg-primary-50 text-primary-500";
+  if (props.isWarning) return "bg-yellow-50 text-yellow-800";
+  if (props.isInfo) return "bg-blue-50 text-blue-800";
+  return "";
+});
+
+const iconColor = computed(() => {
+  if (props.isError) return "text-red-400";
+  if (props.isSuccess) return "text-primary-500";
+  if (props.isWarning) return "text-yellow-500";
+  if (props.isInfo) return "text-blue-500";
   return "";
 });
 </script>

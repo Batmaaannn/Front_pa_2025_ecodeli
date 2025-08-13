@@ -208,7 +208,7 @@ function processFirstName() {
 function processLastName() {
   error.value.lastName = Validators.validateLastName(form.value.lastName);
 }
-
+ 
 const handleSubmit = async () => {
   await handleNext();
 };
@@ -218,15 +218,14 @@ const handleNext = async () => {
   try {
     loading.value = true;
 
-    //if (formClientHasError.value) return;
+    if (formClientHasError.value) return;
 
     navigation.saveAndNext({
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       email: form.value.email,
       phoneNumber: form.value.phone,
-      // password: form.value.password,
-      // passwordConfirmation: form.value.passwordConfirmation,
+      password: form.value.password,
     });
   } catch (err) {
     console.error("Error:", err);
