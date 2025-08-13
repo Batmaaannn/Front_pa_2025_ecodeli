@@ -186,7 +186,8 @@ import { AgentType } from "@/types/user";
 import { onBeforeMount, ref, computed } from "vue";
 import { useRoute } from "vue-router";
 import { Statut } from "@/types/statut";
-import { VehiculeType } from "@/types/vehicule";
+import { VehiculeType } from "@/types/delivery";
+
 import Select from "@/components/Select.vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";

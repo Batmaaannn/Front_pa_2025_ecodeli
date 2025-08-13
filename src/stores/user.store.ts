@@ -43,6 +43,13 @@ export const useUserStore = defineStore("userStore", {
         return Promise.reject(error);
       }
     },
+    async findUsersRequestsNotValidated() {
+      try {
+        return (await axios.get("/users/requests")).data;
+      } catch (error) {
+        return error;
+      }
+    },
     disconnect() {
       const { cookies } = useCookies();
       cookies.remove(COOKIES.CONNECTION_TOKEN);

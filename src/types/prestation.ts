@@ -1,3 +1,6 @@
+import { Appointment } from "./appointment";
+import { ServiceAgent } from "./service-agent";
+
 export interface Prestation {
   id: number;
   label: string;
@@ -5,11 +8,8 @@ export interface Prestation {
   ecodeli_price: number;
   pricing_unit: string;
   description: string;
-}
-
-export interface FormPrestationIdWithPrice {
-  prestationId: number;
-  price: number;
+  is_active: boolean;
+  serviceAgentPrestations: ServiceAgentPrestation[];
 }
 
 export interface InformationsForm {
@@ -25,11 +25,25 @@ export interface InformationsForm {
   companyAddress: string;
 }
 
-export interface PrestationWithPrice {
+export enum PrestationStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REJECTED = "REJECTED",
+  MODIFIED = "MODIFIED",
+}
+
+export interface ServiceAgentPrestation {
   id: number;
-  price: string;
-  prestation: Prestation & {
-    created_at: string;
-    updated_at: string;
-  };
+  requested_price: number;
+  applied_price?: number;
+  price_status: PrestationStatus;
+  ecodeli_comment?: string;
+  is_available: boolean;
+  validated_at?: Date;
+  validated_by?: number;
+  service_agent: ServiceAgent;
+  service_agent_id: number;
+  prestation: Prestation;
+  prestation_id: number;
+  appointments: Appointment[];
 }

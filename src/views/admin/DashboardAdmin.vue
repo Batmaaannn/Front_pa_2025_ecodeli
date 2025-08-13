@@ -1,8 +1,9 @@
 <template>
   <div class="dashboard-patient">
     <ConnecterSidebar :navigation="navigation" />
-
     <div class="lg:pl-72">
+      Ajouter : Demande nouvelles prestations Ajouter : Tickets Ajouter : Pending validation merchant
+
       <main class="py-10">
         <div class="px-4 sm:px-6 lg:px-8">
           <router-view></router-view>

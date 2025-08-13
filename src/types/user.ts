@@ -1,7 +1,7 @@
-import { Customer } from "src/modules/customers/entities/customer.entity";
-import { DeliveryAgent } from "src/modules/delivery-agents/entities/delivery-agents.entity";
-import { Merchant } from "src/modules/merchants/entities/merchants.entity";
-import { ServiceAgent } from "src/modules/service-agents/entities/service-agents.entity";
+import { Customer } from "./customer";
+import { DeliveryAgent } from "./delivery-agent";
+import { Merchant } from "./merchant";
+import { ServiceAgent } from "./service-agent";
 
 export enum UserType {
   ADMIN = "ADMIN",
@@ -20,6 +20,8 @@ interface BaseUser {
   id: number;
   email: string;
   password: string;
+  is_validated: boolean;
+  is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }

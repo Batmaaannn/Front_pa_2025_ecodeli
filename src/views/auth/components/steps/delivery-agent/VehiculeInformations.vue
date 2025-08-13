@@ -72,7 +72,7 @@ import { ref, computed, onMounted } from "vue";
 import InputField from "@/components/formControls/InputField.vue";
 import StepperNavigationButtons from "@/components/StepperNavigationButtons.vue";
 import { useStepperNavigation } from "@/composables/useStepperNavigation";
-import { VehiculeType } from "@/types/vehicule";
+import { VehiculeType } from "@/types/delivery";
 import * as Validators from "@/utils/validate";
 import { ChevronDownIcon } from "@heroicons/vue/16/solid";
 

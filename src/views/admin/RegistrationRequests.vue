@@ -43,27 +43,41 @@
             </thead>
             <tbody class="bg-white">
               <tr
-                v-for="request in registrationStore.registrationRequests"
+                v-for="request in usersRequests"
                 :key="request.email"
                 class="even:bg-gray-50"
               >
                 <td
                   class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3"
                 >
-                  {{ request.company_name }}
-                </td>
-                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {{ request.siret }}
-                </td>
-                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                   {{
-                    request.agent_type === AgentType.SERVICE_AGENT
-                      ? "Prestataire de service"
-                      : "Livreur"
+                    request.service_agent?.company_name ||
+                    request.delivery_agent?.company_name ||
+                    request.merchant?.company_name ||
+                    "-"
                   }}
                 </td>
                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {{ statusToDisplay(request.statut) }}
+                  {{
+                    request.service_agent?.siret ||
+                    request.delivery_agent?.siret ||
+                    request.merchant?.siret ||
+                    "-"
+                  }}
+                </td>
+                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  {{
+                    request.user_type === "SERVICE_AGENT"
+                      ? "Prestataire de service"
+                      : request.user_type === "DELIVERY_AGENT"
+                        ? "Livreur"
+                        : request.user_type === "MERCHANT"
+                          ? "Commerçant"
+                          : "-"
+                  }}
+                </td>
+                <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  {{ request.is_validated ? "Validé" : "En attente" }}
                 </td>
                 <td
                   class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-3"
@@ -85,30 +99,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useRegistrationStore } from "@/stores/registration-request.store";
-import { AgentType } from "@/types/user";
-import { onBeforeMount, computed } from "vue";
-import "@vuepic/vue-datepicker/dist/main.css";
-import { Statut } from "@/types/statut";
+import { useUserStore } from "@/stores/user.store";
+import { User } from "@/types/user";
+import { onBeforeMount, ref } from "vue";
 
-const registrationStore = useRegistrationStore();
+const usersStore = useUserStore();
 
 onBeforeMount(async () => {
-  await registrationStore.getRegistrations();
+  usersRequests.value = await usersStore.findUsersRequestsNotValidated();
 });
 
-const statusToDisplay = computed(() => {
-  return (statut: Statut) => {
-    switch (statut) {
-      case Statut.PENDING:
-        return "En attente";
-      case Statut.ACCEPTED:
-        return "Acceptée";
-      case Statut.REJECTED:
-        return "Rejetée";
-      default:
-        return "";
-    }
-  };
-});
+const usersRequests = ref<User[]>([]);
 </script>
