@@ -168,7 +168,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "prestations",
-        name: "PrestationsChoice",
+        name: "PrestationsChoiceServiceAgent",
         component: () =>
           import(
             "@/views/auth/components/steps/service-agent/PrestationsChoice.vue"
@@ -177,17 +177,17 @@ const routes: Array<RouteRecordRaw> = [
           layout: "HomeLayout",
         },
       },
-      // {
-      //   path: "documents",
-      //   name: "CompanyDocumentsServiceAgent",
-      //   component: () =>
-      //     import(
-      //       "@/views/auth/components/steps/global/DocumentsProfessionnal.vue"
-      //     ),
-      //   meta: {
-      //     layout: "HomeLayout",
-      //   },
-      // },
+      {
+        path: "documents",
+        name: "CompanyDocumentsServiceAgent",
+        component: () =>
+          import(
+            "@/views/auth/components/steps/global/DocumentsProfessionnal.vue"
+          ),
+        meta: {
+          layout: "HomeLayout",
+        },
+      },
     ],
   },
 ];

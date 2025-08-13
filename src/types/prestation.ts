@@ -2,6 +2,9 @@ export interface Prestation {
   id: number;
   label: string;
   category: string;
+  ecodeli_price: number;
+  pricing_unit: string;
+  description: string;
 }
 
 export interface FormPrestationIdWithPrice {

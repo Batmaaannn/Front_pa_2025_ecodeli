@@ -199,7 +199,7 @@ const submitRegistration = async () => {
       Object.assign(registrationData, vehicleInfo);
     } else if (registrationType.value === "service_agent") {
       const prestationsInfo =
-        allStepData[`Informations${suffix} - Prestations`] || {};
+        allStepData[`PrestationsChoice${suffix}`] || {};
       Object.assign(registrationData, prestationsInfo);
     }
 

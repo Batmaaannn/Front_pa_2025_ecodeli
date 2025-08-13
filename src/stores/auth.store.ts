@@ -1,10 +1,5 @@
 import { axios, getAxiosError } from "@/libs/axios";
-import { type RegisterForm } from "@/types/auth";
 import { COOKIES } from "@/types/cookies";
-import {
-  InformationsForm,
-  FormPrestationIdWithPrice,
-} from "@/types/prestation";
 import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
@@ -13,7 +8,7 @@ import {
   RegistrationCustomer,
   RegistrationDeliveryAgent,
   RegistrationMerchant,
-  UploadDocument,
+  RegistrationServiceAgent,
 } from "@/types/registration";
 
 interface StepperStep {
@@ -23,7 +18,6 @@ interface StepperStep {
 }
 
 interface AuthState {
-  register: RegisterForm | Record<string, never>;
   stepperSteps: StepperStep[];
   currentStepIndex: number;
   stepData: Record<string, any>;
@@ -31,7 +25,6 @@ interface AuthState {
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({
-    register: {},
     stepperSteps: [],
     currentStepIndex: 0,
     stepData: {},
@@ -117,7 +110,10 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    async registerDeliveryAgent({ files, ...deliveryAgent }: RegistrationDeliveryAgent) {
+    async registerDeliveryAgent({
+      files,
+      ...deliveryAgent
+    }: RegistrationDeliveryAgent) {
       const filesData = new FormData();
 
       files.forEach((file) => {
@@ -146,9 +142,28 @@ export const useAuthStore = defineStore("authStore", {
       }
     },
 
-    async registerServiceAgent(serviceAgent: RegistrationCustomer) {
+    async registerServiceAgent({
+      files,
+      ...serviceAgent
+    }: RegistrationServiceAgent) {
+      const filesData = new FormData();
+
+      files.forEach((file) => {
+        filesData.append("files", file);
+      });
+
+      Object.entries(serviceAgent).forEach(([key, value]) => {
+        if (value !== undefined) {
+          if (Array.isArray(value)) {
+            filesData.append(key, JSON.stringify(value));
+          } else {
+            filesData.append(key, String(value));
+          }
+        }
+      });
+
       try {
-        await axios.post("delivery-agent/create-deliver", serviceAgent);
+        await axios.post("service-agent/create-service", filesData);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))

@@ -64,8 +64,15 @@ export interface RegistrationCustomer extends BaseRegistration {
 
 export interface RegistrationMerchant extends BaseRegistration, CompanyInfo {}
 
-export interface RegistrationDeliveryAgent extends BaseRegistration, CompanyInfo {
+export interface RegistrationDeliveryAgent
+  extends BaseRegistration,
+    CompanyInfo {
   licenseNumber: string;
   vehicleType: VehiculeType;
 }
 
+export interface RegistrationServiceAgent
+  extends BaseRegistration,
+    CompanyInfo {
+  selectedPrestations: { prestationId: number; requestedPrice: number }[];
+}
