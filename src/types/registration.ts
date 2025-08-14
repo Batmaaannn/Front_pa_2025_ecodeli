@@ -1,5 +1,5 @@
 import { PrestationWithPrice } from "./prestation";
-import { Statut } from "./statut";
+import { Statut } from "./status";
 import { SubscriptionPlan } from "./subscription-plan";
 import { AgentType } from "./user";
 import { VehiculeType } from "./vehicule";

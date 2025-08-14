@@ -19,14 +19,28 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/admin/Dashboard.vue"),
       },
       {
-        name: "RegistrationRequests",
-        path: "demande-inscription",
-        component: () => import("@/views/admin/RegistrationRequests.vue"),
+        name: "DeliveryAgentList",
+        path: "livreurs",
+        component: () =>
+          import("@/views/admin/delivery-agent/DeliveryAgentList.vue"),
       },
       {
-        name: "RegistrationRequestId",
-        path: "demande-inscription/:id",
-        component: () => import("@/views/admin/RegistrationRequestId.vue"),
+        name: "DeliveryAgentById",
+        path: "livreurs/:id",
+        component: () =>
+          import("@/views/admin/delivery-agent/DeliveryAgentById.vue"),
+      },
+      {
+        name: "ServiceAgentList",
+        path: "prestataires-de-services",
+        component: () =>
+          import("@/views/admin/service-agent/ServiceAgentList.vue"),
+      },
+      {
+        name: "ServiceAgentById",
+        path: "prestataires-de-services/:id",
+        component: () =>
+          import("@/views/admin/service-agent/ServiceAgentById.vue"),
       },
     ],
   },

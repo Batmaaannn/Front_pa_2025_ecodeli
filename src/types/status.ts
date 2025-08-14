@@ -1,6 +1,5 @@
-export enum Statut {
+export enum Status {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
   REJECTED = "REJECTED",
-  IN_PROGRESS = "IN_PROGRESS",
 }

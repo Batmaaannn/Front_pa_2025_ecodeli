@@ -185,7 +185,7 @@ import { PaperClipIcon } from "@heroicons/vue/20/solid";
 import { AgentType } from "@/types/user";
 import { onBeforeMount, ref, computed } from "vue";
 import { useRoute } from "vue-router";
-import { Statut } from "@/types/statut";
+import { Statut } from "@/types/status";
 import { VehiculeType } from "@/types/delivery";
 
 import Select from "@/components/Select.vue";

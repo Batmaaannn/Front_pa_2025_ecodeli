@@ -43,18 +43,15 @@ export const useUserStore = defineStore("userStore", {
         return Promise.reject(error);
       }
     },
-    async findUsersRequestsNotValidated() {
+
+    async getFileDownloadUrl(filePath: string) {
       try {
-        return (await axios.get("/users/requests")).data;
+        const url = (
+          await axios.get(`/files/download-file`, { params: { filePath } })
+        ).data;
+        return url;
       } catch (error) {
-        return error;
-      }
-    },
-    async findUserRequestsById(id: number) {
-      try {
-        return (await axios.get(`/users/requests/${id}`)).data;
-      } catch (error) {
-        return error;
+        return Promise.reject(error);
       }
     },
 
