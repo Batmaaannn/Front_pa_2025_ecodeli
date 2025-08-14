@@ -18,15 +18,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
   }),
   getters: {},
   actions: {
-    async getRegistrations() {
-      try {
-        return (this.registrationRequests = (
-          await axios.get<RegistrationRequest[]>("/registration-requests")
-        ).data);
-      } catch (error) {
-        return error;
-      }
-    },
+  
     async getRegistrationById(id: number) {
       try {
         return (this.registrationRequest = (

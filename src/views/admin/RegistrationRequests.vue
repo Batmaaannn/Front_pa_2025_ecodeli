@@ -84,7 +84,7 @@
                 >
                   <router-link
                     :to="`demande-inscription/${request.id}`"
-                    class="text-indigo-600 hover:text-indigo-900"
+                    class="text-primary-600 hover:text-primary-900"
                   >
                     Voir<span class="sr-only">, {{ request.id }}</span>
                   </router-link>

@@ -8,7 +8,7 @@
         <p class="mt-1 max-w-2xl text-sm/6 text-gray-500">
           Demande d'inscription d'un
           {{
-            registration.agent_type === AgentType.SERVICE_AGENT
+            registration.user_type === AgentType.SERVICE_AGENT
               ? "prestataire de service"
               : "livreur"
           }}.
@@ -179,7 +179,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRegistrationStore } from "@/stores/registration-request.store";
+import { useUserStore } from "@/stores/user.store";
 import { RegistrationRequestWithFiles } from "@/types/registration";
 import { PaperClipIcon } from "@heroicons/vue/20/solid";
 import { AgentType } from "@/types/user";
@@ -197,15 +197,18 @@ import { FormUpdateFileStatutRegistration } from "@/types/file";
 const dateFormat = "dd/MM/yyyy";
 import Alert from "@/components/formControls/Alert.vue";
 
-const registrationStore = useRegistrationStore();
+const usersStore = useUserStore();
 
 const route = useRoute();
 
 onBeforeMount(async () => {
   const id = route.params.id;
-  registration.value = await registrationStore.getRegistrationById(+id);
-  initializeEditedDocs();
+  registration.value = await usersStore.findUserRequestsById(+id);
+  console.log("registration", registration.value);
+  //initializeEditedDocs();
 });
+
+const registration = ref({});
 
 const initializeEditedDocs = () => {
   if (registration.value.documents) {
@@ -226,9 +229,6 @@ const getEditedDoc = (docId: number) => {
   return doc;
 };
 
-const registration = ref<RegistrationRequestWithFiles>(
-  {} as RegistrationRequestWithFiles
-);
 const editedDocs = ref<
   { id: number; status: Statut; validityDate: Date | null }[]
 >([]);
@@ -274,50 +274,50 @@ const errorMessage = ref("");
 const successMessageFile = ref("");
 const errorMessageFile = ref("");
 
-const updateRegistrationRequestFile = async (
-  id: number,
-  dataToUpdate: FormUpdateFileStatutRegistration[]
-) => {
-  errorMessageFile.value = "";
-  successMessageFile.value = "";
-  try {
-    await registrationStore.updateFileRegistrationRequest(id, dataToUpdate);
-    successMessageFile.value = "Documents mis à jour avec succès.";
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du statut :", error);
-    errorMessageFile.value = "Erreur lors de la mise à jour des documents.";
-  }
-};
+// const updateRegistrationRequestFile = async (
+//   id: number,
+//   dataToUpdate: FormUpdateFileStatutRegistration[]
+// ) => {
+//   errorMessageFile.value = "";
+//   successMessageFile.value = "";
+//   try {
+//     await registrationStore.updateFileRegistrationRequest(id, dataToUpdate);
+//     successMessageFile.value = "Documents mis à jour avec succès.";
+//   } catch (error) {
+//     console.error("Erreur lors de la mise à jour du statut :", error);
+//     errorMessageFile.value = "Erreur lors de la mise à jour des documents.";
+//   }
+// };
 
-const updateRegistrationRequestStatus = async () => {
-  errorMessage.value = "";
-  successMessage.value = "";
-  try {
-    await registrationStore.validateRegistrationRequest();
-    successMessage.value = "Demande d'inscription validée avec succès.";
-    // Refetch registration data to update the UI
-    registration.value = await registrationStore.getRegistrationById(
-      registration.value.id
-    );
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du statut :", error);
-    errorMessage.value = "Erreur lors de la validation de la demande.";
-  }
-};
+// const updateRegistrationRequestStatus = async () => {
+//   errorMessage.value = "";
+//   successMessage.value = "";
+//   try {
+//     await registrationStore.validateRegistrationRequest();
+//     successMessage.value = "Demande d'inscription validée avec succès.";
+//     // Refetch registration data to update the UI
+//     registration.value = await registrationStore.getRegistrationById(
+//       registration.value.id
+//     );
+//   } catch (error) {
+//     console.error("Erreur lors de la mise à jour du statut :", error);
+//     errorMessage.value = "Erreur lors de la validation de la demande.";
+//   }
+// };
 
-const rejectRegistrationRequest = async () => {
-  errorMessage.value = "";
-  successMessage.value = "";
-  try {
-    await registrationStore.rejectRegistrationRequest();
-    successMessage.value = "Demande d'inscription rejetée avec succès.";
-    // Refetch registration data to update the UI
-    registration.value = await registrationStore.getRegistrationById(
-      registration.value.id
-    );
-  } catch (error) {
-    errorMessage.value = "Erreur lors du rejet de la demande.";
-    console.error("Erreur lors de la mise à jour du statut :", error);
-  }
-};
+// const rejectRegistrationRequest = async () => {
+//   errorMessage.value = "";
+//   successMessage.value = "";
+//   try {
+//     await registrationStore.rejectRegistrationRequest();
+//     successMessage.value = "Demande d'inscription rejetée avec succès.";
+//     // Refetch registration data to update the UI
+//     registration.value = await registrationStore.getRegistrationById(
+//       registration.value.id
+//     );
+//   } catch (error) {
+//     errorMessage.value = "Erreur lors du rejet de la demande.";
+//     console.error("Erreur lors de la mise à jour du statut :", error);
+//   }
+// };
 </script>

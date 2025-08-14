@@ -50,6 +50,14 @@ export const useUserStore = defineStore("userStore", {
         return error;
       }
     },
+    async findUserRequestsById(id: number) {
+      try {
+        return (await axios.get(`/users/requests/${id}`)).data;
+      } catch (error) {
+        return error;
+      }
+    },
+
     disconnect() {
       const { cookies } = useCookies();
       cookies.remove(COOKIES.CONNECTION_TOKEN);

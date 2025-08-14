@@ -105,10 +105,11 @@
           </div>
         </div>
 
+        <!-- :disable-next="formClientHasError" -->
         <StepperNavigationButtons
           :show-previous="navigation.canGoPrevious"
           :loading="loading"
-          :disable-next="formClientHasError"
+          
           submit-type="button"
           @previous="navigation.goToPreviousStep"
           @next="handleNext"
@@ -217,7 +218,7 @@ const handleNext = async () => {
   try {
     loading.value = true;
 
-    if (formClientHasError.value) return;
+    //if (formClientHasError.value) return;
 
     navigation.saveAndNext({
       firstName: form.value.firstName,
