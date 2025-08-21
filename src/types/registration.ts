@@ -1,6 +1,8 @@
 import { PrestationWithPrice } from "./prestation";
-import { Statut } from "./statut";
+import { Statut } from "./status";
+import { SubscriptionPlan } from "./subscription-plan";
 import { AgentType } from "./user";
+import { VehiculeType } from "./vehicule";
 
 export interface RegistrationRequest {
   id: number;
@@ -37,4 +39,40 @@ export interface RegistrationDocument {
   info: string | null;
   created_at: string;
   updated_at: string;
+}
+
+interface BaseRegistration {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  password: string;
+}
+
+interface CompanyInfo {
+  companyName: string;
+  companyAddress: string;
+  companyCity: string;
+  companyPostalCode: string;
+  companySiret: string;
+  files: File[];
+}
+
+export interface RegistrationCustomer extends BaseRegistration {
+  subscriptionPlan: SubscriptionPlan;
+}
+
+export interface RegistrationMerchant extends BaseRegistration, CompanyInfo {}
+
+export interface RegistrationDeliveryAgent
+  extends BaseRegistration,
+    CompanyInfo {
+  licenseNumber: string;
+  vehicleType: VehiculeType;
+}
+
+export interface RegistrationServiceAgent
+  extends BaseRegistration,
+    CompanyInfo {
+  selectedPrestations: { prestationId: number; requestedPrice: number }[];
 }

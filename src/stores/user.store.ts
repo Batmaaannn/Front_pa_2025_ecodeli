@@ -43,6 +43,18 @@ export const useUserStore = defineStore("userStore", {
         return Promise.reject(error);
       }
     },
+
+    async getFileDownloadUrl(filePath: string) {
+      try {
+        const url = (
+          await axios.get(`/files/download-file`, { params: { filePath } })
+        ).data;
+        return url;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+
     disconnect() {
       const { cookies } = useCookies();
       cookies.remove(COOKIES.CONNECTION_TOKEN);

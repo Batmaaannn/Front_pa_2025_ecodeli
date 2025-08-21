@@ -75,7 +75,7 @@
         </p>
         <div class="mt-10 flex items-center gap-x-6">
           <router-link
-            :to="{ name: 'Formules' }"
+            :to="{ name: 'Login' }"
             class="rounded-md bg-primary-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
             >Commencer</router-link
           >

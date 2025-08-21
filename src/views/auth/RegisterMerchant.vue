@@ -62,24 +62,27 @@ const authStore = useAuthStore();
 
 const handleStepClick = (step: any, index: number) => {
   if (index < authStore.currentStepIndex) {
+    authStore.currentStepIndex = index;
+    authStore.updateStepStatuses();
     if (step.pathName) {
       router.push(step.pathName);
     }
-    authStore.currentStepIndex = index;
-    authStore.updateStepStatuses();
   }
 };
 
 onMounted(() => {
-  // Initialize stepper with steps - use unique names for client registration
   authStore.initializeStepper([
     {
-      name: "InformationsCustomer",
-      pathName: "/inscription/client",
+      name: "InformationsMerchant",
+      pathName: "/inscription/commercant",
     },
     {
-      name: "FormuleChoice",
-      pathName: "/inscription/client/formule",
+      name: "CompanyInformationsMerchant",
+      pathName: "/inscription/commercant/entreprise",
+    },
+    {
+      name: "CompanyDocumentsMerchant",
+      pathName: "/inscription/commercant/documents",
     },
   ]);
 
@@ -90,7 +93,7 @@ onMounted(() => {
 // Update current step when route changes
 watch(
   () => route.path,
-  (newPath) => {
+  (newPath, oldPath) => {
     if (newPath) {
       authStore.updateCurrentStepByRoute(newPath);
     }

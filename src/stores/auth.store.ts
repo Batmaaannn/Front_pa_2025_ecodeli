@@ -1,52 +1,104 @@
 import { axios, getAxiosError } from "@/libs/axios";
-import {
-  AddProfessionnal,
-  PrescriptionUpload,
-  type RegisterForm,
-} from "@/types/auth";
 import { COOKIES } from "@/types/cookies";
-import {
-  InformationsForm,
-  FormPrestationIdWithPrice,
-} from "@/types/prestation";
 import { defineStore } from "pinia";
 import { useCookies } from "vue3-cookies";
 import { useUserStore } from "./user.store";
-import { useRouter } from "vue-router";
-import router from "@/router";
+import type { Router } from "vue-router";
+import {
+  RegistrationCustomer,
+  RegistrationDeliveryAgent,
+  RegistrationMerchant,
+  RegistrationServiceAgent,
+} from "@/types/registration";
+
+interface StepperStep {
+  name: string;
+  status: "complete" | "current" | "upcoming";
+  pathName: string;
+}
 
 interface AuthState {
-  register: RegisterForm | Record<string, never>;
+  stepperSteps: StepperStep[];
+  currentStepIndex: number;
+  stepData: Record<string, any>;
 }
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthState => ({
-    register: {},
+    stepperSteps: [],
+    currentStepIndex: 0,
+    stepData: {},
   }),
-  getters: {},
+  getters: {
+    currentStep: (state) => state.stepperSteps[state.currentStepIndex],
+    canGoNext: (state) =>
+      state.currentStepIndex < state.stepperSteps.length - 1,
+    canGoPrevious: (state) => state.currentStepIndex > 0,
+  },
   actions: {
-    setUserProfessionnalInformations(payload: InformationsForm) {
-      this.register.firstName = payload.firstName;
-      this.register.lastName = payload.lastName;
-      this.register.email = payload.email;
-      this.register.password = payload.password;
-      this.register.phoneNumber = payload.phone;
-      this.register.companyName = payload.companyName;
-      this.register.companySiret = payload.siret;
-      this.register.companyCity =
-        payload.compagnyPostalCode + " " + payload.companyCity;
-      this.register.companyAddress = payload.companyAddress;
+    initializeStepper(steps: Omit<StepperStep, "status">[]) {
+      this.stepperSteps = steps.map((step, index) => ({
+        ...step,
+        status: index === 0 ? "current" : ("upcoming" as const),
+      }));
+      this.currentStepIndex = 0;
     },
-    setServiceAgentPrestations(payload: {
-      prestationsAndPrices: FormPrestationIdWithPrice[];
-    }) {
-      this.register.prestations = payload.prestationsAndPrices;
+
+    updateCurrentStepByRoute(pathName: string) {
+      const index = this.stepperSteps.findIndex(
+        (step) => step.pathName === pathName
+      );
+      if (index !== -1) {
+        this.currentStepIndex = index;
+        this.updateStepStatuses();
+      }
     },
-    //TODO: typer
-    async registerClient(client: any) {
-      console.log("Registering client:", client);
+
+    updateStepStatuses() {
+      this.stepperSteps = this.stepperSteps.map((step, index) => ({
+        ...step,
+        status:
+          index < this.currentStepIndex
+            ? "complete"
+            : index === this.currentStepIndex
+              ? "current"
+              : "upcoming",
+      }));
+    },
+
+    goToNextStep(router: Router) {
+      if (this.canGoNext) {
+        this.currentStepIndex++;
+        this.updateStepStatuses();
+        const nextStep = this.stepperSteps[this.currentStepIndex];
+        if (nextStep.pathName) {
+          router.push(nextStep.pathName);
+        }
+      }
+    },
+
+    goToPreviousStep(router: Router) {
+      if (this.canGoPrevious) {
+        this.currentStepIndex--;
+        this.updateStepStatuses();
+        const prevStep = this.stepperSteps[this.currentStepIndex];
+        if (prevStep.pathName) {
+          router.push(prevStep.pathName);
+        }
+      }
+    },
+
+    setStepData(stepName: string, data: any) {
+      this.stepData[stepName] = data;
+    },
+
+    getStepData(stepName: string) {
+      return this.stepData[stepName] || {};
+    },
+
+    async registerClient(customer: RegistrationCustomer) {
       try {
-        await axios.post("customers/create-customer", client);
+        await axios.post("customers/create-customer", customer);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
@@ -57,36 +109,28 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
-    //TODO: typer
-    async registerProfessionnal(
-      userType: string,
-      {
-        files,
-        ...userToAdd
-      }: AddProfessionnal & PrescriptionUpload
-    ) {
+
+    async registerDeliveryAgent({
+      files,
+      ...deliveryAgent
+    }: RegistrationDeliveryAgent) {
       const filesData = new FormData();
-      files.map((file) => {
+
+      files.forEach((file) => {
         filesData.append("files", file);
       });
-      Object.keys(userToAdd).map((item) => {
-        const value = userToAdd[item as keyof typeof userToAdd];
+
+      Object.entries(deliveryAgent).forEach(([key, value]) => {
         if (value !== undefined) {
           if (Array.isArray(value)) {
-            filesData.append(item, JSON.stringify(value));
+            filesData.append(key, JSON.stringify(value));
           } else {
-            filesData.append(item, String(value));
+            filesData.append(key, String(value));
           }
         }
       });
       try {
-        if (userType === "merchant") {
-          await axios.post("merchants/create-merchant", filesData);
-        } else if (userType === "service_agent") {
-          await axios.post("registration-requests/service-agent", filesData);
-        } else if (userType === "delivery_agent") {
-          await axios.post("registration-requests/delivery-agent", filesData);
-        }
+        await axios.post("delivery-agents/create-deliver", filesData);
       } catch (e: any) {
         const { message } = getAxiosError(e);
         if (message.match(/existing/gi))
@@ -97,6 +141,78 @@ export const useAuthStore = defineStore("authStore", {
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
       }
     },
+
+    async registerServiceAgent({
+      files,
+      ...serviceAgent
+    }: RegistrationServiceAgent) {
+      const formData = new FormData();
+
+      files.forEach((file) => {
+        formData.append("files", file);
+      });
+
+     formData.append("firstName", serviceAgent.firstName);
+     formData.append("lastName", serviceAgent.lastName);
+     formData.append("email", serviceAgent.email);
+     formData.append("password", serviceAgent.password);
+     formData.append("phoneNumber", serviceAgent.phoneNumber);
+     formData.append("companySiret", serviceAgent.companySiret);
+     formData.append("companyName", serviceAgent.companyName);
+     formData.append("companyAddress", serviceAgent.companyAddress);
+     formData.append("companyCity", serviceAgent.companyCity);
+     formData.append("companyPostalCode", serviceAgent.companyPostalCode);
+     //formData.append("certifications", serviceAgent.certifications);
+
+     serviceAgent.selectedPrestations.forEach((prestation, idx) => {
+        formData.append(`selectedPrestations[${idx}][prestationId]`, String(prestation.prestationId));
+        formData.append(`selectedPrestations[${idx}][requestedPrice]`, String(prestation.requestedPrice));
+      });
+
+      try {
+        await axios.post("service-agents/create-service", formData);
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
+      }
+    },
+
+    async registerMerchant({ files, ...userToAdd }: RegistrationMerchant) {
+      const filesData = new FormData();
+
+      files.forEach((file) => {
+        filesData.append("files", file);
+      });
+
+      Object.entries(userToAdd).forEach(([key, value]) => {
+        if (value !== undefined) {
+          if (Array.isArray(value)) {
+            filesData.append(key, JSON.stringify(value));
+          } else {
+            filesData.append(key, String(value));
+          }
+        }
+      });
+      try {
+        await axios.post("merchants/create-merchant", filesData);
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        if (message.match(/existing/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+        if (message.match(/blacklisted/gi))
+          throw "Impossible d'utiliser des emails jetables";
+        if (message.match(/exists/gi))
+          throw "Cet utilisateur existe déjà. Vous pouvez essayer de vous connecter sur la page connexion";
+
+        throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client";
+      }
+    },
+
     async login(loginForm: any) {
       try {
         const data: string = (await axios.post("/auth/login", loginForm)).data;
@@ -116,8 +232,8 @@ export const useAuthStore = defineStore("authStore", {
           throw "Email ou mot de passe incorrect.";
         }
 
-        if (message.match(/E-mail not validated/gi)) {
-          throw `Votre e-mail n'est pas validé. Merci de vérifier votre boîte mail.`;
+        if (message.match(/Account not validated/gi)) {
+          throw `Votre compte n'est pas encore validé.`;
         }
 
         throw "Il semble y avoir une erreur. Merci de vous rapprocher de notre service client.";

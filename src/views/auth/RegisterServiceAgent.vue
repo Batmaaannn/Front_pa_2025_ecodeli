@@ -39,7 +39,13 @@
           @step-click="handleStepClick"
         />
       </div>
-
+      <div class="mb-5">
+        <Alert isWarning
+          ><strong>Important :</strong> Votre compte sera activé après
+          validation de votre profil et négociation des tarifs par notre équipe
+          (24-48h).</Alert
+        >
+      </div>
       <router-view v-slot="{ Component }">
         <keep-alive>
           <component :is="Component" />
@@ -54,6 +60,7 @@ import { onMounted, watch } from "vue";
 import { useAuthStore } from "@/stores/auth.store";
 import Stepper from "@/components/Stepper.vue";
 import { useRoute, useRouter } from "vue-router";
+import Alert from "@/components/formControls/Alert.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -62,24 +69,31 @@ const authStore = useAuthStore();
 
 const handleStepClick = (step: any, index: number) => {
   if (index < authStore.currentStepIndex) {
+    authStore.currentStepIndex = index;
+    authStore.updateStepStatuses();
     if (step.pathName) {
       router.push(step.pathName);
     }
-    authStore.currentStepIndex = index;
-    authStore.updateStepStatuses();
   }
 };
 
 onMounted(() => {
-  // Initialize stepper with steps - use unique names for client registration
   authStore.initializeStepper([
     {
-      name: "InformationsCustomer",
-      pathName: "/inscription/client",
+      name: "InformationsServiceAgent",
+      pathName: "/inscription/prestataire",
     },
     {
-      name: "FormuleChoice",
-      pathName: "/inscription/client/formule",
+      name: "CompanyInformationsServiceAgent",
+      pathName: "/inscription/prestataire/entreprise",
+    },
+    {
+      name: "PrestationsChoiceServiceAgent",
+      pathName: "/inscription/prestataire/prestations",
+    },
+    {
+      name: "CompanyDocumentsServiceAgent",
+      pathName: "/inscription/prestataire/documents",
     },
   ]);
 
@@ -90,7 +104,7 @@ onMounted(() => {
 // Update current step when route changes
 watch(
   () => route.path,
-  (newPath) => {
+  (newPath, oldPath) => {
     if (newPath) {
       authStore.updateCurrentStepByRoute(newPath);
     }
