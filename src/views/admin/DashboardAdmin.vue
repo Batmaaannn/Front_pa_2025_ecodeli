@@ -32,5 +32,11 @@ const navigation = [
     icon: HomeIcon,
     current: false,
   },
+  {
+    name: "Prestations",
+    href: "ServiceAgentList", //change
+    icon: HomeIcon,
+    current: false,
+  },
 ];
 </script>

@@ -138,5 +138,21 @@ export const useAdminStore = defineStore("adminStore", {
         throw new Error(message);
       }
     },
+    async acceptUserRequest(id: number) {
+      try {
+        return (await axios.patch(`/admin/users/${id}/accept`)).data;
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        throw new Error(message);
+      }
+    },
+    async rejectUserRequest(id: number) {
+      try {
+        return (await axios.patch(`/admin/users/${id}/reject`)).data;
+      } catch (e: any) {
+        const { message } = getAxiosError(e);
+        throw new Error(message);
+      }
+    },
   },
 });

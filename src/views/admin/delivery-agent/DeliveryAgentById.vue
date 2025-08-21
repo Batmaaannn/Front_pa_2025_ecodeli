@@ -6,15 +6,22 @@
           Profil utilisateur
         </h3>
       </div>
-      <div class="ml-4">
-        <span class="text-sm text-gray-700"
-          >Validation :
-          {{
-            adminStore.fetchedDeliveryAgent.is_validated
-              ? "Validé"
-              : "En attente"
-          }}</span
-        >
+      <div v-if="adminStore.fetchedDeliveryAgent.user" class="ml-4">
+        <span class="text-sm text-gray-700">
+          Status :
+          <template v-if="adminStore.fetchedDeliveryAgent.user.is_validated">
+            Validé
+          </template>
+          <template
+            v-else-if="
+              !adminStore.fetchedDeliveryAgent.user.is_active &&
+              !adminStore.fetchedDeliveryAgent.user.is_validated
+            "
+          >
+            Refusé
+          </template>
+          <template v-else> En attente</template>
+        </span>
       </div>
     </div>
     <div class="mt-6 border-t border-gray-100">
@@ -130,6 +137,7 @@
             <div class="mt-1 flex justify-end">
               <Button
                 isBlue
+                :disabled="!isDocsChanged"
                 @click="
                   updateUserFiles(
                     adminStore.fetchedDeliveryAgent.id,
@@ -150,40 +158,45 @@
         </div>
       </dl>
     </div>
-    <!-- <div class="mt-6 border-t border-gray-100">
-      
-    </div> -->
-    <div class="flex gap-2">
-      <!-- <Button
+    <div
+      v-if="
+        (adminStore.fetchedDeliveryAgent.user &&
+          adminStore.fetchedDeliveryAgent.user.is_validated &&
+          adminStore.fetchedDeliveryAgent.user.is_active) ||
+        (adminStore.fetchedDeliveryAgent.user &&
+          !adminStore.fetchedDeliveryAgent.user.is_validated &&
+          adminStore.fetchedDeliveryAgent.user.is_active)
+      "
+      class="flex gap-2"
+    >
+      <Button
         isGreen
         class="w-full"
-        @click="updateadminStore.fetchedDeliveryAgentRequestStatus()"
+        @click="acceptUserRequest(adminStore.fetchedDeliveryAgent.user.id)"
         :disabled="
-          adminStore.fetchedDeliveryAgent.documents?.some(
-            (doc) => doc.status === Statut.PENDING
-          ) ||
-          adminStore.fetchedDeliveryAgent.statut === Statut.ACCEPTED ||
-          adminStore.fetchedDeliveryAgent.statut === Statut.REJECTED
+          adminStore.fetchedDeliveryAgent.files?.some(
+            (doc) => doc.status === Status.PENDING
+          )
         "
         >Valider</Button
       >
       <Button
         isRed
         class="w-full"
-        @click="rejectadminStore.fetchedDeliveryAgentRequest()"
+        @click="rejectUserRequest(adminStore.fetchedDeliveryAgent.user.id)"
         :disabled="
-          adminStore.fetchedDeliveryAgent.statut === Statut.ACCEPTED ||
-          adminStore.fetchedDeliveryAgent.statut === Statut.REJECTED
+          !adminStore.fetchedDeliveryAgent.user.is_validated &&
+          !adminStore.fetchedDeliveryAgent.user.is_active
         "
         >Refuser</Button
-      > -->
+      >
     </div>
-    <!-- <div v-if="!!successMessage">
+    <div v-if="!!successMessage">
       <Alert isSuccess>{{ successMessage }}</Alert>
     </div>
     <div v-if="!!errorMessage">
       <Alert isError>{{ errorMessage }}</Alert>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -264,20 +277,25 @@ const documentTypeOptions = [
   { label: "Facture", value: DocumentType.INVOICE },
 ];
 
-// // const statusToDisplay = computed(() => {
-// //   return (statut: Status) => {
-// //     switch (statut) {
-// //       case Status.PENDING:
-// //         return "En attente";
-// //       case Status.ACCEPTED:
-// //         return "Acceptée";
-// //       case Status.REJECTED:
-// //         return "Rejetée";
-// //       default:
-// //         return "";
-// //     }
-// //   };
-// // });
+const isDocsChanged = computed(() => {
+  const files = adminStore.fetchedDeliveryAgent.files || [];
+  if (files.length !== editedDocs.value.length) return true;
+  return editedDocs.value.some((editedDoc) => {
+    const original = files.find((f) => f.id === editedDoc.id);
+    if (!original) return true;
+    const originalValidity = original.validity
+      ? new Date(original.validity).getTime()
+      : null;
+    const editedValidity = editedDoc.validityDate
+      ? editedDoc.validityDate.getTime()
+      : null;
+    return (
+      editedDoc.status !== original.status ||
+      editedDoc.type !== original.document_type ||
+      originalValidity !== editedValidity
+    );
+  });
+});
 
 const vehiculeToDisplay = computed(() => {
   return (vehicule: VehiculeType) => {
@@ -332,35 +350,30 @@ const updateUserFiles = async (
   }
 };
 
-// const updateadminStore.fetchedDeliveryAgentRequestStatus = async () => {
-//   errorMessage.value = "";
-//   successMessage.value = "";
-//   try {
-//     await adminStore.fetchedDeliveryAgentStore.validateadminStore.fetchedDeliveryAgentRequest();
-//     successMessage.value = "Demande d'inscription validée avec succès.";
-//     // Refetch adminStore.fetchedDeliveryAgent data to update the UI
-//     adminStore.fetchedDeliveryAgent.value = await adminStore.fetchedDeliveryAgentStore.getadminStore.fetchedDeliveryAgentById(
-//       adminStore.fetchedDeliveryAgent.value.id
-//     );
-//   } catch (error) {
-//     console.error("Erreur lors de la mise à jour du statut :", error);
-//     errorMessage.value = "Erreur lors de la validation de la demande.";
-//   }
-// };
+const acceptUserRequest = async (id: number) => {
+  errorMessage.value = "";
+  successMessage.value = "";
+  try {
+    await adminStore.acceptUserRequest(id);
+    await adminStore.fetchDeliveryAgentById(+route.params.id);
 
-// const rejectadminStore.fetchedDeliveryAgentRequest = async () => {
-//   errorMessage.value = "";
-//   successMessage.value = "";
-//   try {
-//     await adminStore.fetchedDeliveryAgentStore.rejectadminStore.fetchedDeliveryAgentRequest();
-//     successMessage.value = "Demande d'inscription rejetée avec succès.";
-//     // Refetch adminStore.fetchedDeliveryAgent data to update the UI
-//     adminStore.fetchedDeliveryAgent.value = await adminStore.fetchedDeliveryAgentStore.getadminStore.fetchedDeliveryAgentById(
-//       adminStore.fetchedDeliveryAgent.value.id
-//     );
-//   } catch (error) {
-//     errorMessage.value = "Erreur lors du rejet de la demande.";
-//     console.error("Erreur lors de la mise à jour du statut :", error);
-//   }
-// };
+    successMessage.value = "Demande d'inscription validée avec succès.";
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut :", error);
+    errorMessage.value = "Erreur lors de la validation de la demande.";
+  }
+};
+
+const rejectUserRequest = async (id: number) => {
+  errorMessage.value = "";
+  successMessage.value = "";
+  try {
+    await adminStore.rejectUserRequest(id);
+    await adminStore.fetchDeliveryAgentById(+route.params.id);
+    successMessage.value = "Demande d'inscription rejetée avec succès.";
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut :", error);
+    errorMessage.value = "Erreur lors de la validation de la demande.";
+  }
+};
 </script>

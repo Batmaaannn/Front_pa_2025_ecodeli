@@ -28,7 +28,9 @@
             v-for="deliveryAgent in adminStore.deliveryAgents"
             :key="deliveryAgent.id"
             @click="
-              $router.push({ path: `/tableau-de-bord/livreurs/${deliveryAgent.id}` })
+              $router.push({
+                path: `/tableau-de-bord/livreurs/${deliveryAgent.id}`,
+              })
             "
             class="even:bg-gray-50 cursor-pointer"
           >
@@ -45,7 +47,18 @@
             <td
               class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3"
             >
-              {{ deliveryAgent.user.is_validated ? "Validé" : "Non validé" }}
+              <template v-if="deliveryAgent.user.is_validated">
+                Validé
+              </template>
+              <template
+                v-else-if="
+                  !deliveryAgent.user.is_active &&
+                  !deliveryAgent.user.is_validated
+                "
+              >
+                Refusé
+              </template>
+              <template v-else> En attente</template>
             </td>
             <td
               class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-3"
