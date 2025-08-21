@@ -99,7 +99,6 @@ import { ref } from "vue";
 const mobileMenuOpen = ref(false);
 
 const navigation = [
-  { name: "Formules", to: "Formules" },
   { name: "Nos prix", to: "Price" },
   { name: "Nous contacter", to: "Contact" },
 ];

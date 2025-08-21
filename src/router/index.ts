@@ -27,15 +27,6 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/formules",
-    name: "Formules",
-    component: () => import("@/views/landing-page/Formules.vue"),
-    meta: {
-      layout: "HomeLayout",
-      requiresAuth: false,
-    },
-  },
-  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/views/PageNotFound.vue"),

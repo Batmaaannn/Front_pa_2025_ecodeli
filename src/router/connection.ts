@@ -10,17 +10,41 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: "/inscription/professionnel",
-    name: "SigninProfessional",
-    component: () => import("@/views/auth/RegisterProfessionnal.vue"),
+    path: "/inscription",
+    name: "RegisterType",
+    component: () => import("@/views/auth/RegisterTypePage.vue"),
+    meta: {
+      layout: "HomeLayout",
+    },
+  },
+  {
+    path: "/inscription/livreur",
+    name: "RegisterDeliver",
+    component: () => import("@/views/auth/RegisterDeliver.vue"),
     meta: {
       layout: "HomeLayout",
     },
   },
   {
     path: "/inscription/client",
-    name: "SigninClient",
+    name: "RegisterClient",
     component: () => import("@/views/auth/RegisterClient.vue"),
+    meta: {
+      layout: "HomeLayout",
+    },
+  },
+  {
+    path: "/inscription/commercant",
+    name: "RegisterMerchant",
+    component: () => import("@/views/auth/RegisterMerchant.vue"),
+    meta: {
+      layout: "HomeLayout",
+    },
+  },
+  {
+    path: "/inscription/prestataire",
+    name: "RegisterServiceAgent",
+    component: () => import("@/views/auth/RegisterServiceAgent.vue"),
     meta: {
       layout: "HomeLayout",
     },
