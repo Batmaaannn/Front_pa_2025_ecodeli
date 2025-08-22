@@ -1,5 +1,6 @@
 import { Customer } from "./customer";
-import { Delivery } from "./delivery"; 
+import { Delivery } from "./delivery";
+import { DeliveryPackageRequest } from "./package";
 
 export enum AnnouncementStatus {
   POSTED = "posted",
@@ -34,4 +35,18 @@ export interface Announcement {
   customer: Customer;
   customer_id: number;
   deliveries: Delivery[];
+}
+
+export interface AnnouncementPackageRequest {
+  title: string;
+  description: string;
+  departureCity: string;
+  arrivalCity: string;
+  price: number;
+  pickupDate: Date;
+  deliveryDate: Date;
+  assurance: boolean;
+  urgent: boolean;
+  pickupInstructions?: string;
+  objects: DeliveryPackageRequest[];
 }

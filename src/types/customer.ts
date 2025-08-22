@@ -2,7 +2,7 @@ import { User } from "./user";
 import { Appointment } from "./appointment";
 import { Rating } from "./rating";
 import { SubscriptionPlan } from "./subscription-plan";
-import { Announcement } from "./annoucement";
+import { Announcement } from "./announcement";
 import { StorageBox } from "./storage-box";
 
 export interface Customer {
