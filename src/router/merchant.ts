@@ -34,6 +34,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import("@/views/merchant/deliveries/PastDeliveries.vue"),
       },
+      {
+        name: "MerchantDeliveryManagement",
+        path: "gestion-livraisons",
+        component: () =>
+          import("@/views/merchant/deliveries/MerchantDeliveryManagement.vue"),
+      },
     ],
   },
 ];

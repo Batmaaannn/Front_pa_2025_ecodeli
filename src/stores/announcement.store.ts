@@ -1,15 +1,23 @@
 import { axios } from "@/libs/axios";
-import { AnnouncementPackageRequest } from "@/types/announcement";
+import { Announcement, AnnouncementPackageRequest } from "@/types/announcement";
 import { defineStore } from "pinia";
 
-interface AnnouncementState {}
+interface AnnouncementState {
+  futureDeliveries: Announcement[];
+  pastDeliveries: Announcement[];
+}
 
 export const useAnnouncementStore = defineStore("announcementStore", {
-  state: (): AnnouncementState => ({}),
+  state: (): AnnouncementState => ({
+    futureDeliveries: [],
+    pastDeliveries: [],
+  }),
   getters: {},
   actions: {
     async createAnnouncementRequest(announcement: AnnouncementPackageRequest) {
       const formData = new FormData();
+
+      console.log("Creating announcement with data:", announcement);
 
       formData.append("title", announcement.title);
       formData.append("description", announcement.description);
@@ -65,6 +73,37 @@ export const useAnnouncementStore = defineStore("announcementStore", {
         return (await axios.post("/announcements", formData)).data;
       } catch (error) {
         console.error("Erreur lors de la création de la demande :", error);
+        throw error;
+      }
+    },
+    async fetchFutureDeliveries() {
+      try {
+        const data = (await axios.get("/announcements/customer/")).data;
+        this.futureDeliveries = data;
+        return data;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des annonces :", error);
+        throw error;
+      }
+    },
+    async fetchAnnouncementById(id: number) {
+      try {
+        return (await axios.get(`/announcements/${id}`)).data;
+      } catch (error) {
+        console.error(
+          `Erreur lors de la récupération de l'annonce avec l'ID ${id} :`,
+          error
+        );
+        throw error;
+      }
+    },
+    async fetchPastDeliveries() {
+      try {
+        const data = (await axios.get("/announcements/customer/past")).data;
+        this.pastDeliveries = data;
+        return data;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des livraisons passées :", error);
         throw error;
       }
     },
