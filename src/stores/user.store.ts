@@ -1,4 +1,4 @@
-import { axios } from "@/libs/axios";
+import { axios, getAxiosError } from "@/libs/axios";
 import { COOKIES } from "@/types/cookies";
 import {
   isAdminUser,
@@ -59,6 +59,16 @@ export const useUserStore = defineStore("userStore", {
         return url;
       } catch (error) {
         return Promise.reject(error);
+      }
+    },
+
+    async updateUser(data: Partial<User>) {
+      try {
+        const response = await axios.put(`/users/me`, data);
+        this.user = response.data;
+      } catch (error: any) {
+        const { message } = getAxiosError(error);
+        return Promise.reject(message);
       }
     },
 

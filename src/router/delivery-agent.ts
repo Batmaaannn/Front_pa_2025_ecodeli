@@ -39,14 +39,18 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "CreateTrip",
         path: "ajouter-un-trajet",
-        component: () =>
-            import("@/views/delivery-agent/trips/CreateTrip.vue"),
+        component: () => import("@/views/delivery-agent/trips/CreateTrip.vue"),
       },
       {
         name: "AllDeliveryRequests",
         path: "demandes-de-livraisons",
         component: () =>
-            import("@/views/delivery-agent/deliveries/AllRequestsDeliveries.vue"),
+          import("@/views/delivery-agent/deliveries/AllRequestsDeliveries.vue"),
+      },
+      {
+        path: "/mon-profil",
+        name: "UserDeliveryAgentProfile",
+        component: () => import("@/views/delivery-agent/EditProfile.vue"),
       },
     ],
   },
