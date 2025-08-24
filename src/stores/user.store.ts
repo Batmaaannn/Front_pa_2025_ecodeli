@@ -20,7 +20,14 @@ export const useUserStore = defineStore("userStore", {
     user: {},
   }),
   getters: {
-    isConnected: (state) => Object.keys(state.user).length > 0,
+    isConnected: (state: UserState) => Object.keys(state.user).length > 0,
+    // getFavoriteCity: (state: UserState) =>
+    //   isDeliveryAgentUser(state.user) ? state.favoriteCity : {},
+    isCustomer: (state: UserState) => isCustomerUser(state.user),
+    isMerchant: (state: UserState) => isMerchantUser(state.user),
+    isDeliveryAgent: (state: UserState) => isDeliveryAgentUser(state.user),
+    isServiceAgent: (state: UserState) => isServiceAgentUser(state.user),
+    isAdmin: (state: UserState) => isAdminUser(state.user),
     getDashboardUrl: (state: UserState) => {
       if (isCustomerUser(state.user)) return "/mon-espace";
       if (isMerchantUser(state.user)) return "/mon-espace-commercant";

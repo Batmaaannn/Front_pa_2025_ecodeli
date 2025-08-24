@@ -136,9 +136,9 @@
     <div class="mb-8">
       <h2 class="text-xl font-semibold text-gray-900 mb-4">Accès rapides</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <button
+        <RouterLink
+          to="/mon-espace/demande-livraison"
           class="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-xl transition hover:-translate-y-0.5 hover:shadow-md hover:border-primary-500"
-          @click="createNewAnnouncement"
         >
           <svg
             class="w-8 h-8 mb-3 text-primary-500"
@@ -151,17 +151,17 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414
-                 a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                         a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
             />
           </svg>
           <span class="text-sm font-medium text-gray-700"
             >Nouvelle annonce</span
           >
-        </button>
+        </RouterLink>
 
-        <button
+        <RouterLink
+          to="/mon-espace/mon-historique-de-livraison"
           class="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-xl transition hover:-translate-y-0.5 hover:shadow-md hover:border-primary-500"
-          @click="viewHistory"
         >
           <svg
             class="w-8 h-8 mb-3 text-primary-500"
@@ -174,11 +174,11 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M12 8v4l3 3m6-3a9 9 0
-                 11-18 0 9 9 0 0118 0z"
+             11-18 0 9 9 0 0118 0z"
             />
           </svg>
           <span class="text-sm font-medium text-gray-700">Historique</span>
-        </button>
+        </RouterLink>
       </div>
     </div>
 

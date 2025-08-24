@@ -222,7 +222,7 @@
                 >
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      :to="{ name: 'DashboardCustomer' }"
+                      :to="{ name: 'UserProfile' }"
                       :class="[
                         active ? 'bg-gray-50 outline-hidden' : '',
                         'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',

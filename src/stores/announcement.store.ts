@@ -17,8 +17,6 @@ export const useAnnouncementStore = defineStore("announcementStore", {
     async createAnnouncementRequest(announcement: AnnouncementPackageRequest) {
       const formData = new FormData();
 
-      console.log("Creating announcement with data:", announcement);
-
       formData.append("title", announcement.title);
       formData.append("description", announcement.description);
       formData.append("departureCity", announcement.departureCity);

@@ -9,6 +9,7 @@ import deliveryAgentRoutes from "@/router/delivery-agent";
 import serviceAgentRoutes from "@/router/service-agent";
 import merchantsRoutes from "@/router/merchant";
 import adminRoutes from "@/router/admin";
+import userRoutes from "@/router/user"
 
 import { createRouter, createWebHistory } from "vue-router";
 import { createNewInstance as createNewAxiosInstance } from "@/libs/axios";
@@ -28,6 +29,7 @@ const router = createRouter({
     ...serviceAgentRoutes,
     ...merchantsRoutes,
     ...adminRoutes,
+    ...userRoutes,
   ],
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 };
@@ -44,6 +46,7 @@ const app = createApp(App);
 const store = createPinia();
 
 createNewAxiosInstance({ router, store });
+
 //const head = createHead();
 
 app

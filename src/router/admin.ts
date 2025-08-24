@@ -2,7 +2,6 @@ import { UserType } from "@/types/user";
 import type { RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
-  //TODO: scinder les differents dashboard
   {
     path: "/tableau-de-bord",
     name: "DashboardAdmins",
