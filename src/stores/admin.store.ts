@@ -4,8 +4,11 @@ import { FiltersData } from "@/types/filter";
 import { ServiceAgent } from "@/types/service-agent";
 import { defineStore } from "pinia";
 import { File, FormUpdateFileStatus } from "@/types/file";
+import { Prestation,PrestationStatus } from "@/types/prestation";
+
 
 interface AdminState {
+  prestations: Prestation[];
   deliveryAgents: Array<DeliveryAgent>;
   serviceAgents: Array<ServiceAgent>;
   nextService: string;
@@ -50,6 +53,7 @@ export interface MetaResponse {
 
 export const useAdminStore = defineStore("adminStore", {
   state: (): AdminState => ({
+      prestations: [],
     nextDelivery: "",
     nextService: "",
     totalDeliveryAgents: 0,
@@ -154,5 +158,54 @@ export const useAdminStore = defineStore("adminStore", {
         throw new Error(message);
       }
     },
+    async fetchServiceAgentById(id: number) {
+  try {
+    this.fetchedServiceAgent = (
+      await axios.get<ServiceAgent & { files: File[] }>(
+        `/admin/service-agents/${id}`
+      )
+    ).data;
+  } catch (e: any) {
+    const { message } = getAxiosError(e);
+    if (message.match(/Unauthorized/gi)) return "Unauthorized";
+  }
+},
+
+async updateServiceAgentPrestations(serviceAgentId: number, prestations: Array<{id: number, applied_price: number, is_available: boolean, price_status: string}>) {
+  try {
+    return (await axios.patch(`/admin/service-agents/${serviceAgentId}/prestations`, { prestations })).data;
+  } catch (e: any) {
+    const { message } = getAxiosError(e);
+    throw new Error(message);
+  }
+},
+
+async addServiceAgentPrestation(serviceAgentId: number, prestation: {prestationId: number, requested_price: number}) {
+  try {
+    return (await axios.post(`/admin/service-agents/${serviceAgentId}/prestations`, prestation)).data;
+  } catch (e: any) {
+    const { message } = getAxiosError(e);
+    throw new Error(message);
+  }
+},
+
+async fetchPrestations() {
+  try {
+    const { data } = await axios.get('/admin/prestations');
+    this.prestations = data;
+  } catch (e: any) {
+    const { message } = getAxiosError(e);
+    throw new Error(message);
+  }
+},
+
+async updatePrestationStatus(prestationId: number, isActive: boolean) {
+  try {
+    return (await axios.patch(`/admin/prestations/${prestationId}`, { is_active: isActive })).data;
+  } catch (e: any) {
+    const { message } = getAxiosError(e);
+    throw new Error(message);
+  }
+}
   },
 });
