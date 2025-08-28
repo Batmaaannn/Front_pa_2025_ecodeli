@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useTripStore } from "@/stores/trip.store";
+import { useTripStore } from "@/stores/delivery.store";
 
 const store = useTripStore();
 

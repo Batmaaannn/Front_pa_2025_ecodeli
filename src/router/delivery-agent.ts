@@ -7,11 +7,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "DashboardDeliveriesAgents",
     component: () =>
       import("@/views/delivery-agent/DashboardDeliveryAgent.vue"),
-    /*meta: {
+    meta: {
       layout: "ConnectedLayout",
       requiresAuth: true,
       userTypeAuthorized: [UserType.DELIVERY_AGENT],
-    },*/
+    },
     children: [
       {
         name: "DashboardDeliveryAgent",
@@ -39,14 +39,24 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: "CreateTrip",
         path: "ajouter-un-trajet",
-        component: () =>
-            import("@/views/delivery-agent/trips/CreateTrip.vue"),
+        component: () => import("@/views/delivery-agent/trips/CreateTrip.vue"),
       },
       {
         name: "AllDeliveryRequests",
-        path: "demandes-de-livraisons",
+        path: "livraisons",
         component: () =>
-            import("@/views/delivery-agent/deliveries/AllRequestsDeliveries.vue"),
+          import("@/views/delivery-agent/deliveries/AllRequestsDeliveries.vue"),
+      },
+      {
+        name: "DeliveryPage",
+        path: "livraison/:id",
+        component: () =>
+          import("@/views/delivery-agent/deliveries/DeliveryPage.vue"),
+      },
+      {
+        path: "/mon-profil",
+        name: "UserDeliveryAgentProfile",
+        component: () => import("@/views/delivery-agent/EditProfile.vue"),
       },
     ],
   },

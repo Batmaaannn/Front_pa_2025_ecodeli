@@ -116,6 +116,8 @@ export const useAuthStore = defineStore("authStore", {
     }: RegistrationDeliveryAgent) {
       const filesData = new FormData();
 
+      console.log(deliveryAgent);
+
       files.forEach((file) => {
         filesData.append("files", file);
       });
@@ -152,21 +154,27 @@ export const useAuthStore = defineStore("authStore", {
         formData.append("files", file);
       });
 
-     formData.append("firstName", serviceAgent.firstName);
-     formData.append("lastName", serviceAgent.lastName);
-     formData.append("email", serviceAgent.email);
-     formData.append("password", serviceAgent.password);
-     formData.append("phoneNumber", serviceAgent.phoneNumber);
-     formData.append("companySiret", serviceAgent.companySiret);
-     formData.append("companyName", serviceAgent.companyName);
-     formData.append("companyAddress", serviceAgent.companyAddress);
-     formData.append("companyCity", serviceAgent.companyCity);
-     formData.append("companyPostalCode", serviceAgent.companyPostalCode);
-     //formData.append("certifications", serviceAgent.certifications);
+      formData.append("firstName", serviceAgent.firstName);
+      formData.append("lastName", serviceAgent.lastName);
+      formData.append("email", serviceAgent.email);
+      formData.append("password", serviceAgent.password);
+      formData.append("phoneNumber", serviceAgent.phoneNumber);
+      formData.append("companySiret", serviceAgent.companySiret);
+      formData.append("companyName", serviceAgent.companyName);
+      formData.append("companyAddress", serviceAgent.companyAddress);
+      formData.append("companyCity", serviceAgent.companyCity);
+      formData.append("companyPostalCode", serviceAgent.companyPostalCode);
+      //formData.append("certifications", serviceAgent.certifications);
 
-     serviceAgent.selectedPrestations.forEach((prestation, idx) => {
-        formData.append(`selectedPrestations[${idx}][prestationId]`, String(prestation.prestationId));
-        formData.append(`selectedPrestations[${idx}][requestedPrice]`, String(prestation.requestedPrice));
+      serviceAgent.selectedPrestations.forEach((prestation, idx) => {
+        formData.append(
+          `selectedPrestations[${idx}][prestationId]`,
+          String(prestation.prestationId)
+        );
+        formData.append(
+          `selectedPrestations[${idx}][requestedPrice]`,
+          String(prestation.requestedPrice)
+        );
       });
 
       try {

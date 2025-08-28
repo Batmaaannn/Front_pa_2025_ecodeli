@@ -1,4 +1,4 @@
-import { Announcement } from "./annoucement";
+import { Announcement } from "./announcement";
 import { DeliveryAgent } from "./delivery-agent";
 import { Package } from "./package";
 import { Rating } from "./rating";

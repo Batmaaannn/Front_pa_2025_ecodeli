@@ -6,11 +6,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/mon-espace",
     name: "DashboardCustomers",
     component: () => import("@/views/customer/DashboardCustomer.vue"),
-    /*meta: {
+    meta: {
       layout: "ConnectedLayout",
       requiresAuth: true,
       userTypeAuthorized: [UserType.CUSTOMER],
-    },*/
+    },
     children: [
       {
         name: "DashboardCustomer",

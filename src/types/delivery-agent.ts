@@ -16,6 +16,8 @@ export interface DeliveryAgent {
   rating: number;
   is_validated: boolean;
   nfc_card_id?: string;
+  favorite_delivery_city?: string;
+  max_radius_km?: number; //km
   deliveries: Delivery[];
   user: User;
   user_id: number;

@@ -44,6 +44,7 @@ const app = createApp(App);
 const store = createPinia();
 
 createNewAxiosInstance({ router, store });
+
 //const head = createHead();
 
 app

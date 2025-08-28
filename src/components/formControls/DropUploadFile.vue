@@ -13,7 +13,7 @@
   >
     <div v-if="files.length > 0" class="mb-6 space-y-2">
       <h4 class="text-sm font-medium text-gray-700 mb-3">
-        {{ multiple ? 'Fichiers sélectionnés :' : 'Fichier sélectionné :' }}
+        {{ multiple ? "Fichiers sélectionnés :" : "Fichier sélectionné :" }}
       </h4>
       <TransitionGroup name="file-list" tag="div" class="space-y-2">
         <div
@@ -61,7 +61,9 @@
           class="relative cursor-pointer inline-flex items-center gap-2 rounded-lg bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-colors"
         >
           <ArrowUpTrayIcon class="h-5 w-5" />
-          <span>{{ multiple ? 'Choisir des fichiers' : 'Choisir un fichier' }}</span>
+          <span>{{
+            multiple ? "Choisir des fichiers" : "Choisir un fichier"
+          }}</span>
           <input
             type="file"
             @change="fileSelectionUpload"
@@ -71,7 +73,13 @@
             class="hidden"
           />
         </label>
-        <p class="text-sm text-gray-600">{{ multiple ? 'ou glissez-déposez vos fichiers ici' : 'ou glissez-déposez votre fichier ici' }}</p>
+        <p class="text-sm text-gray-600">
+          {{
+            multiple
+              ? "ou glissez-déposez vos fichiers ici"
+              : "ou glissez-déposez votre fichier ici"
+          }}
+        </p>
       </div>
       <div class="mt-4 space-y-1">
         <p class="text-xs text-gray-500">Formats acceptés : PDF, JPG, PNG</p>
@@ -89,7 +97,11 @@
             class="mx-auto h-16 w-16 text-primary-600 animate-bounce"
           />
           <p class="mt-2 text-lg font-semibold text-primary-600">
-            {{ multiple ? 'Déposez vos fichiers ici' : 'Déposez votre fichier ici' }}
+            {{
+              multiple
+                ? "Déposez vos fichiers ici"
+                : "Déposez votre fichier ici"
+            }}
           </p>
         </div>
       </div>
@@ -133,7 +145,7 @@ const isSingleFileUploaded = computed(() => {
 const fileSelectionUpload = (e: Event) => {
   const target = e.target as HTMLInputElement;
   if (!target.files || !target.files.length) return;
-  
+
   if (!props.multiple) {
     // For single file mode, only emit the first file
     emit("upload", target.files[0]);
@@ -150,7 +162,7 @@ const handleDrop = (e: DragEvent) => {
   isDragging.value = false;
   dragCounter = 0;
   if (!e.dataTransfer || !e.dataTransfer.files.length) return;
-  
+
   if (!props.multiple) {
     // For single file mode, only emit the first file
     emit("upload", e.dataTransfer.files[0]);

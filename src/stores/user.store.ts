@@ -1,4 +1,4 @@
-import { axios } from "@/libs/axios";
+import { axios, getAxiosError } from "@/libs/axios";
 import { COOKIES } from "@/types/cookies";
 import {
   isAdminUser,
@@ -20,7 +20,12 @@ export const useUserStore = defineStore("userStore", {
     user: {},
   }),
   getters: {
-    isConnected: (state) => Object.keys(state.user).length > 0,
+    isConnected: (state: UserState) => Object.keys(state.user).length > 0,
+    isCustomer: (state: UserState) => isCustomerUser(state.user),
+    isMerchant: (state: UserState) => isMerchantUser(state.user),
+    isDeliveryAgent: (state: UserState) => isDeliveryAgentUser(state.user),
+    isServiceAgent: (state: UserState) => isServiceAgentUser(state.user),
+    isAdmin: (state: UserState) => isAdminUser(state.user),
     getDashboardUrl: (state: UserState) => {
       if (isCustomerUser(state.user)) return "/mon-espace";
       if (isMerchantUser(state.user)) return "/mon-espace-commercant";
@@ -49,6 +54,26 @@ export const useUserStore = defineStore("userStore", {
         const url = (
           await axios.get(`/files/download-file`, { params: { filePath } })
         ).data;
+        return url;
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+
+    async updateUser(data: Partial<User>) {
+      try {
+        const response = await axios.put(`/users/me`, data);
+        this.user = response.data;
+      } catch (error: any) {
+        const { message } = getAxiosError(error);
+        return Promise.reject(message);
+      }
+    },
+
+    async updateDeliveryAgentProfile(data: any) {
+      try {
+        console.log(data);
+        const url = (await axios.post(`/delivery-agents`, data)).data;
         return url;
       } catch (error) {
         return Promise.reject(error);

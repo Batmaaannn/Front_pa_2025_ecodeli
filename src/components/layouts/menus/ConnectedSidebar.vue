@@ -222,7 +222,9 @@
                 >
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      :to="{ name: 'DashboardCustomer' }"
+                      :to="{
+                        name: getProfileRouteName(userStore.user.user_type),
+                      }"
                       :class="[
                         active ? 'bg-gray-50 outline-hidden' : '',
                         'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',
@@ -280,6 +282,7 @@ const router = useRouter();
 const sidebarOpen = ref(false);
 
 import { type PropType } from "vue";
+import { UserType } from "@/types/user";
 
 const props = defineProps({
   navigation: {
@@ -298,5 +301,20 @@ const props = defineProps({
 function disconnect() {
   userStore.disconnect();
   router.push({ path: "/" });
+}
+
+function getProfileRouteName(userType: UserType) {
+  switch (userType) {
+    case UserType.DELIVERY_AGENT:
+      return "UserDeliveryAgentProfile";
+    case UserType.SERVICE_AGENT:
+      return "UserServiceAgentProfile";
+    case UserType.CUSTOMER:
+      return "UserCustomerProfile";
+    case UserType.MERCHANT:
+      return "UserMerchantProfile";
+    default:
+      return "";
+  }
 }
 </script>
