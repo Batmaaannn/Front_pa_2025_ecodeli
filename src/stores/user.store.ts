@@ -21,8 +21,6 @@ export const useUserStore = defineStore("userStore", {
   }),
   getters: {
     isConnected: (state: UserState) => Object.keys(state.user).length > 0,
-    // getFavoriteCity: (state: UserState) =>
-    //   isDeliveryAgentUser(state.user) ? state.favoriteCity : {},
     isCustomer: (state: UserState) => isCustomerUser(state.user),
     isMerchant: (state: UserState) => isMerchantUser(state.user),
     isDeliveryAgent: (state: UserState) => isDeliveryAgentUser(state.user),
@@ -69,6 +67,16 @@ export const useUserStore = defineStore("userStore", {
       } catch (error: any) {
         const { message } = getAxiosError(error);
         return Promise.reject(message);
+      }
+    },
+
+    async updateDeliveryAgentProfile(data: any) {
+      try {
+        console.log(data);
+        const url = (await axios.post(`/delivery-agents`, data)).data;
+        return url;
+      } catch (error) {
+        return Promise.reject(error);
       }
     },
 

@@ -18,14 +18,14 @@
               <InputField
                 name="firstName"
                 label="Prénom"
-                v-model="formData.first_name"
-                :error="formErrors.first_name"
+                v-model="formData.firstName"
+                :error="formErrors.firstName"
               />
               <InputField
                 name="lastName"
                 label="Nom"
-                v-model="formData.last_name"
-                :error="formErrors.last_name"
+                v-model="formData.lastName"
+                :error="formErrors.lastName"
               />
               <InputField
                 name="email"
@@ -34,11 +34,11 @@
                 type="email"
               />
               <InputField
-                name="phone"
+                name="phoneNumber"
                 label="Téléphone"
-                v-model="formData.phone_number"
+                v-model="formData.phoneNumber"
                 type="tel"
-                :error="formErrors.phone_number"
+                :error="formErrors.phoneNumber"
               />
             </div>
 
@@ -56,20 +56,20 @@
                 <InputField
                   name="companyName"
                   label="Nom de l'entreprise"
-                  v-model="formData.company_name"
+                  v-model="formData.companyName"
                   disabled
                 />
                 <InputField
                   name="companyAddress"
                   label="Adresse de l'entreprise"
-                  v-model="formData.company_address"
-                  :error="formErrors.company_address"
+                  v-model="formData.companyAddress"
+                  :error="formErrors.companyAddress"
                 />
                 <InputField
                   name="companyCity"
                   label="Ville de l'entreprise"
-                  v-model="formData.company_city"
-                  :error="formErrors.company_city"
+                  v-model="formData.companyCity"
+                  :error="formErrors.companyCity"
                 />
               </div>
 
@@ -89,16 +89,13 @@
                     <div class="mt-3 grid grid-cols-1">
                       <select
                         id="vehicleType"
-                        v-model="formData.vehicle_type"
+                        v-model="formData.vehiculeType"
                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600 sm:text-sm/6"
                       >
                         <option value="">Sélectionner un type</option>
                         <option value="CAR">Voiture</option>
                         <option value="VAN">Camionette</option>
                         <option value="TRUCK">Camion</option>
-                        <option value="BIKE">Vélo</option>
-                        <option value="SCOOTER">Scooter</option>
-                        <option value="MOTORCYCLE">Moto</option>
                       </select>
                       <ChevronDownIcon
                         class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
@@ -109,7 +106,7 @@
                   <InputField
                     name="licenseNumber"
                     label="Numéro de permis"
-                    v-model="formData.license_number"
+                    v-model="formData.licenseNumber"
                     disabled
                   />
                 </div>
@@ -126,9 +123,9 @@
                   <InputField
                     name="sectorCity"
                     label="Ville du secteur d'origine"
-                    v-model="formData.sector_city"
+                    v-model="formData.favoriteDeliveryCity"
                     placeholder="Ex: Paris, Lyon, Marseille"
-                    :error="formErrors.sector_city"
+                    :error="formErrors.favoriteDeliveryCity"
                   />
                   <div>
                     <label
@@ -140,7 +137,7 @@
                     <div class="mt-3 grid grid-cols-1">
                       <select
                         id="perimeter"
-                        v-model="formData.perimeter_radius"
+                        v-model="formData.maxRadiusKm"
                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-600 sm:text-sm/6"
                       >
                         <option value="">Sélectionner un rayon</option>
@@ -155,16 +152,17 @@
                         class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                         aria-hidden="true"
                       />
+                      {{ formData.maxRadiusKm }}
                       <p class="mt-1 text-xs">
                         Ce rayon correspond à une zone de prise en charge de
                         colis autour de la ville d'origine.
                       </p>
                     </div>
                     <p
-                      v-if="formErrors.perimeter_radius"
+                      v-if="formErrors.maxRadiusKm"
                       class="mt-2 text-sm text-red-600"
                     >
-                      {{ formErrors.perimeter_radius }}
+                      {{ formErrors.maxRadiusKm }}
                     </p>
                   </div>
                 </div>
@@ -346,7 +344,7 @@
           </div>
         </form>
       </div>
-
+      {{ formData.schedule }}
       <!-- Success/Error Messages -->
       <div v-if="successMessage" class="mt-4">
         <div class="rounded-md bg-green-50 p-4">
@@ -402,7 +400,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { isDeliveryAgentUser } from "@/types/typeGuards";
 import InputField from "@/components/formControls/InputField.vue";
@@ -410,9 +408,15 @@ import {
   ChevronDownIcon,
   DocumentDuplicateIcon,
 } from "@heroicons/vue/16/solid";
-import { axios } from "@/libs/axios";
 
 const userStore = useUserStore();
+
+onBeforeMount(() => {
+  if (!userStore.user) {
+    userStore.fetchUser();
+  }
+  loadUserData();
+});
 
 interface TimeSlot {
   isActive: boolean;
@@ -460,19 +464,17 @@ const createDefaultSchedule = (): Schedule => {
 
 const formData = ref({
   email: "",
-  first_name: "",
-  last_name: "",
-  phone_number: "",
-  postal_code: "",
-  city: "",
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
   siret: "",
-  company_name: "",
-  company_address: "",
-  company_city: "",
-  vehicle_type: "",
-  license_number: "",
-  sector_city: "",
-  perimeter_radius: "",
+  licenseNumber: "",
+  companyName: "",
+  companyAddress: "",
+  companyCity: "",
+  vehiculeType: "",
+  favoriteDeliveryCity: "",
+  maxRadiusKm: "",
   schedule: createDefaultSchedule(),
 });
 
@@ -482,16 +484,13 @@ const errorMessage = ref("");
 const selectedDayForDuplication = ref<string | null>(null);
 
 const formErrors = ref({
-  first_name: "",
-  last_name: "",
-  phone_number: "",
-  siret: "",
-  company_name: "",
-  company_address: "",
-  company_city: "",
-  license_number: "",
-  sector_city: "",
-  perimeter_radius: "",
+  firstName: "",
+  lastName: "",
+  phoneNumber: "",
+  companyAddress: "",
+  companyCity: "",
+  favoriteDeliveryCity: "",
+  maxRadiusKm: "",
   schedule: "",
 });
 
@@ -542,28 +541,24 @@ const applyDuplicatedSchedule = (sourceDay: string) => {
 const loadUserData = () => {
   const user = userStore.user;
 
-  if (!user || Object.keys(user).length === 0) return;
-
-  console.log("User data:", user);
-
   formData.value.email = user.email;
   if (!isDeliveryAgentUser(user)) return;
 
   const deliveryAgent = user.delivery_agent;
-  formData.value.first_name = deliveryAgent.first_name;
-  formData.value.last_name = deliveryAgent.last_name;
-  formData.value.phone_number = deliveryAgent.phone_number;
-  formData.value.siret = deliveryAgent.siret;
-  formData.value.company_name = deliveryAgent.company_name;
-  formData.value.company_address = deliveryAgent.company_address;
-  formData.value.company_city = deliveryAgent.company_city || "";
-  formData.value.vehicle_type = deliveryAgent.vehicle_type;
-  formData.value.license_number = deliveryAgent.license_number || "";
+  formData.value.firstName = deliveryAgent.first_name;
+  formData.value.lastName = deliveryAgent.last_name;
+  formData.value.phoneNumber = deliveryAgent.phone_number;
+  formData.value.companyAddress = deliveryAgent.company_address;
+  formData.value.companyCity = deliveryAgent.company_city || "";
+  formData.value.vehiculeType = deliveryAgent.vehicle_type;
+  formData.value.siret = deliveryAgent.siret || "";
+  formData.value.licenseNumber = deliveryAgent.license_number || "";
+  formData.value.companyName = deliveryAgent.company_name || "";
 
   // Load delivery zone data if available (with type safety)
-  formData.value.sector_city = (deliveryAgent as any).sector_city || "";
-  formData.value.perimeter_radius =
-    (deliveryAgent as any).perimeter_radius || "";
+  formData.value.favoriteDeliveryCity =
+    (deliveryAgent as any).favorite_delivery_city || "";
+  formData.value.maxRadiusKm = (deliveryAgent as any).max_radius_km || "";
 
   // Load schedule if available
   if ((deliveryAgent as any).schedule) {
@@ -595,39 +590,6 @@ const validateForm = () => {
     schedule: "",
   };
 
-  if (!formData.value.first_name.trim()) {
-    errors.first_name = "Le prénom est requis";
-  }
-
-  if (!formData.value.last_name.trim()) {
-    errors.last_name = "Le nom est requis";
-  }
-
-  if (!formData.value.phone_number.trim()) {
-    errors.phone_number = "Le téléphone est requis";
-  }
-
-  if (!formData.value.siret.trim()) {
-    errors.siret = "Le SIRET est requis";
-  }
-
-  if (!formData.value.company_name.trim()) {
-    errors.company_name = "Le nom de l'entreprise est requis";
-  }
-
-  if (!formData.value.company_address.trim()) {
-    errors.company_address = "L'adresse de l'entreprise est requise";
-  }
-
-  // Validate delivery zone fields
-  if (!formData.value.sector_city.trim()) {
-    errors.sector_city = "La ville du secteur est requise";
-  }
-
-  if (!formData.value.perimeter_radius) {
-    errors.perimeter_radius = "Le rayon de livraison est requis";
-  }
-
   // Validate schedule - at least one working day with time slots
   const hasWorkingDay = Object.values(formData.value.schedule).some(
     (day) => day.isWorking
@@ -654,7 +616,6 @@ const validateForm = () => {
     }
   });
 
-  formErrors.value = errors;
   return Object.values(errors).every((error) => !error);
 };
 
@@ -663,34 +624,9 @@ const updateProfile = async () => {
   successMessage.value = "";
   errorMessage.value = "";
 
-  if (!validateForm()) {
-    loading.value = false;
-    errorMessage.value = "Veuillez corriger les erreurs dans le formulaire";
-    return;
-  }
-
   try {
-    const user = userStore.user;
-    if (!user || !isDeliveryAgentUser(user)) {
-      throw new Error("Utilisateur non connecté ou non autorisé");
-    }
 
-    const updateData = {
-      first_name: formData.value.first_name,
-      last_name: formData.value.last_name,
-      phone_number: formData.value.phone_number,
-      siret: formData.value.siret,
-      company_name: formData.value.company_name,
-      company_address: formData.value.company_address,
-      company_city: formData.value.company_city,
-      vehicle_type: formData.value.vehicle_type,
-      license_number: formData.value.license_number,
-      sector_city: formData.value.sector_city,
-      perimeter_radius: formData.value.perimeter_radius,
-      schedule: formData.value.schedule,
-    };
-
-    await axios.put(`/delivery-agents/${user.delivery_agent_id}`, updateData);
+    await userStore.updateDeliveryAgentProfile(formData.value);
     await userStore.fetchUser();
 
     successMessage.value = "Profil mis à jour avec succès";
@@ -707,21 +643,14 @@ const resetForm = () => {
   successMessage.value = "";
   errorMessage.value = "";
   formErrors.value = {
-    first_name: "",
-    last_name: "",
-    phone_number: "",
-    siret: "",
-    company_name: "",
-    company_address: "",
-    company_city: "",
-    license_number: "",
-    sector_city: "",
-    perimeter_radius: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    companyAddress: "",
+    companyCity: "",
+    favoriteDeliveryCity: "",
+    maxRadiusKm: "",
     schedule: "",
   };
 };
-
-onMounted(() => {
-  loadUserData();
-});
 </script>
