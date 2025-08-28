@@ -399,6 +399,7 @@ const initializeEditedPrestations = () => {
       applied_price: sap.applied_price || 0,
       is_available: sap.is_available !== undefined ? sap.is_available : true,
       price_status: sap.price_status || "PENDING",
+      ecodeli_comment: sap.ecodeli_comment || "",
     }));
   }
 };
@@ -425,11 +426,8 @@ const getEditedPrestation = (sapId: number) => {
       applied_price: 0,
       is_available: true,
       price_status: "PENDING",
+      ecodeli_comment: "",
     };
-    editedPrestations.value.push(prestation);
-  }
-  return prestation;
-};};
     editedPrestations.value.push(prestation);
   }
   return prestation;
@@ -450,6 +448,7 @@ const editedPrestations = ref<
     applied_price: number;
     is_available: boolean;
     price_status: string;
+    ecodeli_comment: string;
   }[]
 >([]);
 
