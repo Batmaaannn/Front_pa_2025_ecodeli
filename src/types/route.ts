@@ -2,7 +2,6 @@ import { DeliveryAgent } from "./delivery-agent";
 
 export interface Route {
     id: number;
-    deliverer_id: number;
     departure_city: string;
     arrival_city: string;
     departure_date: Date;

@@ -38,7 +38,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: "CreateTrip",
-        path: "ajouter-un-trajet",
+        path: "trajet",
         component: () => import("@/views/delivery-agent/trips/CreateTrip.vue"),
       },
       {
