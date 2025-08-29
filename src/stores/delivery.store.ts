@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { axios } from "@/libs/axios";
+import { DeliveryStatus } from "@/types/delivery";
 
 interface DeliveryState {
   deliveries: any[];
@@ -77,6 +78,34 @@ export const useDeliveryStore = defineStore("deliveryStore", {
     async deleteRoute(id: number) {
       try {
         return (await axios.delete(`/deliveries/route/${id}`)).data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async updateDeliveryStatus(deliveryId: number): Promise<void> {
+      try {
+        return (await axios.patch(`/deliveries/status/${deliveryId}`)).data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async fetchStat() {
+      try {
+        return (await axios.get("/deliveries/dashboard/stats")).data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async fetchRecentReviews() {
+      try {
+        return (await axios.get("/deliveries/dashboard/reviews")).data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async fetchActiveDeliveries() {
+      try {
+        return (this.deliveries = (await axios.get("/deliveries/active")).data);
       } catch (error) {
         throw error;
       }

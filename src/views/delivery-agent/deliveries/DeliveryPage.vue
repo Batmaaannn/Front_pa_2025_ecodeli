@@ -100,11 +100,19 @@
               <h3 class="text-sm font-medium text-gray-500 mb-2">Départ</h3>
               <div class="space-y-1">
                 <p class="font-medium text-gray-900">
-                  {{ deliveryStore.delivery.announcement?.departure_city }}
+                  {{
+                    deliveryStore.delivery.delivery_type === DeliveryType.FULL
+                      ? deliveryStore.delivery.announcement?.departure_city
+                      : deliveryStore.delivery.intermediate_city
+                  }}
                 </p>
                 <p class="text-sm text-gray-600">
                   {{
-                    formatDate(deliveryStore.delivery.announcement?.pickup_date)
+                    deliveryStore.delivery.delivery_type === DeliveryType.FULL
+                      ? formatDate(
+                          deliveryStore.delivery.announcement?.pickup_date
+                        )
+                      : formatDate(deliveryStore.delivery.pickup_time)
                   }}
                 </p>
                 <p
@@ -126,11 +134,7 @@
                   {{ deliveryStore.delivery.announcement?.arrival_city }}
                 </p>
                 <p class="text-sm text-gray-600">
-                  {{
-                    formatDate(
-                      deliveryStore.delivery.announcement?.delivery_date
-                    )
-                  }}
+                  {{ formatDate(deliveryStore.delivery.delivery_time) }}
                 </p>
               </div>
             </div>
@@ -161,7 +165,7 @@
                   </span>
                   <span
                     v-if="deliveryStore.delivery.announcement?.assurance"
-                    class="flex items-center gap-1 text-green-600"
+                    class="flex items-center gap-1 text-primary-600"
                   >
                     <svg
                       class="w-4 h-4"
@@ -336,8 +340,12 @@
           </button>
           <div class="flex gap-3">
             <button
-              v-if="isAssignedToCurrentUser"
-              class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              v-if="
+                isAssignedToCurrentUser &&
+                deliveryStore.delivery.status !== DeliveryStatus.DELIVERED
+              "
+              @click="changeDeliveryStatus"
+              class="px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors cursor-pointer"
             >
               {{ getNextStatusAction() }}
             </button>
@@ -384,7 +392,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
-import { Delivery, DeliveryStatus } from "@/types/delivery";
+import { Delivery, DeliveryStatus, DeliveryType } from "@/types/delivery";
 import { useDeliveryStore } from "@/stores/delivery.store";
 
 const route = useRoute();
@@ -393,15 +401,16 @@ const deliveryStore = useDeliveryStore();
 
 onMounted(async () => {
   await deliveryStore.fetchDelivery(Number(route.params.id));
-  console.log("Données de livraison récupérées :", deliveryStore.delivery);
 });
 
 const isLoading = ref(false);
 const selectedImage = ref<string | null>(null);
 
-const deliveryId = computed(() => Number(route.params.id));
 const isAssignedToCurrentUser = computed(() => {
-  return deliveryStore.delivery.value?.delivery_agent_id === userStore.user?.id;
+  return (
+    deliveryStore.delivery?.delivery_agent_id ===
+    userStore.user.delivery_agent_id
+  );
 });
 const totalWeight = computed(() => {
   if (!deliveryStore.delivery.value?.packages) return 0;
@@ -427,15 +436,15 @@ const getStatusBadgeClass = (status: DeliveryStatus): string => {
     [DeliveryStatus.ASSIGNED]: "bg-yellow-100 text-yellow-800",
     [DeliveryStatus.PICKED_UP]: "bg-blue-100 text-blue-800",
     [DeliveryStatus.IN_TRANSIT]: "bg-indigo-100 text-indigo-800",
-    [DeliveryStatus.DELIVERED]: "bg-green-100 text-green-800",
+    [DeliveryStatus.DELIVERED]: "bg-primary-100 text-primary-800",
     [DeliveryStatus.PENDING]: "bg-gray-100 text-gray-800",
   };
   return classes[status] || "bg-gray-100 text-gray-800";
 };
 
 const getNextStatusAction = (): string => {
-  if (!deliveryStore.delivery.value) return "";
-  switch (deliveryStore.delivery.value.status) {
+  if (!deliveryStore.delivery) return "";
+  switch (deliveryStore.delivery.status) {
     case DeliveryStatus.ASSIGNED:
       return "Marquer comme ramassée";
     case DeliveryStatus.PICKED_UP:
@@ -460,5 +469,10 @@ const formatDate = (date: Date | string | undefined): string => {
 
 const openImageModal = (imageUrl: string) => {
   selectedImage.value = imageUrl;
+};
+
+const changeDeliveryStatus = async () => {
+  await deliveryStore.updateDeliveryStatus(deliveryStore.delivery.id);
+  await deliveryStore.fetchDelivery(deliveryStore.delivery.id);
 };
 </script>
