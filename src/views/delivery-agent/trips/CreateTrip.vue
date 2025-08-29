@@ -1,6 +1,10 @@
 <template>
   <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold mb-6">Gestion des trajets</h1>
+    <h1 class="text-2xl font-bold">Gestion des trajets</h1>
+    <p class="mb-6 text-gray-600 text-sm/6">
+      Créez et gérez vos trajets de livraison facilement. Vous recevrez une
+      alerte si une annonce correspond à votre trajet
+    </p>
 
     <div class="bg-white rounded-lg shadow">
       <div class="border-b border-gray-200">
@@ -75,10 +79,10 @@
                         'px-2 py-1 text-xs font-medium rounded-full',
                         trip.is_available
                           ? 'bg-green-100 text-green-800'
-                          : 'bg-gray-100 text-gray-800'
+                          : 'bg-gray-100 text-gray-800',
                       ]"
                     >
-                      {{ trip.is_available ? 'À venir' : 'Passé' }}
+                      {{ trip.is_available ? "À venir" : "Passé" }}
                     </span>
                   </div>
                   <div

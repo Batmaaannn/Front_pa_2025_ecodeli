@@ -29,7 +29,7 @@
             :key="serviceAgent.id"
             @click="
               $router.push({
-                path: `/tableau-de-bord/livreurs/${serviceAgent.id}`,
+                path: `/tableau-de-bord/prestataires-de-services/${serviceAgent.id}`,
               })
             "
             class="even:bg-gray-50 cursor-pointer"

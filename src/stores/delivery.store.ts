@@ -4,20 +4,37 @@ import { axios } from "@/libs/axios";
 interface DeliveryState {
   postedDeliveries: any[];
   trips: any[];
+  delivery: any;
 }
 
 export const useDeliveryStore = defineStore("deliveryStore", {
   state: (): DeliveryState => ({
     postedDeliveries: [],
     trips: [],
+    delivery: {},
   }),
   getters: {},
   actions: {
-    async fetchPostedDeliveries() {
+    async fetchDelivery(id: number) {
       try {
-        const data = (await axios.get("/deliveries/posted")).data;
-        this.postedDeliveries = data;
-        return data;
+        return (this.delivery = (
+          await axios.get(`/deliveries/details/${id}`)
+        ).data);
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération de la livraison :",
+          error
+        );
+        throw error;
+      }
+    },
+    async fetchPostedDeliveries(params: any) {
+      try {
+        this.postedDeliveries = (
+          await axios.get("/deliveries", {
+            params,
+          })
+        ).data;
       } catch (error) {
         console.error("Erreur lors de la récupération des livraisons :", error);
         throw error;
