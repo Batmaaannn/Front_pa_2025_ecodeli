@@ -117,24 +117,26 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <template
-          v-for="delivery in deliveryStore.postedDeliveries"
+          v-for="delivery in deliveryStore.deliveries"
           :key="delivery.id"
         >
           <tr>
             <td class="px-3 py-4 text-center">
               <input
                 type="checkbox"
-                :value="delivery.id || delivery.announcementId"
+                :value="delivery.id"
                 v-model="selectedDeliveries"
-                @change="
-                  onDeliverySelectionChange(
-                    delivery.id || delivery.announcementId
-                  )
-                "
+                @change="onDeliverySelectionChange(delivery.id)"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />
             </td>
-            <td class="px-6 py-4">{{ delivery.departureCity }}</td>
+            <td class="px-6 py-4">
+              {{
+                delivery.deliveryType === "full"
+                  ? delivery.departureCity
+                  : delivery.intermediateCity
+              }}
+            </td>
             <td class="px-6 py-4">{{ delivery.arrivalCity }}</td>
             <td class="px-6 py-4">
               {{ new Date(delivery.pickupDate).toLocaleString() }} →<br />
@@ -171,23 +173,15 @@
                 <div class="flex items-center gap-2">
                   <input
                     type="radio"
-                    :id="`full-${delivery.id || delivery.announcementId}`"
-                    :name="`delivery-type-${delivery.id || delivery.announcementId}`"
+                    :id="`full-${delivery.id}`"
+                    :name="`delivery-type-${delivery.id}`"
                     value="full"
-                    :checked="
-                      getDeliveryConfig(delivery.id || delivery.announcementId)
-                        .type === 'full'
-                    "
-                    @change="
-                      updateDeliveryType(
-                        delivery.id || delivery.announcementId,
-                        'full'
-                      )
-                    "
+                    :checked="getDeliveryConfig(delivery.id).type === 'full'"
+                    @change="updateDeliveryType(delivery.id, 'full')"
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
                   />
                   <label
-                    :for="`full-${delivery.id || delivery.announcementId}`"
+                    :for="`full-${delivery.id}`"
                     class="text-sm font-medium text-gray-700"
                   >
                     Livraison complète ({{ delivery.departureCity }} →
@@ -197,33 +191,22 @@
                 <div class="flex items-center gap-2">
                   <input
                     type="radio"
-                    :id="`partial-${delivery.id || delivery.announcementId}`"
-                    :name="`delivery-type-${delivery.id || delivery.announcementId}`"
+                    :id="`partial-${delivery.id}`"
+                    :name="`delivery-type-${delivery.id}`"
                     value="partial"
-                    :checked="
-                      getDeliveryConfig(delivery.id || delivery.announcementId)
-                        .type === 'partial'
-                    "
-                    @change="
-                      updateDeliveryType(
-                        delivery.id || delivery.announcementId,
-                        'partial'
-                      )
-                    "
+                    :checked="getDeliveryConfig(delivery.id).type === 'partial'"
+                    @change="updateDeliveryType(delivery.id, 'partial')"
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
                   />
                   <label
-                    :for="`partial-${delivery.id || delivery.announcementId}`"
+                    :for="`partial-${delivery.id}`"
                     class="text-sm font-medium text-gray-700"
                   >
                     Livraison partielle
                   </label>
                 </div>
                 <div
-                  v-if="
-                    getDeliveryConfig(delivery.id || delivery.announcementId)
-                      .type === 'partial'
-                  "
+                  v-if="getDeliveryConfig(delivery.id).type === 'partial'"
                   class="flex items-center gap-2"
                 >
                   <label class="text-sm font-medium text-gray-700"
@@ -231,10 +214,7 @@
                   >
                   <input
                     type="text"
-                    v-model="
-                      deliveryConfigs[delivery.id || delivery.announcementId]
-                        .intermediateCity
-                    "
+                    v-model="deliveryConfigs[delivery.id].intermediateCity"
                     placeholder="Ex: Lyon"
                     class="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -266,9 +246,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { axios } from "@/libs/axios";
 import { useUserStore } from "@/stores/user.store";
-import { isDeliveryAgentUser } from "@/types/typeGuards";
 import { useDeliveryStore } from "@/stores/delivery.store";
 
 const deliveryStore = useDeliveryStore();
@@ -376,11 +354,8 @@ const assignSelectedDeliveries = async () => {
         : {}),
     };
   });
-
   try {
-    const data = await axios.post("/deliveries/assign", {
-      assignments,
-    });
+    await deliveryStore.assignDeliveriesToAgent(assignments);
     selectedDeliveries.value = [];
     deliveryConfigs.value = {};
     selectAll.value = false;

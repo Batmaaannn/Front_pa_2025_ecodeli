@@ -2,18 +2,21 @@ import { defineStore } from "pinia";
 import { axios } from "@/libs/axios";
 
 interface DeliveryState {
-  postedDeliveries: any[];
+  deliveries: any[];
   trips: any[];
   delivery: any;
 }
 
 export const useDeliveryStore = defineStore("deliveryStore", {
   state: (): DeliveryState => ({
-    postedDeliveries: [],
+    deliveries: [],
     trips: [],
     delivery: {},
   }),
-  getters: {},
+  getters: {
+    getCountDeliveries: (state) => state.deliveries.length,
+    getCountTrips: (state) => state.trips.length,
+  },
   actions: {
     async fetchDelivery(id: number) {
       try {
@@ -30,11 +33,19 @@ export const useDeliveryStore = defineStore("deliveryStore", {
     },
     async fetchPostedDeliveries(params: any) {
       try {
-        this.postedDeliveries = (
+        this.deliveries = (
           await axios.get("/deliveries", {
             params,
           })
         ).data;
+      } catch (error) {
+        console.error("Erreur lors de la récupération des livraisons :", error);
+        throw error;
+      }
+    },
+    async fetchPastDeliveries() {
+      try {
+        this.deliveries = (await axios.get("/deliveries/past")).data;
       } catch (error) {
         console.error("Erreur lors de la récupération des livraisons :", error);
         throw error;
@@ -45,6 +56,14 @@ export const useDeliveryStore = defineStore("deliveryStore", {
         return (this.trips = (await axios.get("/deliveries/trips")).data);
       } catch (error) {
         console.error("Erreur lors de la récupération des livraisons :", error);
+        throw error;
+      }
+    },
+    async assignDeliveriesToAgent(data: any) {
+      try {
+        return (await axios.post("/deliveries/assign", data)).data;
+      } catch (error) {
+        console.error("Erreur lors de l'attribution des livraisons :", error);
         throw error;
       }
     },

@@ -6,7 +6,7 @@
       ></div>
     </div>
 
-    <div v-else-if="!delivery" class="text-center py-12">
+    <div v-else-if="!deliveryStore.delivery" class="text-center py-12">
       <svg
         class="mx-auto h-12 w-12 text-gray-400 mb-4"
         fill="none"
@@ -40,7 +40,9 @@
         <div class="flex justify-between items-start mb-4">
           <div>
             <h1 class="text-2xl font-bold text-gray-900 mb-2">
-              Détails de la livraison #{{ delivery.tracking_code }}
+              Détails de la livraison #{{
+                deliveryStore.delivery.tracking_code
+              }}
             </h1>
             <div class="flex items-center gap-4 text-sm text-gray-600">
               <span class="flex items-center gap-1">
@@ -57,7 +59,10 @@
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   ></path>
                 </svg>
-                Créée le {{ formatDate(delivery.announcement?.created_at) }}
+                Créée le
+                {{
+                  formatDate(deliveryStore.delivery.announcement?.created_at)
+                }}
               </span>
             </div>
           </div>
@@ -65,21 +70,25 @@
             <span
               :class="[
                 'px-3 py-1 text-sm font-medium rounded-full',
-                getStatusBadgeClass(delivery.status),
+                getStatusBadgeClass(deliveryStore.delivery.status),
               ]"
             >
-              {{ getStatusLabel(delivery.status) }}
+              {{ getStatusLabel(deliveryStore.delivery.status) }}
             </span>
             <span
               :class="[
                 'px-3 py-1 text-sm font-medium rounded-full',
-                delivery.delivery_type === 'full'
+                deliveryStore.delivery.delivery_type === 'full'
                   ? 'bg-blue-100 text-blue-800'
                   : 'bg-purple-100 text-purple-800',
               ]"
             >
               Livraison
-              {{ delivery.delivery_type === "full" ? "complète" : "partielle" }}
+              {{
+                deliveryStore.delivery.delivery_type === "full"
+                  ? "complète"
+                  : "partielle"
+              }}
             </span>
           </div>
         </div>
@@ -91,19 +100,22 @@
               <h3 class="text-sm font-medium text-gray-500 mb-2">Départ</h3>
               <div class="space-y-1">
                 <p class="font-medium text-gray-900">
-                  {{ delivery.announcement?.departure_city }}
+                  {{ deliveryStore.delivery.announcement?.departure_city }}
                 </p>
                 <p class="text-sm text-gray-600">
-                  {{ formatDate(delivery.announcement?.pickup_date) }}
+                  {{
+                    formatDate(deliveryStore.delivery.announcement?.pickup_date)
+                  }}
                 </p>
                 <p
                   v-if="
                     isAssignedToCurrentUser &&
-                    delivery.announcement?.pickup_instructions
+                    deliveryStore.delivery.announcement?.pickup_instructions
                   "
                   class="text-sm text-gray-600 italic"
                 >
-                  Instructions: {{ delivery.announcement.pickup_instructions }}
+                  Instructions:
+                  {{ deliveryStore.delivery.announcement.pickup_instructions }}
                 </p>
               </div>
             </div>
@@ -111,10 +123,14 @@
               <h3 class="text-sm font-medium text-gray-500 mb-2">Arrivée</h3>
               <div class="space-y-1">
                 <p class="font-medium text-gray-900">
-                  {{ delivery.announcement?.arrival_city }}
+                  {{ deliveryStore.delivery.announcement?.arrival_city }}
                 </p>
                 <p class="text-sm text-gray-600">
-                  {{ formatDate(delivery.announcement?.delivery_date) }}
+                  {{
+                    formatDate(
+                      deliveryStore.delivery.announcement?.delivery_date
+                    )
+                  }}
                 </p>
               </div>
             </div>
@@ -125,7 +141,7 @@
               <div class="space-y-2">
                 <div class="flex items-center gap-2">
                   <span
-                    v-if="delivery.announcement?.urgent"
+                    v-if="deliveryStore.delivery.announcement?.urgent"
                     class="flex items-center gap-1 text-red-600"
                   >
                     <svg
@@ -144,7 +160,7 @@
                     <span class="text-sm font-medium">Urgent</span>
                   </span>
                   <span
-                    v-if="delivery.announcement?.assurance"
+                    v-if="deliveryStore.delivery.announcement?.assurance"
                     class="flex items-center gap-1 text-green-600"
                   >
                     <svg
@@ -166,7 +182,7 @@
                 <p class="text-sm text-gray-600">
                   Prix:
                   <span class="font-semibold text-gray-900"
-                    >{{ delivery.announcement?.price }}€</span
+                    >{{ deliveryStore.delivery.announcement?.price }}€</span
                   >
                 </p>
               </div>
@@ -178,11 +194,14 @@
       <!-- Liste des colis -->
       <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">
-          Colis ({{ delivery.packages?.length || 0 }})
+          Colis ({{ deliveryStore.delivery.packages?.length || 0 }})
         </h2>
 
         <div
-          v-if="!delivery.packages || delivery.packages.length === 0"
+          v-if="
+            !deliveryStore.delivery.packages ||
+            deliveryStore.delivery.packages.length === 0
+          "
           class="text-center py-8 text-gray-500"
         >
           Aucun colis associé à cette livraison
@@ -190,7 +209,7 @@
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div
-            v-for="(pkg, index) in delivery.packages"
+            v-for="(pkg, index) in deliveryStore.delivery.packages"
             :key="pkg.id"
             class="border rounded-lg p-4 hover:shadow-md transition-shadow"
           >
@@ -273,14 +292,16 @@
             <h3 class="text-sm font-medium text-gray-500 mb-2">Client</h3>
             <div class="space-y-1">
               <p class="font-medium text-gray-900">
-                {{ delivery.announcement?.customer?.first_name }}
-                {{ delivery.announcement?.customer?.last_name }}
+                {{ deliveryStore.delivery.announcement?.customer?.first_name }}
+                {{ deliveryStore.delivery.announcement?.customer?.last_name }}
               </p>
               <p class="text-sm text-gray-600">
-                {{ delivery.announcement?.customer?.email }}
+                {{ deliveryStore.delivery.announcement?.customer?.email }}
               </p>
               <p class="text-sm text-gray-600">
-                {{ delivery.announcement?.customer?.phone_number }}
+                {{
+                  deliveryStore.delivery.announcement?.customer?.phone_number
+                }}
               </p>
             </div>
           </div>
@@ -290,13 +311,13 @@
               <div>
                 <p class="text-xs text-gray-500">Ramassage:</p>
                 <p class="text-sm text-gray-900">
-                  {{ delivery.announcement?.pickup_address }}
+                  {{ deliveryStore.delivery.announcement?.pickup_address }}
                 </p>
               </div>
               <div>
                 <p class="text-xs text-gray-500">Livraison:</p>
                 <p class="text-sm text-gray-900">
-                  {{ delivery.announcement?.delivery_address }}
+                  {{ deliveryStore.delivery.announcement?.delivery_address }}
                 </p>
               </div>
             </div>
@@ -315,15 +336,7 @@
           </button>
           <div class="flex gap-3">
             <button
-              v-if="!isAssignedToCurrentUser && delivery.status === 'posted'"
-              @click="assignToMe"
-              class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              S'assigner cette livraison
-            </button>
-            <button
-              v-if="isAssignedToCurrentUser && canUpdateStatus"
-              @click="updateDeliveryStatus"
+              v-if="isAssignedToCurrentUser"
               class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               {{ getNextStatusAction() }}
@@ -384,28 +397,17 @@ onMounted(async () => {
 });
 
 const isLoading = ref(false);
-const delivery = ref<Delivery | null>(null);
 const selectedImage = ref<string | null>(null);
 
 const deliveryId = computed(() => Number(route.params.id));
-
 const isAssignedToCurrentUser = computed(() => {
-  return delivery.value?.delivery_agent_id === userStore.user?.id;
+  return deliveryStore.delivery.value?.delivery_agent_id === userStore.user?.id;
 });
-
 const totalWeight = computed(() => {
-  if (!delivery.value?.packages) return 0;
-  return delivery.value.packages.reduce(
-    (sum, pkg) => sum + pkg.weight * pkg.quantity,
+  if (!deliveryStore.delivery.value?.packages) return 0;
+  return deliveryStore.delivery.value.packages.reduce(
+    (sum: number, pkg: any) => sum + pkg.weight * pkg.quantity,
     0
-  );
-});
-
-const canUpdateStatus = computed(() => {
-  if (!delivery.value) return false;
-  const status = delivery.value.status;
-  return (
-    status !== DeliveryStatus.DELIVERED && status !== DeliveryStatus.CANCELLED
   );
 });
 
@@ -415,6 +417,7 @@ const getStatusLabel = (status: DeliveryStatus): string => {
     [DeliveryStatus.PICKED_UP]: "Ramassée",
     [DeliveryStatus.IN_TRANSIT]: "En transit",
     [DeliveryStatus.DELIVERED]: "Livrée",
+    [DeliveryStatus.PENDING]: "Pas encore assignée",
   };
   return labels[status] || status;
 };
@@ -425,13 +428,14 @@ const getStatusBadgeClass = (status: DeliveryStatus): string => {
     [DeliveryStatus.PICKED_UP]: "bg-blue-100 text-blue-800",
     [DeliveryStatus.IN_TRANSIT]: "bg-indigo-100 text-indigo-800",
     [DeliveryStatus.DELIVERED]: "bg-green-100 text-green-800",
+    [DeliveryStatus.PENDING]: "bg-gray-100 text-gray-800",
   };
   return classes[status] || "bg-gray-100 text-gray-800";
 };
 
 const getNextStatusAction = (): string => {
-  if (!delivery.value) return "";
-  switch (delivery.value.status) {
+  if (!deliveryStore.delivery.value) return "";
+  switch (deliveryStore.delivery.value.status) {
     case DeliveryStatus.ASSIGNED:
       return "Marquer comme ramassée";
     case DeliveryStatus.PICKED_UP:
@@ -456,99 +460,5 @@ const formatDate = (date: Date | string | undefined): string => {
 
 const openImageModal = (imageUrl: string) => {
   selectedImage.value = imageUrl;
-};
-
-const fetchDelivery = async () => {
-  isLoading.value = true;
-  try {
-    // TODO: Replace with actual API call
-    // const response = await fetch(`/api/deliveries/${deliveryId.value}`);
-    // delivery.value = await response.json();
-
-    // Mock data for demonstration
-    delivery.value = {
-      id: deliveryId.value,
-      tracking_code: "TRK-2024-001",
-      delivery_type: "full" as any,
-      status: DeliveryStatus.ASSIGNED,
-      delivery_agent_id: userStore.user?.id || 1,
-      announcement_id: 1,
-      announcement: {
-        id: 1,
-        title: "Livraison de colis fragiles",
-        description:
-          "Colis contenant des objets fragiles à manipuler avec précaution",
-        departure_city: "Paris",
-        arrival_city: "Lyon",
-        pickup_date: new Date("2024-02-01T10:00:00"),
-        delivery_date: new Date("2024-02-01T18:00:00"),
-        price: 150,
-        urgent: true,
-        assurance: true,
-        pickup_instructions: "Sonner au 3ème étage, code 1234A",
-        created_at: new Date("2024-01-28T10:00:00"),
-        customer: {
-          id: 1,
-          first_name: "Jean",
-          last_name: "Dupont",
-          email: "jean.dupont@email.com",
-          phone_number: "06 12 34 56 78",
-        },
-      } as any,
-      packages: [
-        {
-          id: 1,
-          weight: 5,
-          length: 40,
-          width: 30,
-          height: 20,
-          quantity: 2,
-          fragile: true,
-          photos:
-            "https://via.placeholder.com/400x300/4F46E5/ffffff?text=Colis+1",
-          delivery_id: deliveryId.value,
-        },
-        {
-          id: 2,
-          weight: 3,
-          length: 25,
-          width: 20,
-          height: 15,
-          quantity: 1,
-          fragile: false,
-          delivery_id: deliveryId.value,
-        },
-      ] as any,
-    } as Delivery;
-  } catch (error) {
-    console.error("Erreur lors du chargement de la livraison:", error);
-    delivery.value = null;
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const assignToMe = async () => {
-  try {
-    // TODO: API call to assign delivery
-    alert("Livraison assignée avec succès");
-    await fetchDelivery();
-  } catch (error) {
-    console.error("Erreur lors de l'assignation:", error);
-    alert("Erreur lors de l'assignation de la livraison");
-  }
-};
-
-const updateDeliveryStatus = async () => {
-  if (!delivery.value) return;
-
-  try {
-    // TODO: API call to update status
-    alert("Statut mis à jour avec succès");
-    await fetchDelivery();
-  } catch (error) {
-    console.error("Erreur lors de la mise à jour du statut:", error);
-    alert("Erreur lors de la mise à jour du statut");
-  }
 };
 </script>
