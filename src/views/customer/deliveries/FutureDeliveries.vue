@@ -140,9 +140,6 @@
                   >
                     Options
                   </th>
-                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                    <span class="sr-only">Actions</span>
-                  </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
@@ -206,16 +203,6 @@
                         Assuré
                       </span>
                     </div>
-                  </td>
-                  <td
-                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                  >
-                    <button
-                      @click="viewDetails(delivery)"
-                      class="text-primary-600 hover:text-primary-900 cursor-pointer"
-                    >
-                      Détails
-                    </button>
                   </td>
                 </tr>
               </tbody>

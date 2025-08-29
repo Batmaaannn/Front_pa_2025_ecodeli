@@ -211,12 +211,12 @@
                     class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                   >
                     <div class="flex items-center justify-end space-x-2">
-                      <button
+                      <!-- <button
                         @click="viewDetails(delivery)"
                         class="text-primary-600 hover:text-primary-900 cursor-pointer"
                       >
                         Détails
-                      </button>
+                      </button> -->
                       <button
                         v-if="delivery.status === AnnouncementStatus.DELIVERED"
                         @click="rateDelivery(delivery)"
@@ -254,7 +254,8 @@ onMounted(async () => {
     error.value = null;
     await announcementStore.fetchPastDeliveries();
   } catch (err) {
-    error.value = "Impossible de charger l'historique des livraisons. Veuillez réessayer.";
+    error.value =
+      "Impossible de charger l'historique des livraisons. Veuillez réessayer.";
     console.error("Error fetching past deliveries:", err);
   } finally {
     loading.value = false;
@@ -290,9 +291,9 @@ const getStatusLabel = (status: AnnouncementStatus): string => {
   return statusLabels[status] || status;
 };
 
-const viewDetails = (delivery: Announcement) => {
-  console.log("View details for delivery:", delivery);
-};
+// const viewDetails = (delivery: Announcement) => {
+//   console.log("View details for delivery:", delivery);
+// };
 
 const rateDelivery = (delivery: Announcement) => {
   console.log("Rate delivery:", delivery);
