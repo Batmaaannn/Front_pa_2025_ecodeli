@@ -344,7 +344,7 @@
           </div>
         </form>
       </div>
-      {{ formData.schedule }}
+
       <!-- Success/Error Messages -->
       <div v-if="successMessage" class="mt-4">
         <div class="rounded-md bg-green-50 p-4">
@@ -400,7 +400,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { useUserStore } from "@/stores/user.store";
 import { isDeliveryAgentUser } from "@/types/typeGuards";
 import InputField from "@/components/formControls/InputField.vue";
@@ -625,7 +625,6 @@ const updateProfile = async () => {
   errorMessage.value = "";
 
   try {
-
     await userStore.updateDeliveryAgentProfile(formData.value);
     await userStore.fetchUser();
 

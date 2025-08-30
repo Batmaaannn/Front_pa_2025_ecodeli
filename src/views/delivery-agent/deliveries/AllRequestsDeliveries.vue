@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-5xl mx-auto mt-10">
+  <div class="max-w-7xl mx-auto">
     <h2 class="text-2xl font-bold mb-6">Toutes les demandes de livraison</h2>
 
     <div class="bg-white p-4 mb-6 rounded-lg shadow-md">
@@ -27,6 +27,50 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button
+          @click="applyFilters"
+          :disabled="isLoading"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        >
+          <svg
+            v-if="!isLoading"
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            ></path>
+          </svg>
+          <svg
+            v-else
+            class="animate-spin h-4 w-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          {{ isLoading ? "Recherche..." : "Rechercher" }}
+        </button>
       </div>
     </div>
 
@@ -72,18 +116,27 @@
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
-        <template v-for="delivery in deliveries" :key="delivery.id">
+        <template
+          v-for="delivery in deliveryStore.deliveries"
+          :key="delivery.id"
+        >
           <tr>
             <td class="px-3 py-4 text-center">
               <input
                 type="checkbox"
-                :value="delivery.id || delivery.announcementId"
+                :value="delivery.id"
                 v-model="selectedDeliveries"
-                @change="onDeliverySelectionChange(delivery.id || delivery.announcementId)"
+                @change="onDeliverySelectionChange(delivery.id)"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />
             </td>
-            <td class="px-6 py-4">{{ delivery.departureCity }}</td>
+            <td class="px-6 py-4">
+              {{
+                delivery.deliveryType === "full"
+                  ? delivery.departureCity
+                  : delivery.intermediateCity
+              }}
+            </td>
             <td class="px-6 py-4">{{ delivery.arrivalCity }}</td>
             <td class="px-6 py-4">
               {{ new Date(delivery.pickupDate).toLocaleString() }} →<br />
@@ -105,7 +158,7 @@
               <button
                 @click="
                   $router.push({
-                    path: `livraison/${delivery.announcementId}`,
+                    path: `livraison/${delivery.id}`,
                   })
                 "
                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
@@ -120,40 +173,54 @@
                 <div class="flex items-center gap-2">
                   <input
                     type="radio"
-                    :id="`full-${delivery.id || delivery.announcementId}`"
-                    :name="`delivery-type-${delivery.id || delivery.announcementId}`"
+                    :id="`full-${delivery.id}`"
+                    :name="`delivery-type-${delivery.id}`"
                     value="full"
-                    :checked="getDeliveryConfig(delivery.id || delivery.announcementId).type === 'full'"
-                    @change="updateDeliveryType(delivery.id || delivery.announcementId, 'full')"
+                    :checked="getDeliveryConfig(delivery.id).type === 'full'"
+                    @change="updateDeliveryType(delivery.id, 'full')"
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
                   />
-                  <label :for="`full-${delivery.id || delivery.announcementId}`" class="text-sm font-medium text-gray-700">
-                    Livraison complète ({{ delivery.departureCity }} → {{ delivery.arrivalCity }})
+                  <label
+                    :for="`full-${delivery.id}`"
+                    class="text-sm font-medium text-gray-700"
+                  >
+                    Livraison complète ({{ delivery.departureCity }} →
+                    {{ delivery.arrivalCity }})
                   </label>
                 </div>
                 <div class="flex items-center gap-2">
                   <input
                     type="radio"
-                    :id="`partial-${delivery.id || delivery.announcementId}`"
-                    :name="`delivery-type-${delivery.id || delivery.announcementId}`"
+                    :id="`partial-${delivery.id}`"
+                    :name="`delivery-type-${delivery.id}`"
                     value="partial"
-                    :checked="getDeliveryConfig(delivery.id || delivery.announcementId).type === 'partial'"
-                    @change="updateDeliveryType(delivery.id || delivery.announcementId, 'partial')"
+                    :checked="getDeliveryConfig(delivery.id).type === 'partial'"
+                    @change="updateDeliveryType(delivery.id, 'partial')"
                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
                   />
-                  <label :for="`partial-${delivery.id || delivery.announcementId}`" class="text-sm font-medium text-gray-700">
+                  <label
+                    :for="`partial-${delivery.id}`"
+                    class="text-sm font-medium text-gray-700"
+                  >
                     Livraison partielle
                   </label>
                 </div>
-                <div v-if="getDeliveryConfig(delivery.id || delivery.announcementId).type === 'partial'" class="flex items-center gap-2">
-                  <label class="text-sm font-medium text-gray-700">Déposer à:</label>
+                <div
+                  v-if="getDeliveryConfig(delivery.id).type === 'partial'"
+                  class="flex items-center gap-2"
+                >
+                  <label class="text-sm font-medium text-gray-700"
+                    >Déposer à:</label
+                  >
                   <input
                     type="text"
-                    v-model="deliveryConfigs[delivery.id || delivery.announcementId].intermediateCity"
+                    v-model="deliveryConfigs[delivery.id].intermediateCity"
                     placeholder="Ex: Lyon"
                     class="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <span class="text-sm text-gray-600">(au lieu de {{ delivery.arrivalCity }})</span>
+                  <span class="text-sm text-gray-600"
+                    >(au lieu de {{ delivery.arrivalCity }})</span
+                  >
                 </div>
               </div>
             </td>
@@ -179,12 +246,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { axios } from "@/libs/axios";
 import { useUserStore } from "@/stores/user.store";
-import { isDeliveryAgentUser } from "@/types/typeGuards";
+import { useDeliveryStore } from "@/stores/delivery.store";
+
+const deliveryStore = useDeliveryStore();
 
 interface DeliveryConfig {
-  type: 'full' | 'partial';
+  type: "full" | "partial";
   intermediateCity?: string;
 }
 
@@ -197,6 +265,7 @@ const filterMaxRadius = ref<number | undefined>(undefined);
 const selectedDeliveries = ref<(string | number)[]>([]);
 const selectAll = ref(false);
 const deliveryConfigs = ref<Record<string | number, DeliveryConfig>>({});
+const isLoading = ref(false);
 
 const toggleSelectAll = () => {
   if (selectAll.value) {
@@ -204,10 +273,10 @@ const toggleSelectAll = () => {
       (d) => d.id || d.announcementId
     );
     // Initialize all configs as full delivery by default
-    deliveries.value.forEach(d => {
+    deliveries.value.forEach((d) => {
       const id = d.id || d.announcementId;
       if (!deliveryConfigs.value[id]) {
-        deliveryConfigs.value[id] = { type: 'full' };
+        deliveryConfigs.value[id] = { type: "full" };
       }
     });
   } else {
@@ -222,17 +291,20 @@ const isDeliverySelected = (deliveryId: string | number) => {
 
 const getDeliveryConfig = (deliveryId: string | number): DeliveryConfig => {
   if (!deliveryConfigs.value[deliveryId]) {
-    deliveryConfigs.value[deliveryId] = { type: 'full' };
+    deliveryConfigs.value[deliveryId] = { type: "full" };
   }
   return deliveryConfigs.value[deliveryId];
 };
 
-const updateDeliveryType = (deliveryId: string | number, type: 'full' | 'partial') => {
+const updateDeliveryType = (
+  deliveryId: string | number,
+  type: "full" | "partial"
+) => {
   if (!deliveryConfigs.value[deliveryId]) {
     deliveryConfigs.value[deliveryId] = { type };
   } else {
     deliveryConfigs.value[deliveryId].type = type;
-    if (type === 'full') {
+    if (type === "full") {
       delete deliveryConfigs.value[deliveryId].intermediateCity;
     }
   }
@@ -240,44 +312,56 @@ const updateDeliveryType = (deliveryId: string | number, type: 'full' | 'partial
 
 const onDeliverySelectionChange = (deliveryId: string | number) => {
   if (isDeliverySelected(deliveryId) && !deliveryConfigs.value[deliveryId]) {
-    deliveryConfigs.value[deliveryId] = { type: 'full' };
+    deliveryConfigs.value[deliveryId] = { type: "full" };
   } else if (!isDeliverySelected(deliveryId)) {
     delete deliveryConfigs.value[deliveryId];
   }
 };
 
-const assignSelectedDeliveries = async () => {
-  if (selectedDeliveries.value.length === 0) return;
-  
-  // Prepare delivery assignments with their configurations
-  const assignments = selectedDeliveries.value.map(deliveryId => {
-    const config = deliveryConfigs.value[deliveryId] || { type: 'full' };
-    return {
-      deliveryId,
-      type: config.type,
-      ...(config.type === 'partial' && config.intermediateCity ? { intermediateCity: config.intermediateCity } : {})
-    };
-  });
-  
-  console.log('Assignments to send:', assignments);
-  
+const applyFilters = async () => {
+  isLoading.value = true;
   try {
-    const data = await axios.post("/deliveries/assign", {
-      assignments
-    });
-    console.log("Livraisons assignées avec succès:", data);
-    selectedDeliveries.value = [];
-    deliveryConfigs.value = {};
-    selectAll.value = false;
-
-    // Reload deliveries
     const params: any = {};
     if (filterCity.value) params.city = filterCity.value;
     if (filterMaxRadius.value !== undefined)
       params.maxRadius = filterMaxRadius.value;
-    const res = await axios.get("/deliveries", { params });
 
-    deliveries.value = res.data;
+    await deliveryStore.fetchPostedDeliveries(params);
+
+    // Reset selections when applying new filters
+    selectedDeliveries.value = [];
+    deliveryConfigs.value = {};
+    selectAll.value = false;
+  } catch (error) {
+    console.error("Erreur lors de la recherche:", error);
+    alert("Erreur lors de la recherche des livraisons");
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const assignSelectedDeliveries = async () => {
+  if (selectedDeliveries.value.length === 0) return;
+
+  // Prepare delivery assignments with their configurations
+  const assignments = selectedDeliveries.value.map((deliveryId) => {
+    const config = deliveryConfigs.value[deliveryId] || { type: "full" };
+    return {
+      deliveryId,
+      type: config.type,
+      ...(config.type === "partial" && config.intermediateCity
+        ? { intermediateCity: config.intermediateCity }
+        : {}),
+    };
+  });
+  try {
+    await deliveryStore.assignDeliveriesToAgent(assignments);
+    selectedDeliveries.value = [];
+    deliveryConfigs.value = {};
+    selectAll.value = false;
+
+    // Reload deliveries with current filters
+    await applyFilters();
   } catch (error) {
     console.error("Erreur lors de l'assignation des livraisons:", error);
     alert("Erreur lors de l'assignation des livraisons");
@@ -285,7 +369,7 @@ const assignSelectedDeliveries = async () => {
 };
 
 onMounted(async () => {
-  if (isDeliveryAgentUser(usersStore.user)) {
+  if (usersStore.isDeliveryAgent) {
     filterCity.value =
       usersStore.user.delivery_agent.favorite_delivery_city || "";
     filterMaxRadius.value = usersStore.user.delivery_agent.max_radius_km;
@@ -302,8 +386,7 @@ onMounted(async () => {
       params.maxRadius = filterMaxRadius.value;
     }
 
-    const res = await axios.get("/deliveries", { params });
-    deliveries.value = res.data;
+    await deliveryStore.fetchPostedDeliveries(params);
   } catch (error) {
     console.error(error);
   }

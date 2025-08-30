@@ -14,7 +14,6 @@ const route = useRoute();
 
 const navigationItems = [
   { name: "Accueil", href: "DashboardDeliveryAgent", icon: HomeIcon },
-  { name: "Mes livraisons", href: "FutureDeliveryAgentDeliveries", icon: UsersIcon },
   { name: "Trouver des livraisons", href: "AllDeliveryRequests", icon: FolderIcon },
   { name: "Historique", href: "PastDeliveryAgentDeliveries", icon: CalendarIcon },
   { name: "Ajouter un trajet", href: "CreateTrip", icon: ChartPieIcon },

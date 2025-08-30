@@ -49,7 +49,8 @@
               <span>Siret : </span>{{ adminStore.fetchedServiceAgent.siret }}
             </div>
             <div>
-              <span>Nom : </span>{{ adminStore.fetchedServiceAgent.company_name }}
+              <span>Nom : </span
+              >{{ adminStore.fetchedServiceAgent.company_name }}
             </div>
             <div>
               <span>Adresse : </span>
@@ -68,18 +69,25 @@
           </dd>
         </div>
         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-          <dt class="text-sm/6 font-medium text-gray-900">Informations financières</dt>
+          <dt class="text-sm/6 font-medium text-gray-900">
+            Informations financières
+          </dt>
           <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
             <div>
-              <span>Gains mensuels : </span>{{ adminStore.fetchedServiceAgent.monthly_earnings }}€
+              <span>Gains mensuels : </span
+              >{{ adminStore.fetchedServiceAgent.monthly_earnings }}€
             </div>
             <div v-if="adminStore.fetchedServiceAgent.last_invoice_date">
               <span>Dernière facture : </span>
-              {{ new Date(adminStore.fetchedServiceAgent.last_invoice_date).toLocaleDateString('fr-FR') }}
+              {{
+                new Date(
+                  adminStore.fetchedServiceAgent.last_invoice_date
+                ).toLocaleDateString("fr-FR")
+              }}
             </div>
           </dd>
         </div>
-        
+
         <!-- Section Prestations du service agent -->
         <div
           v-if="adminStore.fetchedServiceAgent.serviceAgentPrestations?.length"
@@ -92,14 +100,19 @@
               class="divide-y divide-gray-100 rounded-md border border-gray-200"
             >
               <li
-                v-for="sap in adminStore.fetchedServiceAgent.serviceAgentPrestations"
+                v-for="sap in adminStore.fetchedServiceAgent
+                  .serviceAgentPrestations"
                 :key="sap.id"
                 class="grid grid-cols-4 gap-4 items-center py-4 pr-5 pl-4 text-sm/6"
               >
                 <div class="flex w-0 flex-1 items-center">
                   <div class="ml-4 flex min-w-0 flex-1 gap-2">
-                    <span class="font-medium">{{ sap.prestation?.label || 'N/A' }}</span>
-                    <span class="text-xs text-gray-500">({{ sap.prestation?.category }})</span>
+                    <span class="font-medium">{{
+                      sap.prestation?.label || "N/A"
+                    }}</span>
+                    <span class="text-xs text-gray-500"
+                      >({{ sap.prestation?.category }})</span
+                    >
                   </div>
                 </div>
                 <label>
@@ -131,7 +144,10 @@
                     v-model="getEditedPrestation(sap.id).is_available"
                   />
                 </label>
-                <div v-if="sap.ecodeli_comment" class="col-span-4 text-xs text-gray-600 mt-1">
+                <div
+                  v-if="sap.ecodeli_comment"
+                  class="col-span-4 text-xs text-gray-600 mt-1"
+                >
                   Commentaire EcoDeli: {{ sap.ecodeli_comment }}
                 </div>
               </li>
@@ -140,7 +156,12 @@
               <Button
                 isBlue
                 :disabled="!isPrestationsChanged"
-                @click="updateServiceAgentPrestations(adminStore.fetchedServiceAgent.id, editedPrestations)"
+                @click="
+                  updateServiceAgentPrestations(
+                    adminStore.fetchedServiceAgent.id,
+                    editedPrestations
+                  )
+                "
               >
                 Enregistrer prestations
               </Button>
@@ -156,11 +177,15 @@
 
         <!-- Section Gestion globale des prestations -->
         <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-          <dt class="text-sm/6 font-medium text-gray-900">Gestion des prestations</dt>
+          <dt class="text-sm/6 font-medium text-gray-900">
+            Gestion des prestations
+          </dt>
           <dd class="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
             <!-- Ajouter une nouvelle prestation -->
             <div class="mb-4 p-3 border border-gray-200 rounded-lg bg-gray-50">
-              <h4 class="text-sm font-medium text-gray-900 mb-2">Ajouter une prestation</h4>
+              <h4 class="text-sm font-medium text-gray-900 mb-2">
+                Ajouter une prestation
+              </h4>
               <div class="grid grid-cols-3 gap-2">
                 <select
                   v-model="newPrestation.prestationId"
@@ -186,7 +211,10 @@
                 <Button
                   isGreen
                   @click="addNewPrestation"
-                  :disabled="!newPrestation.prestationId || !newPrestation.requested_price"
+                  :disabled="
+                    !newPrestation.prestationId ||
+                    !newPrestation.requested_price
+                  "
                   class="text-xs px-2 py-1"
                 >
                   Ajouter
@@ -196,7 +224,9 @@
 
             <!-- Liste des prestations globales -->
             <div v-if="availablePrestations?.length">
-              <h4 class="text-sm font-medium text-gray-900 mb-2">Toutes les prestations</h4>
+              <h4 class="text-sm font-medium text-gray-900 mb-2">
+                Toutes les prestations
+              </h4>
               <ul
                 role="list"
                 class="divide-y divide-gray-100 rounded-md border border-gray-200"
@@ -210,21 +240,30 @@
                     <span>{{ prestation.name }}</span>
                   </div>
                   <span>{{ prestation.base_price }}€</span>
-                  <span :class="prestation.is_active ? 'text-green-600' : 'text-red-600'">
-                    {{ prestation.is_active ? 'Active' : 'Inactive' }}
+                  <span
+                    :class="
+                      prestation.is_active ? 'text-green-600' : 'text-red-600'
+                    "
+                  >
+                    {{ prestation.is_active ? "Active" : "Inactive" }}
                   </span>
                   <Button
                     :isGreen="!prestation.is_active"
                     :isRed="prestation.is_active"
-                    @click="togglePrestationStatus(prestation.id, !prestation.is_active)"
+                    @click="
+                      togglePrestationStatus(
+                        prestation.id,
+                        !prestation.is_active
+                      )
+                    "
                     class="text-xs px-2 py-1"
                   >
-                    {{ prestation.is_active ? 'Désactiver' : 'Activer' }}
+                    {{ prestation.is_active ? "Désactiver" : "Activer" }}
                   </Button>
                 </li>
               </ul>
             </div>
-            
+
             <div v-if="!!successMessageGlobal">
               <Alert isSuccess>{{ successMessageGlobal }}</Alert>
             </div>
@@ -292,10 +331,7 @@
                 isBlue
                 :disabled="!isDocsChanged"
                 @click="
-                  updateUserFiles(
-                    adminStore.fetchedServiceAgent.id,
-                    editedDocs
-                  )
+                  updateUserFiles(adminStore.fetchedServiceAgent.id, editedDocs)
                 "
               >
                 Enregistrer
@@ -394,6 +430,7 @@ const initializeEditedDocs = () => {
 
 const initializeEditedPrestations = () => {
   if (adminStore.fetchedServiceAgent.serviceAgentPrestations) {
+
     editedPrestations.value = adminStore.fetchedServiceAgent.serviceAgentPrestations.map((sap) => ({
       id: sap.id,
       applied_price: sap.applied_price || 0,
@@ -475,7 +512,7 @@ const documentTypeOptions = [
 
 const prestationStatusOptions = [
   { label: "En attente", value: "PENDING" },
-  { label: "Accepté", value: "ACCEPTED" }, 
+  { label: "Accepté", value: "ACCEPTED" },
   { label: "Refusé", value: "REJECTED" },
 ];
 
@@ -515,14 +552,16 @@ const isDocsChanged = computed(() => {
 });
 
 const isPrestationsChanged = computed(() => {
-  const prestations = adminStore.fetchedServiceAgent.serviceAgentPrestations || [];
+  const prestations =
+    adminStore.fetchedServiceAgent.serviceAgentPrestations || [];
   if (prestations.length !== editedPrestations.value.length) return true;
   return editedPrestations.value.some((edited) => {
     const original = prestations.find((p) => p.id === edited.id);
     if (!original) return true;
     return (
       edited.applied_price !== (original.applied_price || 0) ||
-      edited.is_available !== (original.is_available !== undefined ? original.is_available : true) ||
+      edited.is_available !==
+        (original.is_available !== undefined ? original.is_available : true) ||
       edited.price_status !== (original.price_status || "PENDING")
     );
   });
@@ -603,12 +642,15 @@ const addNewPrestation = async () => {
   }
 };
 
-const togglePrestationStatus = async (prestationId: number, isActive: boolean) => {
+const togglePrestationStatus = async (
+  prestationId: number,
+  isActive: boolean
+) => {
   errorMessageGlobal.value = "";
   successMessageGlobal.value = "";
   try {
     await adminStore.updatePrestationStatus(prestationId, isActive);
-    successMessageGlobal.value = `Prestation ${isActive ? 'activée' : 'désactivée'} avec succès.`;
+    successMessageGlobal.value = `Prestation ${isActive ? "activée" : "désactivée"} avec succès.`;
     await adminStore.fetchPrestations();
   } catch (e: any) {
     errorMessageGlobal.value = e;

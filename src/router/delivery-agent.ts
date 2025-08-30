@@ -19,12 +19,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/delivery-agent/Dashboard.vue"),
       },
       {
-        name: "FutureDeliveryAgentDeliveries",
-        path: "mes-demandes-de-livraison",
-        component: () =>
-          import("@/views/delivery-agent/deliveries/FutureDeliveries.vue"),
-      },
-      {
         name: "DeliveryAgentDelivery",
         path: "mes-demandes-de-livraison/:id",
         component: () =>
@@ -38,7 +32,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         name: "CreateTrip",
-        path: "ajouter-un-trajet",
+        path: "trajet",
         component: () => import("@/views/delivery-agent/trips/CreateTrip.vue"),
       },
       {
