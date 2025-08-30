@@ -171,7 +171,7 @@ export const useAdminStore = defineStore("adminStore", {
   }
 },
 
-async updateServiceAgentPrestations(serviceAgentId: number, prestations: Array<{id: number, applied_price: number, is_available: boolean, price_status: string}>) {
+async updateServiceAgentPrestations(serviceAgentId: number, prestations: Array<{id: number, applied_price: number, is_available: boolean, price_status: string, ecodeli_comment: string}>) {
   try {
     return (await axios.patch(`/admin/service-agents/${serviceAgentId}/prestations`, { prestations })).data;
   } catch (e: any) {
