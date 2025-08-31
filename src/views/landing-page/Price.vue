@@ -2,18 +2,13 @@
   <div class="bg-white py-24 sm:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
       <div class="mx-auto max-w-4xl text-center">
-        <h2 class="text-base/7 font-semibold text-indigo-600">Pricing</h2>
-        <p
-          class="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl"
-        >
-          Pricing that grows with you
+        <h2 class="text-base/7 font-semibold text-primary-600">Nos prix</h2>
+        <p class="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl">
+          Partez sur de bonnes bases et améliorez-vous petit à petit
         </p>
       </div>
-      <p
-        class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8"
-      >
-        Choose an affordable plan that’s packed with the best features for
-        engaging your audience, creating customer loyalty, and driving sales.
+      <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8">
+        Ces plans sont conçues pour les clients, livreurs, commerçants ainsi que prestataires.
       </p>
 
       <!-- xs to lg -->
@@ -33,7 +28,7 @@
           </h3>
           <p class="mt-2 flex items-baseline gap-x-1 text-gray-900">
             <span class="text-4xl font-semibold">{{ tier.priceMonthly }}</span>
-            <span class="text-sm font-semibold">/month</span>
+            <span class="text-sm font-semibold">/ mois</span>
           </p>
           <a
             :href="tier.href"
