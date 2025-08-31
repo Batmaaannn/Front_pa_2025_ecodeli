@@ -91,79 +91,79 @@
             <div>
               <label
                 for="first-name"
-                class="block text-sm/6 font-semibold text-gray-900"
+                class="block text-sm/6 font-semibold text-gray-900">
                 Votre prénom
-              >
+              </label>
               <div class="mt-2.5">
                 <input
                   type="text"
                   name="first-name"
                   id="first-name"
                   autocomplete="given-name"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div>
               <label
                 for="last-name"
-                class="block text-sm/6 font-semibold text-gray-900"
+                class="block text-sm/6 font-semibold text-gray-900">
                 Votre nom
-              >
+              </label>
               <div class="mt-2.5">
                 <input
                   type="text"
                   name="last-name"
                   id="last-name"
                   autocomplete="family-name"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="email"
-                class="block text-sm/6 font-semibold text-gray-900"
+                class="block text-sm/6 font-semibold text-gray-900">
                 Votre adresse email
-              >
+              </label>
               <div class="mt-2.5">
                 <input
                   type="email"
                   name="email"
                   id="email"
                   autocomplete="email"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="phone-number"
-                class="block text-sm/6 font-semibold text-gray-900"
+                class="block text-sm/6 font-semibold text-gray-900">
                 Votre numéro de téléphone
-              >
+              </label>
               <div class="mt-2.5">
                 <input
                   type="tel"
                   name="phone-number"
                   id="phone-number"
                   autocomplete="tel"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="message"
-                class="block text-sm/6 font-semibold text-gray-900"
+                class="block text-sm/6 font-semibold text-gray-900">
                 Votre message
-              >
+              </label>
               <div class="mt-2.5">
                 <textarea
                   name="message"
                   id="message"
                   rows="4"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
@@ -171,6 +171,7 @@
           <div class="mt-8 flex justify-end">
             <button
               type="submit"
+              class="rounded-md bg-primary-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
               Envoyer un message
             </button>
           </div>
