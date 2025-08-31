@@ -137,9 +137,9 @@
           {{ " " }}
           <router-link
             :to="{ name: 'RegisterType' }"
-            class="font-semibold text-primary-600 hover:text-primary-500"
-            >S'incrire</router-link
-          >
+            class="font-semibold text-primary-600 hover:text-primary-500">
+            S'inscrire
+          </router-link>
         </p>
       </div>
     </div>
