@@ -224,7 +224,7 @@
 
             <!-- Liste des prestations globales -->
             <div v-if="availablePrestations?.length">
-              <h4 class="text-sm font-medium text-gray-900 mb-2">
+              <!-- <h4 class="text-sm font-medium text-gray-900 mb-2">
                 Toutes les prestations
               </h4>
               <ul
@@ -261,7 +261,7 @@
                     {{ prestation.is_active ? "Désactiver" : "Activer" }}
                   </Button>
                 </li>
-              </ul>
+              </ul> -->
             </div>
 
             <div v-if="!!successMessageGlobal">

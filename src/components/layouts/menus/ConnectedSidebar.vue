@@ -121,7 +121,7 @@
         <div class="flex h-16 shrink-0 items-center">
           <img
             class="h-8 w-auto"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white"
+            src="/src/assets/logo/logo.svg"
             alt="Your Company"
           />
         </div>
