@@ -35,12 +35,10 @@
             :aria-describedby="tier.id"
             :class="[
               tier.mostPopular
-                ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-                : 'text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300',
-              'mt-8 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
-            ]"
-            >Buy plan</a
-          >
+                ? 'bg-primary-600 text-white hover:bg-primary-500'
+                : 'text-primary-600 ring-1 ring-primary-200 ring-inset hover:ring-primary-300',
+              'mt-8 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
+            ]">Acheter</a>
           <ul role="list" class="mt-10 space-y-4 text-sm/6 text-gray-900">
             <li v-for="section in sections" :key="section.name">
               <ul role="list" class="space-y-4">
@@ -50,7 +48,7 @@
                 >
                   <li v-if="feature.tiers[tier.name]" class="flex gap-x-3">
                     <CheckIcon
-                      class="h-6 w-5 flex-none text-indigo-600"
+                      class="h-6 w-5 flex-none text-primary-600"
                       aria-hidden="true"
                     />
                     <span>
@@ -128,17 +126,17 @@
                     <span class="text-4xl font-semibold">{{
                       tier.priceMonthly
                     }}</span>
-                    <span class="text-sm/6 font-semibold">/month</span>
+                    <span class="text-sm/6 font-semibold">/ mois</span>
                   </div>
                   <a
                     :href="tier.href"
                     :class="[
                       tier.mostPopular
-                        ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-                        : 'text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300',
-                      'mt-8 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600',
+                        ? 'bg-primary-600 text-white hover:bg-primary-500'
+                        : 'text-primary-600 ring-1 ring-primary-200 ring-inset hover:ring-primary-300',
+                      'mt-8 block rounded-md px-3 py-2 text-center text-sm/6 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600',
                     ]"
-                    >Buy plan</a
+                    >Acheter</a
                   >
                 </td>
               </tr>
@@ -181,7 +179,7 @@
                     <template v-else>
                       <CheckIcon
                         v-if="feature.tiers[tier.name] === true"
-                        class="mx-auto size-5 text-indigo-600"
+                        class="mx-auto size-5 text-primary-600"
                         aria-hidden="true"
                       />
                       <MinusIcon
@@ -214,24 +212,24 @@ import { CheckIcon, MinusIcon } from "@heroicons/vue/20/solid";
 
 const tiers = [
   {
-    name: "Starter",
-    id: "tier-starter",
-    href: "#",
-    priceMonthly: "$19",
+    name: "Gratuit",
+    id: "gratuit",
+    href: "/connexion",
+    priceMonthly: "0€",
     mostPopular: false,
   },
   {
-    name: "Growth",
-    id: "tier-growth",
-    href: "#",
-    priceMonthly: "$49",
+    name: "Starter",
+    id: "starter",
+    href: "/connexion",
+    priceMonthly: "9,90€",
     mostPopular: true,
   },
   {
     name: "Scale",
     id: "tier-scale",
-    href: "#",
-    priceMonthly: "$99",
+    href: "/connexion",
+    priceMonthly: "19,99€",
     mostPopular: false,
   },
 ];
