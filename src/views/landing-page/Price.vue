@@ -21,8 +21,7 @@
               ? 'rounded-xl bg-gray-400/5 ring-1 ring-gray-200 ring-inset'
               : '',
             'p-8',
-          ]"
-        >
+          ]">
           <h3 :id="tier.id" class="text-sm/6 font-semibold text-gray-900">
             {{ tier.name }}
           </h3>
@@ -76,32 +75,24 @@
             class="absolute inset-x-4 inset-y-0 -z-10 flex"
           >
             <div
-              class="flex w-1/4 px-4"
+              class="flex w-1/3 px-4"
               aria-hidden="true"
               :style="{
-                marginLeft: `${(tiers.findIndex((tier) => tier.mostPopular) + 1) * 25}%`,
+                marginLeft: `${(tiers.findIndex((tier) => tier.mostPopular)) * 100 / 3}%`,
+                transform: `translateY(16px)`,
               }"
             >
-              <div
-                class="w-full rounded-t-xl border-x border-t border-gray-900/10 bg-gray-400/5"
-              />
+              <div class="w-full rounded-xl border border-gray-900/10 bg-gray-400/5" />
             </div>
           </div>
-          <table
-            class="w-full table-fixed border-separate border-spacing-x-8 text-left"
-          >
-            <caption class="sr-only">
-              Pricing plan comparison
-            </caption>
+          <table class="w-full table-fixed border-separate border-spacing-x-8 text-left">
             <colgroup>
-              <col class="w-1/4" />
-              <col class="w-1/4" />
-              <col class="w-1/4" />
-              <col class="w-1/4" />
+              <col class="w-1/3" />
+              <col class="w-1/3" />
+              <col class="w-1/3" />
             </colgroup>
             <thead>
               <tr>
-                <td />
                 <th
                   v-for="tier in tiers"
                   :key="tier.id"
@@ -116,7 +107,6 @@
             </thead>
             <tbody>
               <tr>
-                <th scope="row"><span class="sr-only">Price</span></th>
                 <td
                   v-for="tier in tiers"
                   :key="tier.id"
@@ -140,65 +130,6 @@
                   >
                 </td>
               </tr>
-              <template
-                v-for="(section, sectionIdx) in sections"
-                :key="section.name"
-              >
-                <tr>
-                  <th
-                    scope="colgroup"
-                    colspan="4"
-                    :class="[
-                      sectionIdx === 0 ? 'pt-8' : 'pt-16',
-                      'pb-4 text-sm/6 font-semibold text-gray-900',
-                    ]"
-                  >
-                    {{ section.name }}
-                    <div class="absolute inset-x-8 mt-4 h-px bg-gray-900/10" />
-                  </th>
-                </tr>
-                <tr v-for="feature in section.features" :key="feature.name">
-                  <th
-                    scope="row"
-                    class="py-4 text-sm/6 font-normal text-gray-900"
-                  >
-                    {{ feature.name }}
-                    <div class="absolute inset-x-8 mt-4 h-px bg-gray-900/5" />
-                  </th>
-                  <td
-                    v-for="tier in tiers"
-                    :key="tier.id"
-                    class="px-6 py-4 xl:px-8"
-                  >
-                    <div
-                      v-if="typeof feature.tiers[tier.name] === 'string'"
-                      class="text-center text-sm/6 text-gray-500"
-                    >
-                      {{ feature.tiers[tier.name] }}
-                    </div>
-                    <template v-else>
-                      <CheckIcon
-                        v-if="feature.tiers[tier.name] === true"
-                        class="mx-auto size-5 text-primary-600"
-                        aria-hidden="true"
-                      />
-                      <MinusIcon
-                        v-else
-                        class="mx-auto size-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                      <span class="sr-only"
-                        >{{
-                          feature.tiers[tier.name] === true
-                            ? "Included"
-                            : "Not included"
-                        }}
-                        in {{ tier.name }}</span
-                      >
-                    </template>
-                  </td>
-                </tr>
-              </template>
             </tbody>
           </table>
         </div>
