@@ -51,7 +51,7 @@
                   aria-hidden="true"
                 />
               </dt>
-              <dd>545 Mavis Island<br />Chicago, IL 99191</dd>
+              <dd>242 Rue du Faubourg Saint-Antoine<br />75012 Paris</dd>
             </div>
             <div class="flex gap-x-4">
               <dt class="flex-none">
@@ -59,9 +59,9 @@
                 <PhoneIcon class="h-7 w-6 text-gray-400" aria-hidden="true" />
               </dt>
               <dd>
-                <a class="hover:text-gray-900" href="tel:+1 (555) 234-5678"
-                  >+1 (555) 234-5678</a
-                >
+                <a class="hover:text-gray-900" href="tel:+33123456789">
+                  01 23 45 67 89
+                </a>
               </dd>
             </div>
             <div class="flex gap-x-4">
@@ -73,9 +73,9 @@
                 />
               </dt>
               <dd>
-                <a class="hover:text-gray-900" href="mailto:hello@example.com"
-                  >hello@example.com</a
-                >
+                <a class="hover:text-gray-900" href="mailto:contact@ecodeli.fr">
+                  contact@ecodeli.fr
+                </a>
               </dd>
             </div>
           </dl>
