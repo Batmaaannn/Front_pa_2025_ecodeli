@@ -121,7 +121,7 @@
         <div class="flex h-16 shrink-0 items-center">
           <img
             class="h-8 w-auto"
-            src="/src/assets/logo/logo.svg"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white"
             alt="Your Company"
           />
         </div>
@@ -222,27 +222,32 @@
                 >
                   <MenuItem v-slot="{ active }">
                     <router-link
-                      :to="{
-                        name: getProfileRouteName(userStore.user.user_type),
-                      }"
-                      :class="[
-                        active ? 'bg-gray-50 outline-hidden' : '',
-                        'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',
-                      ]"
-                    >
+                        v-if="profileTo"
+                        :to="profileTo"
+                        :class="[
+                          active ? 'bg-gray-50 outline-hidden' : '',
+                          'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',
+                        ]">
                       Mon profil
                     </router-link>
+                    <span
+                        v-else
+                        :class="[
+                          active ? 'bg-gray-50 outline-hidden' : '',
+                          'block px-3 py-1 text-sm/6 text-gray-400 cursor-not-allowed',
+                        ]">
+                      Mon profil
+                    </span>
                   </MenuItem>
+
                   <MenuItem v-slot="{ active }">
-                    <a
-                      @click="disconnect"
-                      :class="[
-                        active ? 'bg-gray-50 outline-hidden' : '',
-                        'block px-3 py-1 text-sm/6 text-gray-900 cursor-pointer',
-                      ]"
+                    <button
+                        type="button"
+                        @click="disconnect"
+                        :class="[ active ? 'bg-gray-50 outline-hidden' : '', 'block w-full text-left px-3 py-1 text-sm/6 text-gray-900' ]"
                     >
                       Se déconnecter
-                    </a>
+                    </button>
                   </MenuItem>
                 </MenuItems>
               </transition>
@@ -275,9 +280,18 @@ import {
 import { ChevronDownIcon } from "@heroicons/vue/20/solid";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/stores/user.store";
+import { computed } from "vue";
+
 const userStore = useUserStore();
 
 const router = useRouter();
+
+const routeNameByType: Partial<Record<UserType, string>> = {
+  [UserType.DELIVERY_AGENT]: 'UserDeliveryAgentProfile',
+  [UserType.SERVICE_AGENT]:  'UserServiceAgentProfile',
+  [UserType.CUSTOMER]:       'UserCustomerProfile',
+  [UserType.MERCHANT]:       'UserMerchantProfile',
+};
 
 const sidebarOpen = ref(false);
 
@@ -298,23 +312,24 @@ const props = defineProps({
   },
 });
 
+const profileTo = computed(() => {
+  const u = userStore.user;
+  if (!u) return null;
+
+  const name = routeNameByType[u.user_type as UserType];
+  if (!name || !router.hasRoute(name)) return null;
+
+  const route = router.getRoutes().find(r => r.name === name);
+  const needsId = route?.path?.includes(":id") ?? false;
+
+  const id = (u as any).customer_id ?? (u as any).id ?? (u as any).user_id;
+  if (needsId && !id) return null;
+
+  return needsId ? { name, params: { id } } : { name };
+});
+
 function disconnect() {
   userStore.disconnect();
   router.push({ path: "/" });
-}
-
-function getProfileRouteName(userType: UserType) {
-  switch (userType) {
-    case UserType.DELIVERY_AGENT:
-      return "UserDeliveryAgentProfile";
-    case UserType.SERVICE_AGENT:
-      return "UserServiceAgentProfile";
-    case UserType.CUSTOMER:
-      return "UserCustomerProfile";
-    case UserType.MERCHANT:
-      return "UserMerchantProfile";
-    default:
-      return "";
-  }
 }
 </script>
