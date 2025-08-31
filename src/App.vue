@@ -13,7 +13,7 @@ import ConnectedLayout from "@/components/layouts/ConnectedLayout.vue";
 
 import { computed } from "vue";
 import { useUserStore } from "@/stores/user.store";
-import OneSignalInit from "@/components/OneSIgnalInit.vue";
+import OneSignalInit from "@/components/OneSignalInit.vue";
 const usersStore = useUserStore();
 
 const layout = computed(() => {
