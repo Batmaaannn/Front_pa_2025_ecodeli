@@ -36,15 +36,11 @@
               />
             </svg>
           </div>
-          <h2
-            class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl"
-          >
-            Get in touch
+          <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
+            Nous contacter
           </h2>
           <p class="mt-6 text-lg/8 text-gray-600">
-            Proin volutpat consequat porttitor cras nullam gravida at. Orci
-            molestie a eu arcu. Sed ut tincidunt integer elementum id sem. Arcu
-            sed malesuada et magna.
+            Une question ? Besoin d’un renseignement ? L'équipe d'Ecodeli répond à votre demande.
           </p>
           <dl class="mt-10 space-y-4 text-base/7 text-gray-600">
             <div class="flex gap-x-4">
@@ -55,7 +51,7 @@
                   aria-hidden="true"
                 />
               </dt>
-              <dd>545 Mavis Island<br />Chicago, IL 99191</dd>
+              <dd>242 Rue du Faubourg Saint-Antoine<br />75012 Paris</dd>
             </div>
             <div class="flex gap-x-4">
               <dt class="flex-none">
@@ -63,9 +59,9 @@
                 <PhoneIcon class="h-7 w-6 text-gray-400" aria-hidden="true" />
               </dt>
               <dd>
-                <a class="hover:text-gray-900" href="tel:+1 (555) 234-5678"
-                  >+1 (555) 234-5678</a
-                >
+                <a class="hover:text-gray-900" href="tel:+33123456789">
+                  01 23 45 67 89
+                </a>
               </dd>
             </div>
             <div class="flex gap-x-4">
@@ -77,9 +73,9 @@
                 />
               </dt>
               <dd>
-                <a class="hover:text-gray-900" href="mailto:hello@example.com"
-                  >hello@example.com</a
-                >
+                <a class="hover:text-gray-900" href="mailto:contact@ecodeli.fr">
+                  contact@ecodeli.fr
+                </a>
               </dd>
             </div>
           </dl>
@@ -95,79 +91,79 @@
             <div>
               <label
                 for="first-name"
-                class="block text-sm/6 font-semibold text-gray-900"
-                >First name</label
-              >
+                class="block text-sm/6 font-semibold text-gray-900">
+                Votre prénom
+              </label>
               <div class="mt-2.5">
                 <input
                   type="text"
                   name="first-name"
                   id="first-name"
                   autocomplete="given-name"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div>
               <label
                 for="last-name"
-                class="block text-sm/6 font-semibold text-gray-900"
-                >Last name</label
-              >
+                class="block text-sm/6 font-semibold text-gray-900">
+                Votre nom
+              </label>
               <div class="mt-2.5">
                 <input
                   type="text"
                   name="last-name"
                   id="last-name"
                   autocomplete="family-name"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="email"
-                class="block text-sm/6 font-semibold text-gray-900"
-                >Email</label
-              >
+                class="block text-sm/6 font-semibold text-gray-900">
+                Votre adresse email
+              </label>
               <div class="mt-2.5">
                 <input
                   type="email"
                   name="email"
                   id="email"
                   autocomplete="email"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="phone-number"
-                class="block text-sm/6 font-semibold text-gray-900"
-                >Phone number</label
-              >
+                class="block text-sm/6 font-semibold text-gray-900">
+                Votre numéro de téléphone
+              </label>
               <div class="mt-2.5">
                 <input
                   type="tel"
                   name="phone-number"
                   id="phone-number"
                   autocomplete="tel"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
             <div class="sm:col-span-2">
               <label
                 for="message"
-                class="block text-sm/6 font-semibold text-gray-900"
-                >Message</label
-              >
+                class="block text-sm/6 font-semibold text-gray-900">
+                Votre message
+              </label>
               <div class="mt-2.5">
                 <textarea
                   name="message"
                   id="message"
                   rows="4"
-                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                  class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-primary-500"
                 />
               </div>
             </div>
@@ -175,9 +171,8 @@
           <div class="mt-8 flex justify-end">
             <button
               type="submit"
-              class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Send message
+              class="rounded-md bg-primary-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500">
+              Envoyer un message
             </button>
           </div>
         </div>

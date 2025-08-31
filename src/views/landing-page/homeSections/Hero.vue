@@ -79,9 +79,6 @@
             class="rounded-md bg-primary-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-primary-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400"
             >Commencer</router-link
           >
-          <a href="#" class="text-sm/6 font-semibold text-gray-900"
-            >En savoir plus <span aria-hidden="true">→</span></a
-          >
         </div>
       </div>
       <div
