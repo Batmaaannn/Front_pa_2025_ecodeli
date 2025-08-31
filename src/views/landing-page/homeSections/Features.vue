@@ -12,7 +12,7 @@
       </p>
       <p class="mt-6 text-lg/8 text-gray-500">
         Que vous soyez particulier, commerçant, livreur ou prestataire, EcoDeli
-        centralise les services du quotidien : livraisons, trajets partagés,
+        centralise les services du quotidien : livraisons, trajets partagés,
         aide à domicile, achats à l’étranger et bien plus encore.
       </p>
     </div>
