@@ -36,15 +36,11 @@
               />
             </svg>
           </div>
-          <h2
-            class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl"
-          >
-            Get in touch
+          <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">
+            Nous contacter
           </h2>
           <p class="mt-6 text-lg/8 text-gray-600">
-            Proin volutpat consequat porttitor cras nullam gravida at. Orci
-            molestie a eu arcu. Sed ut tincidunt integer elementum id sem. Arcu
-            sed malesuada et magna.
+            Une question ? Besoin d’un renseignement ? L'équipe d'Ecodeli répond à votre demande.
           </p>
           <dl class="mt-10 space-y-4 text-base/7 text-gray-600">
             <div class="flex gap-x-4">
@@ -96,7 +92,7 @@
               <label
                 for="first-name"
                 class="block text-sm/6 font-semibold text-gray-900"
-                >First name</label
+                Votre prénom
               >
               <div class="mt-2.5">
                 <input
@@ -112,7 +108,7 @@
               <label
                 for="last-name"
                 class="block text-sm/6 font-semibold text-gray-900"
-                >Last name</label
+                Votre nom
               >
               <div class="mt-2.5">
                 <input
@@ -128,7 +124,7 @@
               <label
                 for="email"
                 class="block text-sm/6 font-semibold text-gray-900"
-                >Email</label
+                Votre adresse email
               >
               <div class="mt-2.5">
                 <input
@@ -144,7 +140,7 @@
               <label
                 for="phone-number"
                 class="block text-sm/6 font-semibold text-gray-900"
-                >Phone number</label
+                Votre numéro de téléphone
               >
               <div class="mt-2.5">
                 <input
@@ -160,7 +156,7 @@
               <label
                 for="message"
                 class="block text-sm/6 font-semibold text-gray-900"
-                >Message</label
+                Votre message
               >
               <div class="mt-2.5">
                 <textarea
@@ -175,9 +171,7 @@
           <div class="mt-8 flex justify-end">
             <button
               type="submit"
-              class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Send message
+              Envoyer un message
             </button>
           </div>
         </div>
