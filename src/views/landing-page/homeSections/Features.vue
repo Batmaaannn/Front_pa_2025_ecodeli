@@ -39,13 +39,6 @@
           </dt>
           <dd class="mt-1 flex flex-auto flex-col text-base/7 text-gray-500">
             <p class="flex-auto">{{ feature.description }}</p>
-            <p class="mt-6">
-              <a
-                :href="feature.href"
-                class="text-sm/6 font-semibold text-primary-500"
-                >En savoir plus <span aria-hidden="true">→</span></a
-              >
-            </p>
           </dd>
         </div>
       </dl>
