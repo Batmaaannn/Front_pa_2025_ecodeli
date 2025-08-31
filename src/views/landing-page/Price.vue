@@ -8,7 +8,7 @@
         </p>
       </div>
       <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8">
-        Ces plans sont conçues pour les clients, livreurs, commerçants ainsi que prestataires.
+        Que vous soyez client, livreur, commerçant ou prestataire, ces offres sont faites pour vous.
       </p>
 
       <!-- xs to lg -->
