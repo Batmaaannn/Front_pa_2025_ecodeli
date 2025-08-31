@@ -411,6 +411,7 @@ const route = useRoute();
 
 onBeforeMount(async () => {
   const id = route.params.id;
+  console.log('Service Agent ID:', id); // Ajoutez ce log pour debug
   await adminStore.fetchServiceAgentById(+id);
   await adminStore.fetchPrestations();
   initializeEditedDocs();
